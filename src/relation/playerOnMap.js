@@ -12,9 +12,6 @@ export function playerOnMapCreate() {
   };
 }
 
-function waitFinely(floor){
-  console.log("im moving to "+ floor)
-}
 
 /**
  * 플레이어가 위치한 타일에 따라 특정 동작을 함
@@ -49,9 +46,8 @@ export function playerOnMapUpdate(playerOnMap, player, map, scene) {
       case 'FirstFloorScene':
         switch (curTileName) {
           case 'up':
-            startScene(scene, 'SecondFloorScene', { x: 16 * 3, y: 16 * 11 });
             scene.socket.emit('moveFloor', { id: scene.socket.id, floor: '2F' });
-
+            startScene(scene, 'SecondFloorScene', { x: 16 * 3, y: 16 * 11 });
             break;
           case 'down':
             scene.socket.emit('moveFloor', { id: scene.socket.id, floor: 'B1' });
@@ -76,9 +72,8 @@ export function playerOnMapUpdate(playerOnMap, player, map, scene) {
             startScene(scene, 'FifthFloorScene', { x: 16 * 3, y: 16 * 14 });
             break;
           case 'down':
-            startScene(scene, 'FirstFloorScene', { x: 16 * 6, y: 16 * 14 });
             scene.socket.emit('moveFloor', { id: scene.socket.id, floor: '1F' });
-
+            startScene(scene, 'FirstFloorScene', { x: 16 * 6, y: 16 * 14 });
             break;
           case 'elevator':
             showElevatorPanel(scene, '2F');

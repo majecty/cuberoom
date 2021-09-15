@@ -12,6 +12,10 @@ export function playerOnMapCreate() {
   };
 }
 
+function waitFinely(floor){
+  console.log("im moving to "+ floor)
+}
+
 /**
  * 플레이어가 위치한 타일에 따라 특정 동작을 함
  */
@@ -22,20 +26,11 @@ export function playerOnMapUpdate(playerOnMap, player, map, scene) {
   const curTileName = curTile?.properties?.name;
 
 
-  let wflag = false;
 
 
   if (playerOnMap.prevTileName !== curTileName) {
     if (playerOnMap.prevTileName === 'elevator') hideElevatorPanel();
     if (['work-1', 'work-2', 'work-3','work-4','work-5','work-6','work-7','work-8'].includes(playerOnMap.prevTileName)) popupDestroy();
-
-
-
-    if( playerX >= 140 && playerX <= 180 && playerY >= 430 && playerY <= 460 ){
-      welcomeCreate(scene, {x:203, y:400},flag);
-
-    }
-
 
 
 
@@ -54,8 +49,9 @@ export function playerOnMapUpdate(playerOnMap, player, map, scene) {
       case 'FirstFloorScene':
         switch (curTileName) {
           case 'up':
-            scene.socket.emit('moveFloor', { id: scene.socket.id, floor: '2F' });
             startScene(scene, 'SecondFloorScene', { x: 16 * 3, y: 16 * 11 });
+            scene.socket.emit('moveFloor', { id: scene.socket.id, floor: '2F' });
+
             break;
           case 'down':
             scene.socket.emit('moveFloor', { id: scene.socket.id, floor: 'B1' });
@@ -80,8 +76,9 @@ export function playerOnMapUpdate(playerOnMap, player, map, scene) {
             startScene(scene, 'FifthFloorScene', { x: 16 * 3, y: 16 * 14 });
             break;
           case 'down':
-            scene.socket.emit('moveFloor', { id: scene.socket.id, floor: '1F' });
             startScene(scene, 'FirstFloorScene', { x: 16 * 6, y: 16 * 14 });
+            scene.socket.emit('moveFloor', { id: scene.socket.id, floor: '1F' });
+
             break;
           case 'elevator':
             showElevatorPanel(scene, '2F');

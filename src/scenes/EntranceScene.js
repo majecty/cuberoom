@@ -85,7 +85,7 @@ class EntranceScene extends Phaser.Scene {
         }
         this.load.once('complete', () => {
           // if (!this.players[id]) this.players[id] = playerCreate(this, player.x, player.y, player.name, player.chat, player.id);
-          if (!this.players[id]) {
+          if (!this.players[id] || !this.players[id].phaser.scene) {
           this.players[id] = playerCreate(this, player.x, player.y, player.name, player.chat, player.id);
         } else {
           // if (player.floor === 'entrance' && this.socket.id !== id) {

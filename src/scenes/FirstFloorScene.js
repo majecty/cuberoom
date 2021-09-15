@@ -39,6 +39,7 @@ class FirstFloorScene extends Phaser.Scene {
 
     this.socket.on('playerList', (data) => {
       for (const [id, player] of Object.entries(data)) {
+        
         if (player.floor !== '1F') return;
 
         const directions = ['left', 'right', 'up', 'down'];
@@ -49,9 +50,13 @@ class FirstFloorScene extends Phaser.Scene {
         }
         this.load.once('complete', () => {
           // if (!this.players[id]) this.players[id] = playerCreate(this, player.x, player.y, player.name, player.chat, player.id);
-          if (!this.players[id]) {
+         
+        if (!this.players[id] ) {
           this.players[id] = playerCreate(this, player.x, player.y, player.name, player.chat, player.id);
-        } else {
+        } else if(this.players[id].phaser.scene == undefined) {
+          this.players[id] = playerCreate(this, player.x, player.y, player.name, player.chat, player.id);
+        }
+        else{
           // if (player.floor === '1F' && this.socket.id !== id) {
           if (this.socket.id !== id) {
             if (this.players[id].phaser.depth === 0) {

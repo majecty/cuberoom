@@ -12,6 +12,7 @@ export function playerOnMapCreate() {
   };
 }
 
+
 /**
  * 플레이어가 위치한 타일에 따라 특정 동작을 함
  */
@@ -22,20 +23,11 @@ export function playerOnMapUpdate(playerOnMap, player, map, scene) {
   const curTileName = curTile?.properties?.name;
 
 
-  let wflag = false;
 
 
   if (playerOnMap.prevTileName !== curTileName) {
     if (playerOnMap.prevTileName === 'elevator') hideElevatorPanel();
     if (['work-1', 'work-2', 'work-3','work-4','work-5','work-6','work-7','work-8'].includes(playerOnMap.prevTileName)) popupDestroy();
-
-
-
-    if( playerX >= 140 && playerX <= 180 && playerY >= 430 && playerY <= 460 ){
-      welcomeCreate(scene, {x:203, y:400},flag);
-
-    }
-
 
 
 

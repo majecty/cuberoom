@@ -3,10 +3,38 @@ from flask.helpers import send_from_directory
 from flask_socketio import SocketIO, emit, join_room, leave_room
 from flask_cors import CORS
 import time
+import sys
+import os
 
+cuberoom_env = os.getenv('CUBEROOM_ENV')
 
-app = Flask(__name__)#, static_url_path='', static_folder='')
-CORS(app, resources={r'*': {'origins': 'http://cuberoom.net'}})
+config_values = {}
+config_values["local"] = {
+  "static_url_path": "",
+  "static_folder": "",
+  "cors_origin": "http://localhost:5000",
+  "public_path": "../client/public",
+  "user_image_prefix": "", # empty
+  "port": 3000
+}
+
+config_values["production"] = {
+  "static_url_path": "static",
+  "static_folder": "static",
+  "cors_origin": "http://cuberoom.net",
+  "public_path": "cuberoom/public", # please check this in the deployed environment
+  "user_image_prefix": "results",
+  "port": 5000 # default port in flask
+}
+
+if cuberoom_env not in ["local", "production"]:
+    sys.exit("please set CUBEROOM_ENV environment variable to `local` or `production`")
+
+config_value = config_values[cuberoom_env]
+
+app = Flask(__name__, static_url_path=config_value["static_url_path"],
+  static_folder=config_value["static_folder"])#, static_url_path='', static_folder='')
+CORS(app, resources={r'*': {'origins': config_value["cors_origin"]}})
 
 app.secret_key = "cuberoom"
 socketio = SocketIO(app, cors_allowed_origins="*")
@@ -16,7 +44,7 @@ def base():
 
 @app.route("/<path:path>", methods=['GET', 'POST'])
 def home(path):
-    return send_from_directory('cuberoom/public', path)
+    return send_from_directory(config_value['public_path'], path)
 
 
 @app.route("/character-selection",methods=['GET', 'POST'])
@@ -27,8 +55,9 @@ def user_information():
     hairC = request.get_json()["hairC"]
     skin =  request.get_json()["skin"]
     cloth = request.get_json()["cloth"]
+    prefix = config_value["user_image_prefix"]
 
-    filePath = f"results/skin{skin}_hairC{hairC}_cloth{cloth}_hairS{hairS}_faceS{faceS}/"
+    filePath = f"{prefix}/skin{skin}_hairC{hairC}_cloth{cloth}_hairS{hairS}_faceS{faceS}/"
     return url_for('static',filename = filePath)
 
 
@@ -127,4 +156,4 @@ def disconnect():
     emit('removePlayer', { 'id': request.sid })
 
 if __name__ == "__main__":
-    socketio.run(app, debug=True)
+    socketio.run(app, debug=True, port=config_value["port"])

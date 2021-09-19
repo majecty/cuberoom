@@ -4,3 +4,12 @@
 .DS_Store
 
 ENV.js
+
+__pycache__
+cuberoom/
+cuberoom.ini
+myenv
+server.py
+static/  
+wsgi.py
+.DS_Store

@@ -3,7 +3,14 @@ from flask.helpers import send_from_directory
 from flask_socketio import SocketIO, emit, join_room, leave_room
 from flask_cors import CORS
 import time
+import sys
+import os
 
+
+cuberoom_env = os.getenv('CUBEROOM_ENV')
+
+if cuberoom_env not in ["local", "production"]:
+    sys.exit("please set CUBEROOM_ENV environment variable to `local` or `production`")
 
 app = Flask(__name__)#, static_url_path='', static_folder='')
 CORS(app, resources={r'*': {'origins': 'http://cuberoom.net'}})

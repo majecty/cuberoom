@@ -18,7 +18,14 @@ pip3 install -r ./requirements.txt
 
 ```sh
 . ./cuberoom/bin/activate
-python3 ./__init__.py
+CUBEROOM_ENV=local python3 ./__init__.py
+```
+
+## 프로덕션 실행하기
+
+```sh
+. ./cuberoom/bin/activate
+CUBEROOM_ENV=production python3 ./__init__.py
 ```
 
 http://cuberoom.net

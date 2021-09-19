@@ -3,8 +3,6 @@
 
 .DS_Store
 
-ENV.js
-
 __pycache__
 cuberoom/
 cuberoom.ini

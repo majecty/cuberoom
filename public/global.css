@@ -1,0 +1,67 @@
+@font-face {
+	font-family: NeoDunggeunmo;
+	src: url(fonts/neodgm_pro.woff2) format('woff2'),
+			 url(fonts/neodgm_pro.woff) format('woff'),
+			 url(fonts/neodgm_pro.ttf) format('ttf');
+}
+
+html, body {
+	position: relative;
+	width: 100%;
+	height: 100%;
+}
+
+body {
+	color: #333;
+	margin: 0;
+	box-sizing: border-box;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+	overflow: hidden;
+}
+
+.closebutton {
+	margin-right: -20px;
+	margin-top: -50px;;
+}
+
+.link1 {
+	margin-bottom: 20px !important;
+}
+
+.link2 {
+	margin-bottom: 25px !important;
+}
+
+@media ( max-width : 800px){
+
+	.work {
+		transform: scale(90%);
+		font-size: 11px !important;
+		margin-bottom: -15%;
+		padding:  5% !important;
+	}
+
+	.popup-left{
+		width: 80px !important;
+		height: 80px !important;
+	}
+
+
+	.link1 {
+		margin-bottom: 20px !important;
+	}
+
+	.link2 {
+		margin-bottom: 35px !important;
+	}
+
+	.closebutton {
+		margin-right: -5px;
+		margin-top: -30px;;
+	}
+
+	.right>div:first-child {
+		padding: 20%;
+	}
+
+}

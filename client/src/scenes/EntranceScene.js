@@ -25,7 +25,6 @@ class EntranceScene extends Phaser.Scene {
     this.y = 16 * 30;
     this.socket = window.socket;
     this.players = {};
-
     this.socket.on('removePlayer', (data) => {
       if (this.players[data.id]) {
         this.players[data.id].phaser.destroy(true);
@@ -34,44 +33,6 @@ class EntranceScene extends Phaser.Scene {
         delete this.players[data.id];
       }
     });
-
-    // this.socket.on('playerList', (data) => {
-    //   for (const [id, player] of Object.entries(data)) {
-    //     if (player.floor !== 'entrance') return;
-    //     if (!this.players[id]) {
-    //       const directions = ['left', 'right', 'up', 'down'];
-    //       for (const direction of directions) {
-    //         for (let i = 1; i < 5; i += 1) {
-    //           this.load.image(`${player.id}-${direction}-${i}`, `${ENV.URL_STATIC}${player.imgUrl}${direction}-${i}.png`);
-    //         }
-    //       }
-    //       this.load.once('complete', () => {
-    //         if (!this.players[id]) this.players[id] = playerCreate(this, player.x, player.y, player.name, player.chat, player.id);
-    //       }, this);
-    //       this.load.start();
-    //     } else {
-    //       // if (player.floor === 'entrance' && this.socket.id !== id) {
-    //       if (this.socket.id !== id) {
-    //         if (this.players[id].phaser.depth === 0) {
-    //           this.players[id].phaser.setDepth(1);
-    //           this.players[id].nameLabel.setDepth(1);
-    //           this.players[id].chatBubble.setDepth(1);
-    //         }
-    //         this.players[id].phaser.x = player.x;
-    //         this.players[id].phaser.y = player.y;
-    //         this.players[id].nameLabel.x = player.x;
-    //         this.players[id].nameLabel.y = player.y - 30;
-    //         this.players[id].chatBubble.x = player.x;
-    //         this.players[id].chatBubble.y = player.y - 50;
-    //         // this.players[id].phaser.anims.play(`player-${player.direction}`, true);
-    //         // this.players[id].phaser.anims.play(`player-${player.direction}-stop`, true);
-    //         // 이 phaser에게는 scene이 없다...!
-    //         if (!this.players[id].phaser.scene) this.players[id].phaser.scene = this;
-    //         this.players[id].phaser.setTexture(`${player.id}-${player.direction}-${2}`); // 이거 playerCreate할 때 참고!!!!
-    //       }
-    //     }
-    //   }
-    // });
 
     this.socket.on('playerList', (data) => {
       for (const [id, player] of Object.entries(data)) {
@@ -84,11 +45,9 @@ class EntranceScene extends Phaser.Scene {
           }
         }
         this.load.once('complete', () => {
-          // if (!this.players[id]) this.players[id] = playerCreate(this, player.x, player.y, player.name, player.chat, player.id);
           if (!this.players[id] || !this.players[id].phaser.scene) {
           this.players[id] = playerCreate(this, player.x, player.y, player.name, player.chat, player.id);
         } else {
-          // if (player.floor === 'entrance' && this.socket.id !== id) {
           if (this.socket.id !== id) {
             if (this.players[id].phaser.depth === 0) {
               this.players[id].phaser.setDepth(1);
@@ -101,8 +60,6 @@ class EntranceScene extends Phaser.Scene {
             this.players[id].nameLabel.y = player.y - 30;
             this.players[id].chatBubble.x = player.x;
             this.players[id].chatBubble.y = player.y - 50;
-            // this.players[id].phaser.anims.play(`player-${player.direction}`, true);
-            // this.players[id].phaser.anims.play(`player-${player.direction}-stop`, true);
             this.players[id].phaser.setTexture(`${player.id}-${player.direction}-${2}`);
           }
         }
@@ -168,8 +125,6 @@ class EntranceScene extends Phaser.Scene {
 
     this.playerOnMap = playerOnMapCreate();
     this.physics.add.collider(this.player.phaser, this.map.collisionLayer);
-    // this.physics.add.collider(this.player.nameLabel, this.map.collisionLayer);
-    // this.physics.add.collider(this.player.chatBubble, this.map.collisionLayer);
 
     this.map = mapCreateOverCharacterLayer(this.map, 'entrance-background');
 
@@ -199,28 +154,6 @@ class EntranceScene extends Phaser.Scene {
 
 
   update(_time, _delta) {
-    // const pointer = this.input.activePointer;
-    // if (pointer.isDown) {
-    //   this.player = playerMouseUpdate(this.player,this.input.activePointer, this);
-    //   mapUpdateMousePoint(this.map, this);
-    //   this.playerOnMap = playerOnMapUpdate(
-    //     this.playerOnMap,
-    //     this.player,
-    //     this.map,
-    //     this
-    //   );
-    // } else {
-    //   this.player = playerUpdate(this.player, this.cursors, this);
-    //   mapUpdateMousePoint(this.map, this);
-    //   this.playerOnMap = playerOnMapUpdate(
-    //     this.playerOnMap,
-    //     this.player,
-    //     this.map,
-    //     this
-    //   );
-    // }
-
-
     const pointer = this.input.activePointer;
     this.player = playerFollowClickUpdate(this.player, this.destinationX, this.destinationY, this);
     mapUpdateMousePoint(this.map, this);
@@ -231,12 +164,10 @@ class EntranceScene extends Phaser.Scene {
       this
     );
 
-
     if(pointer.isDown){
       this.destinationX = this.input.activePointer.worldX;
       this.destinationY = this.input.activePointer.worldY;
     }
-
 
     this.player.nameLabel.x = this.player.phaser.x;
     this.player.chatBubble.x = this.player.phaser.x;

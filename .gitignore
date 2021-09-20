@@ -1,10 +1,9 @@
-/node_modules/
-/public/build/
+node_modules/
+client/public/build/
 
 .DS_Store
 
 __pycache__
-cuberoom/
 cuberoom.ini
 myenv
 server.py

@@ -149,6 +149,12 @@ def movePlayer(data):
         
         emit('playerList', players, broadcast=True, to=data['floor'])
 
+@socketio.on('getPlayers')
+def getPlayers():
+    global players
+    emit('playerList', players)
+    emit('debugMessage', players)
+
 @socketio.on('disconnect')
 def disconnect():
     global players

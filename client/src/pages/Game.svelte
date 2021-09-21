@@ -54,6 +54,10 @@
     scene: [EntranceScene, FirstFloorScene, FirstBasementScene, SecondFloorScene, FifthFloorScene, SixthFloorScene, SeventhFloorScene, EighthFloorScene, SecondBasementScene],
   };
 
+  window.socket.on('debugMessage', (data) => {
+    console.log("debugMessage", data);
+  });
+  window.scenes = {};
   const game = new Phaser.Game(config);
   window.game = game;
 
@@ -68,6 +72,44 @@
     chat += String.fromCharCode(event.keyCode);
   }
 
+  document.addEventListener('keydown', (e) => {
+    if (e.key === "a") {
+      printAllPlayers();
+    }
+
+    if (e.key === "s") {
+      getPlayersFromServer();
+    }
+  });
+
+  function printAllPlayers() {
+    for (const [sceneName, scene] of Object.entries(window.scenes)) {
+      console.log("Scene", sceneName);
+      const player = scene.player;
+      if (player != null) {
+        console.log("player:", player.nameLabel.text,
+          player.id.substring(0, 5),
+          player.phaser.x, player.phaser.y);
+      } else {
+        console.log("player null");
+      }
+
+      const players = scene.players;
+      if (players != null) {
+        for (const [id, otherPlayer] of Object.entries(players)) {
+        console.log("other player", otherPlayer.nameLabel.text,
+          id.substring(0, 5),
+          otherPlayer.phaser.x, otherPlayer.phaser.y)
+        };
+      } else {
+        console.log("players null");
+      }
+    }
+  }
+
+  function getPlayersFromServer() {
+    window.socket.emit('getPlayers');
+  }
 
 </script>
 

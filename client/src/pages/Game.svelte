@@ -54,6 +54,9 @@
     scene: [EntranceScene, FirstFloorScene, FirstBasementScene, SecondFloorScene, FifthFloorScene, SixthFloorScene, SeventhFloorScene, EighthFloorScene, SecondBasementScene],
   };
 
+  window.socket.on('debugMessage', (data) => {
+    console.log("debugMessage", data);
+  });
   window.scenes = {};
   const game = new Phaser.Game(config);
   window.game = game;
@@ -75,7 +78,7 @@
     }
 
     if (e.key === "s") {
-      // send message to server
+      getPlayersFromServer();
     }
   });
 
@@ -102,6 +105,10 @@
         console.log("players null");
       }
     }
+  }
+
+  function getPlayersFromServer() {
+    window.socket.emit('getPlayers');
   }
 
 </script>

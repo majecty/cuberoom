@@ -17,6 +17,7 @@ function backgroundStatic(scene) {
 class EntranceScene extends Phaser.Scene {
   constructor() {
     super('EntranceScene');
+    window.scenes.entrance = this;
     this.map = null;
     this.player = null;
     this.cursors = null;

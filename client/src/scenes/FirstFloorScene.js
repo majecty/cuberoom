@@ -17,6 +17,7 @@ function backgroundStatic(scene) {
 class FirstFloorScene extends Phaser.Scene {
   constructor() {
     super('FirstFloorScene');
+    window.scenes.firstFloor = this;
     this.map = null;
     this.player = null;
     this.cursors = null;

@@ -91,9 +91,9 @@ def addPlayer(data):
     global players
     player = Player(data['id'], data['name'], data['imgUrl'], data['floor'], data['x'], data['y'])
     players[data['id']] = player.serialize()
-    join_room(player.floor)
+    # join_room(player.floor)
     time.sleep(0.5)
-    emit('playerList', players, broadcast=True, to=data['floor'])
+    emit('playerList', players, broadcast=True)
 
 @socketio.on('moveFloor')
 def moveFloor(data):
@@ -101,11 +101,11 @@ def moveFloor(data):
     prevRoom = players[data['id']]['floor']
     nextRoom = data['floor']
     players[data['id']]['floor'] = nextRoom
-    leave_room(prevRoom)
-    join_room(nextRoom)
-    emit('removePlayer', { 'id': data['id'] }, broadcast=True, to=prevRoom)
+    # leave_room(prevRoom)
+    # join_room(nextRoom)
+    emit('removePlayer', { 'id': data['id'] }, broadcast=True)
     time.sleep(1)
-    emit('playerList', players, broadcast=True, to=nextRoom)
+    emit('playerList', players, broadcast=True)
 
 @socketio.on('addChat')
 def addChat(data):
@@ -119,8 +119,7 @@ def addChat(data):
             'chat': data['chat'],
             'floor': players[data['id']]['floor'],
         },
-        broadcast=True,
-        to=players[data['id']]['floor']
+        broadcast=True
     )
 
 @socketio.on('removeChat')
@@ -135,8 +134,7 @@ def removeChat(data):
             'chat': '',
             'floor': players[data['id']]['floor'],
         },
-        broadcast=True,
-        to=players[data['id']]['floor']
+        broadcast=True
     )
 
 @socketio.on('movePlayer')
@@ -147,7 +145,7 @@ def movePlayer(data):
         players[data['id']]['y'] = data['y']
         players[data['id']]['direction'] = data['direction']
         
-        emit('playerList', players, broadcast=True, to=data['floor'])
+        emit('playerList', players, broadcast=True)
 
 @socketio.on('getPlayers')
 def getPlayers():

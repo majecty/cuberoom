@@ -1,5 +1,5 @@
 /* eslint-disable import/prefer-default-export */
-import ENV from '../../../ENV';
+import ENV from "../../../ENV";
 
 const directions = ["down", "up", "left", "right"];
 

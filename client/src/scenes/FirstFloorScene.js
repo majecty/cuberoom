@@ -12,7 +12,14 @@ import {
   mapUpdateMousePoint,
 } from "../entity/map/interaction";
 import { playerOnMapCreate, playerOnMapUpdate } from "../relation/playerOnMap";
-import { listenRemovePlayerOnPlayers, listenRemovePlayerOnPlayer, FLOOR_NAMES, listenPlayerList, listenAddChat, listenRemoveChat } from "./common";
+import {
+  listenRemovePlayerOnPlayers,
+  listenRemovePlayerOnPlayer,
+  FLOOR_NAMES,
+  listenPlayerList,
+  listenAddChat,
+  listenRemoveChat,
+} from "./common";
 
 function backgroundStatic(scene) {
   scene.add.sprite(800 / 2, 608 / 2, "firstFloor-background");
@@ -34,7 +41,12 @@ class FirstFloorScene extends Phaser.Scene {
     this.sceneName = FLOOR_NAMES.FirstFloorScene;
 
     listenRemovePlayerOnPlayers(this.socket, this.sceneName, this.players);
-    listenRemovePlayerOnPlayer(this.socket, this.sceneName, () => this.socket.id, () => this.player = null);
+    listenRemovePlayerOnPlayer(
+      this.socket,
+      this.sceneName,
+      () => this.socket.id,
+      () => (this.player = null)
+    );
     listenPlayerList({
       socket: this.socket,
       sceneName: this.sceneName,

@@ -1,3 +1,5 @@
+import { log } from "../log";
+
 let welcomeSprite;
 
 export function welcomeCreate(scene, { x, y }, flag) {
@@ -5,26 +7,27 @@ export function welcomeCreate(scene, { x, y }, flag) {
     let counter = 1;
 
     welcomeSprite = scene.add.sprite(x, y, "welcome1");
-    console.log("1");
+    log("1");
     welcomeSprite.setName("welcome");
     counter = 2;
 
     const welcomeinterval = setInterval(() => {
-      if (counter == 2) {
+      if (counter === 2) {
         if (welcomeSprite != null) {
           welcomeSprite.setTexture("welcome2");
           counter = 3;
-          console.log("2");
+          log("2");
         }
-      } else if (counter == 3) {
+      } else if (counter === 3) {
         if (welcomeSprite != null) {
           welcomeSprite.setTexture("welcome3");
           counter = 1;
-          console.log("3");
+          log("3");
         }
       }
     }, 3000);
 
+    // FIXME: it looks like a bug
     if ((counter = 1)) {
       clearInterval(welcomeinterval);
     }
@@ -33,6 +36,8 @@ export function welcomeCreate(scene, { x, y }, flag) {
       phaser: welcomeSprite,
     };
   }
+
+  return null;
 }
 
 export function welcomeDestroy() {

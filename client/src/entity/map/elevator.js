@@ -36,11 +36,19 @@ export function showElevatorPanel(scene, floor) {
   panel.style.width = "224px";
   panel.style.height = "472px";
   panel.style.position = "relative";
-  panel.onmousedown = () => (window.game.input.enabled = false);
-  panel.onmouseup = () => (window.game.input.enabled = true);
+  panel.onmousedown = () => {
+    window.game.input.enabled = false;
+  };
+  panel.onmouseup = () => {
+    window.game.input.enabled = true;
+  };
 
-  panel.ontouchstart = () => (window.game.input.mouse.enabled = false);
-  panel.ontouchend = () => (window.game.input.mouse.enabled = true);
+  panel.ontouchstart = () => {
+    window.game.input.mouse.enabled = false;
+  };
+  panel.ontouchend = () => {
+    window.game.input.mouse.enabled = true;
+  };
 
   panelContainer.appendChild(panel);
 
@@ -51,7 +59,7 @@ export function showElevatorPanel(scene, floor) {
     startScene(scene, "FirstFloorScene", { x: 16 * 9, y: 16 * 21 });
   };
   buttonTo1F.ontouchstart = () => {
-    if (floor != "1F") {
+    if (floor !== "1F") {
       hideElevatorPanel();
       scene.socket.emit("moveFloor", { id: scene.socket.id, floor: "1F" });
       startScene(scene, "FirstFloorScene", { x: 16 * 9, y: 16 * 21 });
@@ -66,7 +74,7 @@ export function showElevatorPanel(scene, floor) {
     startScene(scene, "SecondFloorScene", { x: 16 * 9, y: 16 * 21 });
   };
   buttonTo2F.ontouchstart = () => {
-    if (floor != "2F") {
+    if (floor !== "2F") {
       hideElevatorPanel();
       scene.socket.emit("moveFloor", { id: scene.socket.id, floor: "2F" });
       startScene(scene, "SecondFloorScene", { x: 16 * 9, y: 16 * 21 });
@@ -81,7 +89,7 @@ export function showElevatorPanel(scene, floor) {
     startScene(scene, "FifthFloorScene", { x: 16 * 9, y: 16 * 22 });
   };
   buttonTo5F.ontouchstart = () => {
-    if (floor != "5F") {
+    if (floor !== "5F") {
       hideElevatorPanel();
       scene.socket.emit("moveFloor", { id: scene.socket.id, floor: "5F" });
       startScene(scene, "FifthFloorScene", { x: 16 * 9, y: 16 * 22 });
@@ -96,7 +104,7 @@ export function showElevatorPanel(scene, floor) {
     startScene(scene, "SixthFloorScene", { x: 16 * 9, y: 16 * 30 });
   };
   buttonTo6F.ontouchstart = () => {
-    if (floor != "6F") {
+    if (floor !== "6F") {
       hideElevatorPanel();
       scene.socket.emit("moveFloor", { id: scene.socket.id, floor: "6F" });
       startScene(scene, "SixthFloorScene", { x: 16 * 9, y: 16 * 30 });
@@ -111,7 +119,7 @@ export function showElevatorPanel(scene, floor) {
     startScene(scene, "SeventhFloorScene", { x: 16 * 9, y: 16 * 22 });
   };
   buttonTo7F.ontouchstart = () => {
-    if (floor != "7F") {
+    if (floor !== "7F") {
       hideElevatorPanel();
       scene.socket.emit("moveFloor", { id: scene.socket.id, floor: "7F" });
       startScene(scene, "SeventhFloorScene", { x: 16 * 9, y: 16 * 22 });
@@ -126,7 +134,7 @@ export function showElevatorPanel(scene, floor) {
     startScene(scene, "FirstBasementScene", { x: 16 * 9, y: 16 * 42 });
   };
   buttonToB1.ontouchstart = () => {
-    if (floor != "B1") {
+    if (floor !== "B1") {
       hideElevatorPanel();
       scene.socket.emit("moveFloor", { id: scene.socket.id, floor: "B1" });
       startScene(scene, "FirstBasementScene", { x: 16 * 9, y: 16 * 42 });
@@ -141,7 +149,7 @@ export function showElevatorPanel(scene, floor) {
     startScene(scene, "SecondBasementScene", { x: 16 * 9, y: 16 * 23 });
   };
   buttonToB2.ontouchstart = () => {
-    if (floor != "B2") {
+    if (floor !== "B2") {
       hideElevatorPanel();
       scene.socket.emit("moveFloor", { id: scene.socket.id, floor: "B2" });
       startScene(scene, "SecondBasementScene", { x: 16 * 9, y: 16 * 23 });

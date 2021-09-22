@@ -1,6 +1,5 @@
 /* eslint-disable import/prefer-default-export */
 
-import Phaser from "phaser";
 import { animationFrames } from "./image";
 
 const directions = ["down", "up", "left", "right"];
@@ -182,8 +181,6 @@ export function updateFollowClickAnimation(
   destinationY
 ) {
   let newPrevAnim = player.prevAnim;
-
-  const isStuck = false;
 
   const playerRight = player.phaser.x + 10;
   const playerLeft = player.phaser.x - 10;

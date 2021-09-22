@@ -4,6 +4,7 @@ import {
   updateFollowClickAnimation,
   updateInitAnimation,
 } from "./player/animation";
+import { log } from "../log";
 
 export function playerCreate(scene, x, y, name, chat, id) {
   let idStr = "";
@@ -12,7 +13,7 @@ export function playerCreate(scene, x, y, name, chat, id) {
   } else {
     idStr = id;
   }
-  console.log("playerCreate", scene.sceneName, name, idStr.substring(0, 5));
+  log("playerCreate", scene.sceneName, name, idStr.substring(0, 5));
   const phaser = scene.physics.add.sprite(x, y, `${id}-down-2`, 1);
   phaser.setSize(20, 20, false).setOffset(0, 20);
 
@@ -78,11 +79,10 @@ function initmove(player) {
   };
 }
 
-function followClick(player, destinationX, destinationY, scene) {
+function followClick(player, destinationX, destinationY) {
   const tempX = player.phaser.x;
   const tempY = player.phaser.y;
 
-  let moved = false;
   let velocity = 50;
 
   let newPrevMove = player.prevMove;
@@ -99,7 +99,6 @@ function followClick(player, destinationX, destinationY, scene) {
       player.phaser.body.setVelocityX(-velocity);
       newPrevMove = "left";
     }
-    moved = true;
   } else if (destinationX > 5 + player.phaser.x) {
     // velocity *= parseInt( destinationX - player.phaser.x) * 0.007;
     if (velocity < 100) {
@@ -109,7 +108,6 @@ function followClick(player, destinationX, destinationY, scene) {
       player.phaser.body.setVelocityX(velocity);
       newPrevMove = "right";
     }
-    moved = true;
   } else {
     player.phaser.body.setVelocityX(0);
   }
@@ -123,7 +121,6 @@ function followClick(player, destinationX, destinationY, scene) {
       player.phaser.body.setVelocityY(-velocity);
       newPrevMove = "up";
     }
-    moved = true;
   } else if (player.phaser.y + 5 < destinationY) {
     // velocity *= parseInt(  destinationY - player.phaser.y) * 0.015;
     if (velocity < 100) {
@@ -133,7 +130,6 @@ function followClick(player, destinationX, destinationY, scene) {
       player.phaser.body.setVelocityY(velocity);
       newPrevMove = "down";
     }
-    moved = true;
   } else {
     player.phaser.body.setVelocityY(0);
   }
@@ -152,7 +148,6 @@ function followClick(player, destinationX, destinationY, scene) {
 }
 
 function mouseMove(player, pointer, scene) {
-  let moved = false;
   let velocity = 100;
 
   if (scene.cheat) {
@@ -162,6 +157,7 @@ function mouseMove(player, pointer, scene) {
   let newPrevMove = player.prevMove;
   if (pointer.isDown) {
     if (pointer.worldX + 16 < player.phaser.x) {
+      // FIXME: why should we use the parseInt?
       velocity *= parseInt(player.phaser.x - pointer.worldX) * 0.007;
       if (velocity < 100) {
         velocity = 100;
@@ -174,8 +170,8 @@ function mouseMove(player, pointer, scene) {
         // player.chatBubble.x = player.phaser.x;
         newPrevMove = "left";
       }
-      moved = true;
     } else if (pointer.worldX > 16 + player.phaser.x) {
+      // FIXME: why should we use the parseInt?
       velocity *= parseInt(pointer.worldX - player.phaser.x) * 0.007;
       if (velocity < 100) {
         velocity = 100;
@@ -188,7 +184,6 @@ function mouseMove(player, pointer, scene) {
         // player.chatBubble.x = player.phaser.x;
         newPrevMove = "right";
       }
-      moved = true;
     } else {
       player.phaser.body.setVelocityX(0);
       player.nameLabel.body.setVelocityX(0);
@@ -196,6 +191,7 @@ function mouseMove(player, pointer, scene) {
     }
 
     if (pointer.worldY + 16 < player.phaser.y) {
+      // FIXME: why should we use the parseInt?
       velocity *= parseInt(player.phaser.y - pointer.worldY) * 0.015;
       if (velocity < 100) {
         velocity = 100;
@@ -209,8 +205,8 @@ function mouseMove(player, pointer, scene) {
         // player.chatBubble.y = player.phaser.y - 45;
         newPrevMove = "up";
       }
-      moved = true;
     } else if (pointer.worldY > 16 + player.phaser.y) {
+      // FIXME: why should we use the parseInt?
       velocity *= parseInt(pointer.worldY - player.phaser.y) * 0.015;
       if (velocity < 100) {
         velocity = 100;
@@ -223,7 +219,6 @@ function mouseMove(player, pointer, scene) {
         // player.chatBubble.y = player.phaser.y - 45;
         newPrevMove = "down";
       }
-      moved = true;
     } else {
       player.phaser.body.setVelocityY(0);
       player.nameLabel.body.setVelocityY(0);

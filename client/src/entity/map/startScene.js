@@ -1,4 +1,6 @@
-function getFloorName(sceneName) {
+import { log } from "../../log";
+
+export function getFloorName(sceneName) {
   switch (sceneName) {
     case "EntranceScene":
       return "entrance";
@@ -18,15 +20,17 @@ function getFloorName(sceneName) {
       return "B1";
     case "SecondBasementScene":
       return "B2";
+    default:
+      throw new Error(`invalie sceneName: {sceneName}`);
   }
 }
 
 export default function startScene(currentScene, targetSceneName, spawnPos) {
-  console.log("call startScene");
+  log("call startScene");
   currentScene.cameras.main.fadeOut(500);
   // window.socket.emit('moveFloor', { id: this.socket.id, floor: getFloorName(sceneName) });
   currentScene.cameras.main.on("camerafadeoutcomplete", () => {
-    console.log("start next scene");
+    log("start next scene");
     currentScene.scene.pause(currentScene.scene.key);
     currentScene.scene.start(targetSceneName, spawnPos);
   });

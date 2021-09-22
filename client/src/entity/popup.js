@@ -21,13 +21,18 @@ export function popupCreate(scene, { x, y }, workNum) {
   // FIXME: event 등록 해제해야 하는지 확인 필요
   popupSprite.on("pointerdown", () => {
     descriptionContainer = document.createElement("div");
-    descriptionContainer.onmousedown = () =>
-      (window.game.input.enabled = false);
-    descriptionContainer.onmouseup = () => (window.game.input.enabled = true);
-    descriptionContainer.ontouchstart = () =>
-      (window.game.input.mouse.enabled = false);
-    descriptionContainer.ontouchend = () =>
-      (window.game.input.mouse.enabled = true);
+    descriptionContainer.onmousedown = () => {
+      window.game.input.enabled = false;
+    };
+    descriptionContainer.onmouseup = () => {
+      window.game.input.enabled = true;
+    };
+    descriptionContainer.ontouchstart = () => {
+      window.game.input.mouse.enabled = false;
+    };
+    descriptionContainer.ontouchend = () => {
+      window.game.input.mouse.enabled = true;
+    };
     descriptionContainer.classList.add("description-container");
     descriptionContainer.style.position = "absolute";
     descriptionContainer.style.top = "0px";
@@ -143,8 +148,9 @@ export function popupCreate(scene, { x, y }, workNum) {
     closeButton.style.right = "-30px";
     closeButton.style.position = "absolute";
     closeButton.onclick = () => document.body.removeChild(descriptionContainer);
-    closeButton.ontouchstart = () =>
+    closeButton.ontouchstart = () => {
       document.body.removeChild(descriptionContainer);
+    };
 
     const link = document.createElement("a");
     link.classList.add("link1");

@@ -17,6 +17,7 @@ function backgroundStatic(scene) {
 class FirstFloorScene extends Phaser.Scene {
   constructor() {
     super('FirstFloorScene');
+    console.log("firstFloor constructor");
     window.scenes.firstFloor = this;
     this.map = null;
     this.player = null;
@@ -30,6 +31,7 @@ class FirstFloorScene extends Phaser.Scene {
     this.players = {};
 
     this.socket.on('removePlayer', (data) => {
+      console.log("removePlayer", data);
       if (this.players[data.id]) {
         this.players[data.id].phaser.destroy(true);
         this.players[data.id].nameLabel.destroy(true);
@@ -112,11 +114,13 @@ class FirstFloorScene extends Phaser.Scene {
   }
 
   init(data) {
+    console.log("firstFloor init");
     if (data.x) this.x = data.x, this.destinationX = data.x;
     if (data.y) this.y = data.y, this.destinationY = data.y;
   }
 
   preload() {
+    console.log("firstFloor preload");
     this.load.image("firstFloor-background", "/img/1f_background.png");
     this.load.image("collision-tileset", "/tilemap/simple_tile.png");
     this.load.image("interactive-tile", "/tilemap/interactive-tile.png");
@@ -134,6 +138,7 @@ class FirstFloorScene extends Phaser.Scene {
   }
 
   create() {
+    console.log("firstFloor create");
     playerCreateAnimations(this);
     backgroundStatic(this);
 

@@ -17,6 +17,7 @@ function backgroundStatic(scene) {
 class EntranceScene extends Phaser.Scene {
   constructor() {
     super('EntranceScene');
+    console.log("entrance constructor");
     window.scenes.entrance = this;
     this.map = null;
     this.player = null;
@@ -27,6 +28,7 @@ class EntranceScene extends Phaser.Scene {
     this.socket = window.socket;
     this.players = {};
     this.socket.on('removePlayer', (data) => {
+      console.log("removePlayer", data);
       if (this.players[data.id]) {
         this.players[data.id].phaser.destroy(true);
         this.players[data.id].nameLabel.destroy(true);
@@ -88,9 +90,11 @@ class EntranceScene extends Phaser.Scene {
   init(data) {
     if (data.x) this.x = data.x, this.destinationX = data.x;
     if (data.y) this.y = data.y, this.destinationY = data.y;
+    console.log("entrance init");
   }
 
   preload() {
+    console.log("entrance preload");
     this.load.image("entrance-background", "/img/entrance_background.png");
     this.load.image("collision-tileset", "/tilemap/simple_tile.png");
     this.load.image("interactive-tile", "/tilemap/interactive-tile.png");
@@ -107,6 +111,7 @@ class EntranceScene extends Phaser.Scene {
   }
 
   create() {
+    console.log("entrance create");
     playerCreateAnimations(this);
     backgroundStatic(this);
 

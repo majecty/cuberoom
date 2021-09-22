@@ -58,8 +58,12 @@
     console.log("debugMessage", data);
   });
   window.scenes = {};
-  const game = new Phaser.Game(config);
-  window.game = game;
+  window.socket.on("connect", () => {
+    if (window.game == null) {
+      const game = new Phaser.Game(config);
+      window.game = game;
+    }
+  });
 
   let key;
   let keyCode;

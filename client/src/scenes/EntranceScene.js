@@ -9,6 +9,7 @@ import {
 } from "../entity/map/interaction";
 import { playerOnMapCreate, playerOnMapUpdate } from "../relation/playerOnMap";
 import ENV from '../../ENV';
+import { listenRemovePlayer } from "./common";
 
 function backgroundStatic(scene) {
   scene.add.sprite(1200 / 2, 800 / 2, "entrance-background");
@@ -27,15 +28,8 @@ class EntranceScene extends Phaser.Scene {
     this.y = 16 * 30;
     this.socket = window.socket;
     this.players = {};
-    this.socket.on('removePlayer', (data) => {
-      console.log("removePlayer", data);
-      if (this.players[data.id]) {
-        this.players[data.id].phaser.destroy(true);
-        this.players[data.id].nameLabel.destroy(true);
-        this.players[data.id].chatBubble.destroy(true);
-        delete this.players[data.id];
-      }
-    });
+
+    listenRemovePlayer(this.socket, "firstFloor", this.players);
 
     this.socket.on('playerList', (data) => {
       for (const [id, player] of Object.entries(data)) {

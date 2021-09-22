@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { playerCreate, playerUpdate ,playerMouseUpdate, playerFollowClickUpdate, playerinitmove } from "../entity/player";
+import { playerCreate, playerFollowClickUpdate, playerinitmove } from "../entity/player";
 import { allCharacterImageNames } from "../entity/player/image";
 import { playerCreateAnimations } from "../entity/player/animation";
 import { mapCreate, mapCreateOverCharacterLayer } from "../entity/map";
@@ -9,6 +9,7 @@ import {
 } from "../entity/map/interaction";
 import { playerOnMapCreate, playerOnMapUpdate } from "../relation/playerOnMap";
 import ENV from '../../ENV';
+import { listenRemovePlayer } from "./common"
 
 function backgroundStatic(scene) {
   scene.add.sprite(800 / 2, 608 / 2, "firstFloor-background");
@@ -30,15 +31,7 @@ class FirstFloorScene extends Phaser.Scene {
     this.socket = window.socket;
     this.players = {};
 
-    this.socket.on('removePlayer', (data) => {
-      console.log("removePlayer", data);
-      if (this.players[data.id]) {
-        this.players[data.id].phaser.destroy(true);
-        this.players[data.id].nameLabel.destroy(true);
-        this.players[data.id].chatBubble.destroy(true);
-        delete this.players[data.id];
-      }
-    });
+    listenRemovePlayer(this.socket, "entrance", this.players);
 
     this.socket.on('playerList', (data) => {
       for (const [id, player] of Object.entries(data)) {

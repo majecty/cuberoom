@@ -8,7 +8,7 @@ import {
   mapUpdateMousePoint,
 } from "../entity/map/interaction";
 import { playerOnMapCreate, playerOnMapUpdate } from "../relation/playerOnMap";
-import { listenRemovePlayer, FLOOR_NAMES, listenPlayerList, listenAddChat, listenRemoveChat } from "./common";
+import { listenRemovePlayerOnPlayers, listenRemovePlayerOnPlayer, FLOOR_NAMES, listenPlayerList, listenAddChat, listenRemoveChat } from "./common";
 
 function backgroundStatic(scene) {
   scene.add.sprite(1200 / 2, 800 / 2, "entrance-background");
@@ -29,7 +29,8 @@ class EntranceScene extends Phaser.Scene {
     this.players = {};
     this.sceneName = FLOOR_NAMES.EntranceScene;
 
-    listenRemovePlayer(this.socket, this.sceneName, this.players);
+    listenRemovePlayerOnPlayers(this.socket, this.sceneName, this.players);
+    listenRemovePlayerOnPlayer(this.socket, this.sceneName, () => this.socket.id, () => this.player = null);
     listenPlayerList({
       socket: this.socket,
       sceneName: this.sceneName,
@@ -114,6 +115,11 @@ class EntranceScene extends Phaser.Scene {
 
   update(_time, _delta) {
     const pointer = this.input.activePointer;
+
+    // player can be removed since removePlayer is called
+    if (this.player == null) {
+      return;
+    }
 
     this.player = playerFollowClickUpdate(this.player, this.destinationX, this.destinationY, this);
     mapUpdateMousePoint(this.map, this);

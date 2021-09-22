@@ -13,7 +13,7 @@ export const FLOOR_NAMES = {
   SecondBasementScene: "B2",
 };
 
-export function listenRemovePlayer(socket, sceneName, players) {
+export function listenRemovePlayerOnPlayers(socket, sceneName, players) {
   socket.on("removePlayer", (data) => {
     console.log("removePlayer", sceneName, data);
     if (players[data.id]) {
@@ -21,6 +21,23 @@ export function listenRemovePlayer(socket, sceneName, players) {
       players[data.id].nameLabel.destroy(true);
       players[data.id].chatBubble.destroy(true);
       delete players[data.id];
+    }
+  });
+}
+
+/**
+ * removePlayer: functions that remove player from scene
+ */
+export function listenRemovePlayerOnPlayer(
+  socket,
+  sceneName,
+  getId,
+  removePlayer
+) {
+  socket.on("removePlayer", (data) => {
+    if (data.id === getId()) {
+      console.log("removePlayer", sceneName, data.id, data);
+      removePlayer();
     }
   });
 }

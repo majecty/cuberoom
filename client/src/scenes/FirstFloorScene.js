@@ -12,7 +12,7 @@ import {
   mapUpdateMousePoint,
 } from "../entity/map/interaction";
 import { playerOnMapCreate, playerOnMapUpdate } from "../relation/playerOnMap";
-import { listenRemovePlayer, FLOOR_NAMES, listenPlayerList, listenAddChat, listenRemoveChat } from "./common";
+import { listenRemovePlayerOnPlayers, listenRemovePlayerOnPlayer, FLOOR_NAMES, listenPlayerList, listenAddChat, listenRemoveChat } from "./common";
 
 function backgroundStatic(scene) {
   scene.add.sprite(800 / 2, 608 / 2, "firstFloor-background");
@@ -33,7 +33,8 @@ class FirstFloorScene extends Phaser.Scene {
     this.players = {};
     this.sceneName = FLOOR_NAMES.FirstFloorScene;
 
-    listenRemovePlayer(this.socket, this.sceneName, this.players);
+    listenRemovePlayerOnPlayers(this.socket, this.sceneName, this.players);
+    listenRemovePlayerOnPlayer(this.socket, this.sceneName, () => this.socket.id, () => this.player = null);
     listenPlayerList({
       socket: this.socket,
       sceneName: this.sceneName,
@@ -132,26 +133,10 @@ class FirstFloorScene extends Phaser.Scene {
   }
 
   update(_time, _delta) {
-    // const pointer = this.input.activePointer;
-    // if(pointer.isDown){
-    //   this.player = playerMouseUpdate(this.player,this.input.activePointer, this);
-    //   mapUpdateMousePoint(this.map, this);
-    //   this.playerOnMap = playerOnMapUpdate(
-    //     this.playerOnMap,
-    //     this.player,
-    //     this.map,
-    //     this
-    //   );
-    // }else{
-    //   this.player = playerUpdate(this.player,this.cursors, this);
-    //   mapUpdateMousePoint(this.map, this);
-    //   this.playerOnMap = playerOnMapUpdate(
-    //     this.playerOnMap,
-    //     this.player,
-    //     this.map,
-    //     this
-    //   );
-    // }
+    // player can be removed since removePlayer is called
+    if (this.player == null) {
+      return;
+    }
 
     const pointer = this.input.activePointer;
     this.player = playerFollowClickUpdate(

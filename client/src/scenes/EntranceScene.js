@@ -8,8 +8,7 @@ import {
   mapUpdateMousePoint,
 } from "../entity/map/interaction";
 import { playerOnMapCreate, playerOnMapUpdate } from "../relation/playerOnMap";
-import ENV from '../../ENV';
-import { listenRemovePlayer, FLOOR_NAMES } from "./common";
+import { listenRemovePlayer, FLOOR_NAMES, listenPlayerList, listenAddChat, listenRemoveChat } from "./common";
 
 function backgroundStatic(scene) {
   scene.add.sprite(1200 / 2, 800 / 2, "entrance-background");
@@ -31,56 +30,15 @@ class EntranceScene extends Phaser.Scene {
     this.sceneName = FLOOR_NAMES.EntranceScene;
 
     listenRemovePlayer(this.socket, this.sceneName, this.players);
-
-    this.socket.on('playerList', (data) => {
-      for (const [id, player] of Object.entries(data)) {
-        if (player.floor !== this.sceneName) return;
-
-        const directions = ['left', 'right', 'up', 'down'];
-        for (const direction of directions) {
-          for (let i = 1; i < 5; i += 1) {
-            if (!this.textures.exists(`${player.id}-${direction}-${i}`)) this.load.image(`${player.id}-${direction}-${i}`, `${ENV.URL_STATIC}${player.imgUrl}${direction}-${i}.png`);
-          }
-        }
-        this.load.once('complete', () => {
-          if (!this.players[id] || !this.players[id].phaser.scene) {
-          this.players[id] = playerCreate(this, player.x, player.y, player.name, player.chat, player.id);
-        } else {
-          if (this.socket.id !== id) {
-            if (this.players[id].phaser.depth === 0) {
-              this.players[id].phaser.setDepth(1);
-              this.players[id].nameLabel.setDepth(1);
-              this.players[id].chatBubble.setDepth(1);
-            }
-            this.players[id].phaser.x = player.x;
-            this.players[id].phaser.y = player.y;
-            this.players[id].nameLabel.x = player.x;
-            this.players[id].nameLabel.y = player.y - 30;
-            this.players[id].chatBubble.x = player.x;
-            this.players[id].chatBubble.y = player.y - 50;
-            this.players[id].phaser.setTexture(`${player.id}-${player.direction}-${2}`);
-          }
-        }
-        }, this);
-        this.load.start();
-      }
+    listenPlayerList({
+      socket: this.socket,
+      sceneName: this.sceneName,
+      phaserScene: this,
+      players: this.players
     });
-
-    this.socket.on('addChat', (data) => {
-      if (data.floor === this.sceneName && this.players[data.id]) {
-        const formattedChat = data.chat.match(/.{1,12}/g).join('\n');
-        this.players[data.id].chatBubble.setText(formattedChat);
-        this.players[data.id].chatBubble.setPadding(4);
-      }
-    });
-
-    this.socket.on('removeChat', (data) => {
-      if (data.floor === this.sceneName && this.players[data.id]) {
-        this.players[data.id].chatBubble.setText('');
-        this.players[data.id].chatBubble.setPadding(0);
-      }
-    });
-  }
+    listenAddChat(this.socket, this.sceneName, this.players);
+    listenRemoveChat(this.socket, this.sceneName, this.players);
+ }
 
   init(data) {
     if (data.x) this.x = data.x, this.destinationX = data.x;
@@ -156,6 +114,7 @@ class EntranceScene extends Phaser.Scene {
 
   update(_time, _delta) {
     const pointer = this.input.activePointer;
+
     this.player = playerFollowClickUpdate(this.player, this.destinationX, this.destinationY, this);
     mapUpdateMousePoint(this.map, this);
     this.playerOnMap = playerOnMapUpdate(

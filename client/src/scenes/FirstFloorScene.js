@@ -1,5 +1,9 @@
 import Phaser from "phaser";
-import { playerCreate, playerFollowClickUpdate, playerinitmove } from "../entity/player";
+import {
+  playerCreate,
+  playerFollowClickUpdate,
+  playerinitmove,
+} from "../entity/player";
 import { allCharacterImageNames } from "../entity/player/image";
 import { playerCreateAnimations } from "../entity/player/animation";
 import { mapCreate, mapCreateOverCharacterLayer } from "../entity/map";
@@ -8,8 +12,7 @@ import {
   mapUpdateMousePoint,
 } from "../entity/map/interaction";
 import { playerOnMapCreate, playerOnMapUpdate } from "../relation/playerOnMap";
-import ENV from '../../ENV';
-import { listenRemovePlayer, FLOOR_NAMES } from "./common"
+import { listenRemovePlayer, FLOOR_NAMES, listenPlayerList, listenAddChat, listenRemoveChat } from "./common";
 
 function backgroundStatic(scene) {
   scene.add.sprite(800 / 2, 608 / 2, "firstFloor-background");
@@ -17,7 +20,7 @@ function backgroundStatic(scene) {
 
 class FirstFloorScene extends Phaser.Scene {
   constructor() {
-    super('FirstFloorScene');
+    super("FirstFloorScene");
     console.log("firstFloor constructor");
     window.scenes.firstFloor = this;
     this.map = null;
@@ -28,66 +31,23 @@ class FirstFloorScene extends Phaser.Scene {
     this.y = 16 * 31;
     this.socket = window.socket;
     this.players = {};
-    this.floorName = FLOOR_NAMES.FirstFloorScene;
+    this.sceneName = FLOOR_NAMES.FirstFloorScene;
 
-    listenRemovePlayer(this.socket, "entrance", this.players);
-
-    this.socket.on('playerList', (data) => {
-      for (const [id, player] of Object.entries(data)) {
-
-        if (player.floor !== this.floorName) return;
-
-        const directions = ['left', 'right', 'up', 'down'];
-        for (const direction of directions) {
-          for (let i = 1; i < 5; i += 1) {
-            if (!this.textures.exists(`${player.id}-${direction}-${i}`)) this.load.image(`${player.id}-${direction}-${i}`, `${ENV.URL_STATIC}${player.imgUrl}${direction}-${i}.png`);
-          }
-        }
-        this.load.once('complete', () => {
-
-        if (!this.players[id] || !this.players[id].phaser.scene) {
-          this.players[id] = playerCreate(this, player.x, player.y, player.name, player.chat, player.id);
-        } else {
-          if (this.socket.id !== id) {
-            if (this.players[id].phaser.depth === 0) {
-              this.players[id].phaser.setDepth(1);
-              this.players[id].nameLabel.setDepth(1);
-              this.players[id].chatBubble.setDepth(1);
-            }
-            this.players[id].phaser.x = player.x;
-            this.players[id].phaser.y = player.y;
-            this.players[id].nameLabel.x = player.x;
-            this.players[id].nameLabel.y = player.y - 30;
-            this.players[id].chatBubble.x = player.x;
-            this.players[id].chatBubble.y = player.y - 50;
-            this.players[id].phaser.setTexture(`${player.id}-${player.direction}-${2}`);
-          }
-        }
-        }, this);
-        this.load.start();
-      }
+    listenRemovePlayer(this.socket, this.sceneName, this.players);
+    listenPlayerList({
+      socket: this.socket,
+      sceneName: this.sceneName,
+      phaserScene: this,
+      players: this.players,
     });
-
-    this.socket.on('addChat', (data) => {
-      if (data.floor === this.floorName && this.players[data.id]) {
-        const formattedChat = data.chat.match(/.{1,12}/g).join('\n');
-        this.players[data.id].chatBubble.setText(formattedChat);
-        this.players[data.id].chatBubble.setPadding(4);
-      }
-    });
-
-    this.socket.on('removeChat', (data) => {
-      if (data.floor === this.floorName && this.players[data.id]) {
-        this.players[data.id].chatBubble.setText('');
-        this.players[data.id].chatBubble.setPadding(0);
-      }
-    });
+    listenAddChat(this.socket, this.sceneName, this.players);
+    listenRemoveChat(this.socket, this.sceneName, this.players);
   }
 
   init(data) {
     console.log("firstFloor init");
-    if (data.x) this.x = data.x, this.destinationX = data.x;
-    if (data.y) this.y = data.y, this.destinationY = data.y;
+    if (data.x) (this.x = data.x), (this.destinationX = data.x);
+    if (data.y) (this.y = data.y), (this.destinationY = data.y);
   }
 
   preload() {
@@ -113,22 +73,30 @@ class FirstFloorScene extends Phaser.Scene {
     playerCreateAnimations(this);
     backgroundStatic(this);
 
-    this.map = mapCreate(this, 'firstFloor-map');
+    this.map = mapCreate(this, "firstFloor-map");
 
     // 잔상 관련 주석 처리
     // for (const [id, player] of Object.entries(this.players)) {
     //   this.players[id] = playerCreate(this, player.phaser.x, player.phaser.y, player.nameLabel._text, player.chatBubble._text, player.id);
     // }
 
-    this.player = playerCreate(this, this.x, this.y, window.playerName, '', this.socket.id, window.playerImgUrl); // 소켓 연결 되면 이 부분을 지워야 함
+    this.player = playerCreate(
+      this,
+      this.x,
+      this.y,
+      window.playerName,
+      "",
+      this.socket.id,
+      window.playerImgUrl
+    ); // 소켓 연결 되면 이 부분을 지워야 함
     this.players[this.socket.id] = this.player;
     this.player = playerinitmove(this.player);
 
-    this.socket.emit('addPlayer', {
+    this.socket.emit("addPlayer", {
       id: this.socket.id,
       name: window.playerName,
       imgUrl: window.playerImgUrl,
-      floor: this.floorName,
+      floor: this.sceneName,
       x: this.x,
       y: this.y,
     });
@@ -138,7 +106,7 @@ class FirstFloorScene extends Phaser.Scene {
     // this.physics.add.collider(this.player.nameLabel, this.map.collisionLayer);
     // this.physics.add.collider(this.player.chatBubble, this.map.collisionLayer);
 
-    this.map = mapCreateOverCharacterLayer(this.map, 'firstFloor-background');
+    this.map = mapCreateOverCharacterLayer(this.map, "firstFloor-background");
 
     this.cameras.main.setBounds(
       0,
@@ -186,7 +154,12 @@ class FirstFloorScene extends Phaser.Scene {
     // }
 
     const pointer = this.input.activePointer;
-    this.player = playerFollowClickUpdate(this.player, this.destinationX, this.destinationY, this);
+    this.player = playerFollowClickUpdate(
+      this.player,
+      this.destinationX,
+      this.destinationY,
+      this
+    );
     mapUpdateMousePoint(this.map, this);
     this.playerOnMap = playerOnMapUpdate(
       this.playerOnMap,
@@ -195,10 +168,9 @@ class FirstFloorScene extends Phaser.Scene {
       this
     );
 
-    if(pointer.isDown){
+    if (pointer.isDown) {
       this.destinationX = this.input.activePointer.worldX;
       this.destinationY = this.input.activePointer.worldY;
-
     }
 
     this.player.nameLabel.x = this.player.phaser.x;
@@ -207,14 +179,14 @@ class FirstFloorScene extends Phaser.Scene {
     this.player.chatBubble.y = this.player.phaser.y - 50;
 
     if (
-      this.destinationX && this.destinationY && (
-        Math.abs(this.destinationX - this.player.phaser.x) > 20
-        || Math.abs(this.destinationY - this.player.phaser.y) > 20
-      )
+      this.destinationX &&
+      this.destinationY &&
+      (Math.abs(this.destinationX - this.player.phaser.x) > 20 ||
+        Math.abs(this.destinationY - this.player.phaser.y) > 20)
     ) {
-      this.socket.emit('movePlayer', {
+      this.socket.emit("movePlayer", {
         id: this.socket.id,
-        floor: this.floorName,
+        floor: this.sceneName,
         direction: this.player.prevMove,
         x: this.player.phaser.x,
         y: this.player.phaser.y,

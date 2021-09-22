@@ -45,12 +45,10 @@ class FirstFloorScene extends Phaser.Scene {
           }
         }
         this.load.once('complete', () => {
-          // if (!this.players[id]) this.players[id] = playerCreate(this, player.x, player.y, player.name, player.chat, player.id);
 
         if (!this.players[id] || !this.players[id].phaser.scene) {
           this.players[id] = playerCreate(this, player.x, player.y, player.name, player.chat, player.id);
         } else {
-          // if (player.floor === '1F' && this.socket.id !== id) {
           if (this.socket.id !== id) {
             if (this.players[id].phaser.depth === 0) {
               this.players[id].phaser.setDepth(1);
@@ -63,30 +61,11 @@ class FirstFloorScene extends Phaser.Scene {
             this.players[id].nameLabel.y = player.y - 30;
             this.players[id].chatBubble.x = player.x;
             this.players[id].chatBubble.y = player.y - 50;
-            // this.players[id].phaser.anims.play(`player-${player.direction}`, true);
-            // this.players[id].phaser.anims.play(`player-${player.direction}-stop`, true);
             this.players[id].phaser.setTexture(`${player.id}-${player.direction}-${2}`);
           }
         }
         }, this);
         this.load.start();
-
-        // if (!this.players[id]) {
-        //   this.players[id] = playerCreate(this, player.x, player.y, player.name, player.chat, player.id);
-        // } else {
-        //   // if (player.floor === '1F' && this.socket.id !== id) {
-        //   if (this.socket.id !== id) {
-        //     this.players[id].phaser.x = player.x;
-        //     this.players[id].phaser.y = player.y;
-        //     this.players[id].nameLabel.x = player.x;
-        //     this.players[id].nameLabel.y = player.y - 30;
-        //     this.players[id].chatBubble.x = player.x;
-        //     this.players[id].chatBubble.y = player.y - 50;
-        //     // this.players[id].phaser.anims.play(`player-${player.direction}`, true);
-        //     // this.players[id].phaser.anims.play(`player-${player.direction}-stop`, true);
-        //     this.players[id].phaser.setTexture(`${player.id}-${player.direction}-${2}`);
-        //   }
-        // }
       }
     });
 

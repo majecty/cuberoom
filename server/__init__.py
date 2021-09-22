@@ -150,7 +150,8 @@ def movePlayer(data):
 @socketio.on('getPlayers')
 def getPlayers():
     global players
-    emit('playerList', players)
+#    emit('playerList', players)
+    emit('debugPlayerList', players)
     emit('debugMessage', players)
 
 @socketio.on('disconnect')

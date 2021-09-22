@@ -1,6 +1,13 @@
 import { updateAnimation, updateMouseAnimation, updateFollowClickAnimation, updateInitAnimation } from "./player/animation";
 
 export function playerCreate(scene, x, y, name, chat, id) {
+  let idStr = "";
+  if (id == null) {
+    idStr = "isnull";
+  } else {
+    idStr = id;
+  }
+  console.log("playerCreate", scene.sceneName, name, idStr.substring(0, 5));
   const phaser = scene.physics.add.sprite(x, y, `${id}-down-2`, 1);
   phaser.setSize(20, 20, false).setOffset(0, 20);
 

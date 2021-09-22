@@ -47,8 +47,50 @@ export function listenRemovePlayerOnPlayer(
 }
 
 // FIXME: too many arguments.
-// FIXME: refactor the listener function
 export function listenPlayerList({ socket, sceneName, phaserScene, players }) {
+  function loadPlayerImages(playerFromServer, debug) {
+    const directions = ["left", "right", "up", "down"];
+    for (const direction of directions) {
+      for (let i = 1; i < 5; i += 1) {
+        if (
+          !phaserScene.textures.exists(
+            `${playerFromServer.id}-${direction}-${i}`
+          )
+        ) {
+          if (debug) {
+            log(
+              "listenPlayerList load",
+              id.substring(0, 5),
+              `${playerFromServer.id}-${direction}-${i}`,
+              `${ENV.URL_STATIC}${playerFromServer.imgUrl}${direction}-${i}.png`
+            );
+          }
+          phaserScene.load.image(
+            `${playerFromServer.id}-${direction}-${i}`,
+            `${ENV.URL_STATIC}${playerFromServer.imgUrl}${direction}-${i}.png`
+          );
+        }
+      }
+    }
+  }
+
+  function updatePlayerFromServer(playerFromServer, player) {
+    if (player.phaser.depth === 0) {
+      player.phaser.setDepth(1);
+      player.nameLabel.setDepth(1);
+      player.chatBubble.setDepth(1);
+    }
+    player.phaser.x = playerFromServer.x;
+    player.phaser.y = playerFromServer.y;
+    player.nameLabel.x = playerFromServer.x;
+    player.nameLabel.y = playerFromServer.y - 30;
+    player.chatBubble.x = playerFromServer.x;
+    player.chatBubble.y = playerFromServer.y - 50;
+    player.phaser.setTexture(
+      `${playerFromServer.id}-${playerFromServer.direction}-${2}`
+    );
+  }
+
   function listener(data, debug) {
     if (debug) {
       log("listenPlayerList", sceneName);
@@ -66,31 +108,13 @@ export function listenPlayerList({ socket, sceneName, phaserScene, players }) {
         continue;
       }
 
-      const directions = ["left", "right", "up", "down"];
-      for (const direction of directions) {
-        for (let i = 1; i < 5; i += 1) {
-          if (!phaserScene.textures.exists(`${player.id}-${direction}-${i}`)) {
-            if (debug) {
-              log(
-                "listenPlayerList load",
-                id.substring(0, 5),
-                `${player.id}-${direction}-${i}`,
-                `${ENV.URL_STATIC}${player.imgUrl}${direction}-${i}.png`
-              );
-            }
-            phaserScene.load.image(
-              `${player.id}-${direction}-${i}`,
-              `${ENV.URL_STATIC}${player.imgUrl}${direction}-${i}.png`
-            );
-          }
-        }
-      }
+      loadPlayerImages(player, debug);
+
       phaserScene.load.once("complete", () => {
         if (debug) {
           log("listenPlayerList complete", id.substring(0, 5));
         }
-        // fixme do not use implicit boolean casting
-        if (!players[id] || !players[id].phaser.scene) {
+        if (players[id] == null || players[id].phaser.scene == null) {
           if (debug) {
             log("listenPlayerList playerCreate", id.substring(0, 5));
           }
@@ -106,20 +130,7 @@ export function listenPlayerList({ socket, sceneName, phaserScene, players }) {
           if (debug) {
             log("listenPlayerList socket.id!==id", id.substring(0, 5));
           }
-          if (players[id].phaser.depth === 0) {
-            players[id].phaser.setDepth(1);
-            players[id].nameLabel.setDepth(1);
-            players[id].chatBubble.setDepth(1);
-          }
-          players[id].phaser.x = player.x;
-          players[id].phaser.y = player.y;
-          players[id].nameLabel.x = player.x;
-          players[id].nameLabel.y = player.y - 30;
-          players[id].chatBubble.x = player.x;
-          players[id].chatBubble.y = player.y - 50;
-          players[id].phaser.setTexture(
-            `${player.id}-${player.direction}-${2}`
-          );
+          updatePlayerFromServer(players[id], player);
         } else if (debug) {
           log("listenPlayerList socket.id===id", id.substring(0, 5));
         }

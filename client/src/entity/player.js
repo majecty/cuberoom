@@ -147,90 +147,6 @@ function followClick(player, destinationX, destinationY) {
   };
 }
 
-function mouseMove(player, pointer, scene) {
-  let velocity = 100;
-
-  if (scene.cheat) {
-    velocity *= 10;
-  }
-
-  let newPrevMove = player.prevMove;
-  if (pointer.isDown) {
-    if (pointer.worldX + 16 < player.phaser.x) {
-      // FIXME: why should we use the parseInt?
-      velocity *= parseInt(player.phaser.x - pointer.worldX) * 0.007;
-      if (velocity < 100) {
-        velocity = 100;
-      }
-      if (player.prevMove !== "left") {
-        player.phaser.body.setVelocityX(-velocity);
-        player.nameLabel.body.setVelocityX(-velocity);
-        player.chatBubble.body.setVelocityX(-velocity);
-        // player.nameLabel.x = player.phaser.x;
-        // player.chatBubble.x = player.phaser.x;
-        newPrevMove = "left";
-      }
-    } else if (pointer.worldX > 16 + player.phaser.x) {
-      // FIXME: why should we use the parseInt?
-      velocity *= parseInt(pointer.worldX - player.phaser.x) * 0.007;
-      if (velocity < 100) {
-        velocity = 100;
-      }
-      if (player.prevMove !== "right") {
-        player.phaser.body.setVelocityX(velocity);
-        player.nameLabel.body.setVelocityX(velocity);
-        player.chatBubble.body.setVelocityX(velocity);
-        // player.nameLabel.x = player.phaser.x;
-        // player.chatBubble.x = player.phaser.x;
-        newPrevMove = "right";
-      }
-    } else {
-      player.phaser.body.setVelocityX(0);
-      player.nameLabel.body.setVelocityX(0);
-      player.chatBubble.body.setVelocityX(0);
-    }
-
-    if (pointer.worldY + 16 < player.phaser.y) {
-      // FIXME: why should we use the parseInt?
-      velocity *= parseInt(player.phaser.y - pointer.worldY) * 0.015;
-      if (velocity < 100) {
-        velocity = 100;
-      }
-
-      if (player.prevMove !== "up") {
-        player.phaser.body.setVelocityY(-velocity);
-        player.nameLabel.body.setVelocityY(-velocity);
-        player.chatBubble.body.setVelocityY(-velocity);
-        // player.nameLabel.y = player.phaser.y - 30;
-        // player.chatBubble.y = player.phaser.y - 45;
-        newPrevMove = "up";
-      }
-    } else if (pointer.worldY > 16 + player.phaser.y) {
-      // FIXME: why should we use the parseInt?
-      velocity *= parseInt(pointer.worldY - player.phaser.y) * 0.015;
-      if (velocity < 100) {
-        velocity = 100;
-      }
-      if (player.prevMove !== "down") {
-        player.phaser.body.setVelocityY(velocity);
-        player.nameLabel.body.setVelocityY(velocity);
-        player.chatBubble.body.setVelocityY(velocity);
-        // player.nameLabel.y = player.phaser.y - 30;
-        // player.chatBubble.y = player.phaser.y - 45;
-        newPrevMove = "down";
-      }
-    } else {
-      player.phaser.body.setVelocityY(0);
-      player.nameLabel.body.setVelocityY(0);
-      player.chatBubble.body.setVelocityY(0);
-    }
-  }
-  return {
-    ...player,
-    prevMove: newPrevMove,
-  };
-}
-
 function move(player, cursors, scene) {
   let moved = false;
   let velocity = 100;
@@ -373,12 +289,6 @@ function move(player, cursors, scene) {
 export function playerUpdate(player, cursors, scene) {
   let newPlayer = updateAnimation(player, cursors);
   newPlayer = move(newPlayer, cursors, scene);
-  return newPlayer;
-}
-
-export function playerMouseUpdate(player, pointer, scene) {
-  let newPlayer = updateMouseAnimation(player, pointer);
-  newPlayer = mouseMove(newPlayer, pointer, scene);
   return newPlayer;
 }
 

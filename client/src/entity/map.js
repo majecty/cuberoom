@@ -63,11 +63,19 @@ export function mapCreate(scene, key) {
  * 플레이어 생성 이후에 호출해야 플레이어 위에 그려진다.
  */
 export function mapCreateOverCharacterLayer(map, tilesetImage) {
-  const backgroundTileset = map.phaser.addTilesetImage('background', tilesetImage);
-  const b2Cylinder = map.phaser.addTilesetImage('cylinder', 'b2-cylinder');
-  const b2Cube = map.phaser.addTilesetImage('cube', 'b2-cube');
-  const b2Pink = map.phaser.addTilesetImage('pink', 'b2-pink');
-  map.phaser.createLayer("overCharacter", [backgroundTileset, b2Cylinder, b2Cube, b2Pink], 0, 0);
+  const backgroundTileset = map.phaser.addTilesetImage(
+    "background",
+    tilesetImage
+  );
+  const b2Cylinder = map.phaser.addTilesetImage("cylinder", "b2-cylinder");
+  const b2Cube = map.phaser.addTilesetImage("cube", "b2-cube");
+  const b2Pink = map.phaser.addTilesetImage("pink", "b2-pink");
+  map.phaser.createLayer(
+    "overCharacter",
+    [backgroundTileset, b2Cylinder, b2Cube, b2Pink],
+    0,
+    0
+  );
   return {
     ...map,
     backgroundTileset,

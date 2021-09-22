@@ -102,36 +102,26 @@ export function listenPlayerList({ socket, sceneName, phaserScene, players }) {
             player.chat,
             player.id
           );
-        } else {
-          if (socket.id !== id) {
-            if (debug) {
-              console.log(
-                "listenPlayerList socket.id!==id",
-                id.substring(0, 5)
-              );
-            }
-            if (players[id].phaser.depth === 0) {
-              players[id].phaser.setDepth(1);
-              players[id].nameLabel.setDepth(1);
-              players[id].chatBubble.setDepth(1);
-            }
-            players[id].phaser.x = player.x;
-            players[id].phaser.y = player.y;
-            players[id].nameLabel.x = player.x;
-            players[id].nameLabel.y = player.y - 30;
-            players[id].chatBubble.x = player.x;
-            players[id].chatBubble.y = player.y - 50;
-            players[id].phaser.setTexture(
-              `${player.id}-${player.direction}-${2}`
-            );
-          } else {
-            if (debug) {
-              console.log(
-                "listenPlayerList socket.id===id",
-                id.substring(0, 5)
-              );
-            }
+        } else if (socket.id !== id) {
+          if (debug) {
+            console.log("listenPlayerList socket.id!==id", id.substring(0, 5));
           }
+          if (players[id].phaser.depth === 0) {
+            players[id].phaser.setDepth(1);
+            players[id].nameLabel.setDepth(1);
+            players[id].chatBubble.setDepth(1);
+          }
+          players[id].phaser.x = player.x;
+          players[id].phaser.y = player.y;
+          players[id].nameLabel.x = player.x;
+          players[id].nameLabel.y = player.y - 30;
+          players[id].chatBubble.x = player.x;
+          players[id].chatBubble.y = player.y - 50;
+          players[id].phaser.setTexture(
+            `${player.id}-${player.direction}-${2}`
+          );
+        } else if (debug) {
+          console.log("listenPlayerList socket.id===id", id.substring(0, 5));
         }
       });
       phaserScene.load.start();

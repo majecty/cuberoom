@@ -9,7 +9,7 @@ import {
 } from "../entity/map/interaction";
 import { playerOnMapCreate, playerOnMapUpdate } from "../relation/playerOnMap";
 import ENV from '../../ENV';
-import { listenRemovePlayer } from "./common"
+import { listenRemovePlayer, FLOOR_NAMES } from "./common"
 
 function backgroundStatic(scene) {
   scene.add.sprite(800 / 2, 608 / 2, "firstFloor-background");
@@ -26,17 +26,16 @@ class FirstFloorScene extends Phaser.Scene {
     this.playerOnMap = null;
     this.x = 16 * 5;
     this.y = 16 * 31;
-
-
     this.socket = window.socket;
     this.players = {};
+    this.floorName = FLOOR_NAMES.FirstFloorScene;
 
     listenRemovePlayer(this.socket, "entrance", this.players);
 
     this.socket.on('playerList', (data) => {
       for (const [id, player] of Object.entries(data)) {
 
-        if (player.floor !== '1F') return;
+        if (player.floor !== this.floorName) return;
 
         const directions = ['left', 'right', 'up', 'down'];
         for (const direction of directions) {
@@ -70,7 +69,7 @@ class FirstFloorScene extends Phaser.Scene {
     });
 
     this.socket.on('addChat', (data) => {
-      if (data.floor === '1F' && this.players[data.id]) {
+      if (data.floor === this.floorName && this.players[data.id]) {
         const formattedChat = data.chat.match(/.{1,12}/g).join('\n');
         this.players[data.id].chatBubble.setText(formattedChat);
         this.players[data.id].chatBubble.setPadding(4);
@@ -78,7 +77,7 @@ class FirstFloorScene extends Phaser.Scene {
     });
 
     this.socket.on('removeChat', (data) => {
-      if (data.floor === '1F' && this.players[data.id]) {
+      if (data.floor === this.floorName && this.players[data.id]) {
         this.players[data.id].chatBubble.setText('');
         this.players[data.id].chatBubble.setPadding(0);
       }
@@ -129,7 +128,7 @@ class FirstFloorScene extends Phaser.Scene {
       id: this.socket.id,
       name: window.playerName,
       imgUrl: window.playerImgUrl,
-      floor: '1F',
+      floor: this.floorName,
       x: this.x,
       y: this.y,
     });
@@ -215,7 +214,7 @@ class FirstFloorScene extends Phaser.Scene {
     ) {
       this.socket.emit('movePlayer', {
         id: this.socket.id,
-        floor: '1F',
+        floor: this.floorName,
         direction: this.player.prevMove,
         x: this.player.phaser.x,
         y: this.player.phaser.y,

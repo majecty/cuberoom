@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { playerCreate, playerUpdate, playerMouseUpdate, playerFollowClickUpdate, playerinitmove } from "../entity/player";
+import { playerCreate, playerFollowClickUpdate, playerinitmove } from "../entity/player";
 import { allCharacterImageNames } from "../entity/player/image";
 import { playerCreateAnimations } from "../entity/player/animation";
 import { mapCreate, mapCreateOverCharacterLayer } from "../entity/map";
@@ -9,7 +9,7 @@ import {
 } from "../entity/map/interaction";
 import { playerOnMapCreate, playerOnMapUpdate } from "../relation/playerOnMap";
 import ENV from '../../ENV';
-import { listenRemovePlayer } from "./common";
+import { listenRemovePlayer, FLOOR_NAMES } from "./common";
 
 function backgroundStatic(scene) {
   scene.add.sprite(1200 / 2, 800 / 2, "entrance-background");
@@ -28,12 +28,13 @@ class EntranceScene extends Phaser.Scene {
     this.y = 16 * 30;
     this.socket = window.socket;
     this.players = {};
+    this.sceneName = FLOOR_NAMES.EntranceScene;
 
-    listenRemovePlayer(this.socket, "firstFloor", this.players);
+    listenRemovePlayer(this.socket, this.sceneName, this.players);
 
     this.socket.on('playerList', (data) => {
       for (const [id, player] of Object.entries(data)) {
-        if (player.floor !== 'entrance') return;
+        if (player.floor !== this.sceneName) return;
 
         const directions = ['left', 'right', 'up', 'down'];
         for (const direction of directions) {
@@ -66,7 +67,7 @@ class EntranceScene extends Phaser.Scene {
     });
 
     this.socket.on('addChat', (data) => {
-      if (data.floor === 'entrance' && this.players[data.id]) {
+      if (data.floor === this.sceneName && this.players[data.id]) {
         const formattedChat = data.chat.match(/.{1,12}/g).join('\n');
         this.players[data.id].chatBubble.setText(formattedChat);
         this.players[data.id].chatBubble.setPadding(4);
@@ -74,7 +75,7 @@ class EntranceScene extends Phaser.Scene {
     });
 
     this.socket.on('removeChat', (data) => {
-      if (data.floor === 'entrance' && this.players[data.id]) {
+      if (data.floor === this.sceneName && this.players[data.id]) {
         this.players[data.id].chatBubble.setText('');
         this.players[data.id].chatBubble.setPadding(0);
       }
@@ -118,7 +119,7 @@ class EntranceScene extends Phaser.Scene {
       id: this.socket.id,
       name: window.playerName,
       imgUrl: window.playerImgUrl,
-      floor: 'entrance',
+      floor: this.sceneName,
       x: this.x,
       y: this.y,
     });
@@ -182,7 +183,7 @@ class EntranceScene extends Phaser.Scene {
     ) {
       this.socket.emit('movePlayer', {
         id: this.socket.id,
-        floor: 'entrance',
+        floor: this.sceneName,
         direction: this.player.prevMove,
         x: this.player.phaser.x,
         y: this.player.phaser.y,

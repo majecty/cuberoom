@@ -21,11 +21,13 @@ function getFloorName(sceneName) {
   }
 }
 
-export default function startScene(scene, sceneName, spawnPos) {
-  scene.cameras.main.fadeOut(500);
+export default function startScene(currentScene, targetSceneName, spawnPos) {
+  console.log("call startScene");
+  currentScene.cameras.main.fadeOut(500);
   // window.socket.emit('moveFloor', { id: this.socket.id, floor: getFloorName(sceneName) });
-  scene.cameras.main.on('camerafadeoutcomplete', () => {
-    scene.scene.pause(scene.scene.key);
-    scene.scene.start(sceneName, spawnPos);
+  currentScene.cameras.main.on('camerafadeoutcomplete', () => {
+    console.log("start next scene");
+    currentScene.scene.pause(currentScene.scene.key);
+    currentScene.scene.start(targetSceneName, spawnPos);
   });
 }

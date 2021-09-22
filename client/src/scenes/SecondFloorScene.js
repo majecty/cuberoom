@@ -1,8 +1,6 @@
 import Phaser from "phaser";
 import {
   playerCreate,
-  playerUpdate,
-  playerMouseUpdate,
   playerFollowClickUpdate,
   playerinitmove,
 } from "../entity/player";

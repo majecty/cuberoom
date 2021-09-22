@@ -54,7 +54,17 @@ export function listenPlayerList({ socket, sceneName, phaserScene, players }) {
       console.log("listenPlayerList", sceneName);
     }
     for (const [id, player] of Object.entries(data)) {
-      if (player.floor !== sceneName) return;
+      if (player.floor !== sceneName) {
+        if (debug) {
+          console.log(
+            "listenPlayerList skip",
+            id.substring(0, 5),
+            player.floor,
+            sceneName
+          );
+        }
+        continue;
+      }
 
       const directions = ["left", "right", "up", "down"];
       for (const direction of directions) {

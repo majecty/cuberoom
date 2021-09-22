@@ -250,28 +250,24 @@ export function playerOnMapUpdate(playerOnMap, player, map, scene) {
           case "work-1":
             if (document.getElementById("work-1") == null) {
               popupCreate(scene, popupPos[1], 1);
-              // FIXME: it seems a bug
-              break;
             }
+            break;
 
           case "work-2":
             if (document.getElementById("work-2") == null) {
               popupCreate(scene, popupPos[2], 2);
-              // FIXME: it seems a bug
-              break;
             }
+            break;
           case "work-3":
             if (document.getElementById("work-3") == null) {
               popupCreate(scene, popupPos[3], 3);
-              // FIXME: it seems a bug
-              break;
             }
+            break;
           case "work-4":
             if (document.getElementById("work-4") == null) {
               popupCreate(scene, popupPos[4], 4);
-              // FIXME: it seems a bug
-              break;
             }
+            break;
           default:
             break;
         }
@@ -298,27 +294,23 @@ export function playerOnMapUpdate(playerOnMap, player, map, scene) {
           case "work-5":
             if (document.getElementById("work-5") == null) {
               popupCreate(scene, popupPos[5], 5);
-              // FIXME: it seems a bug
-              break;
             }
+            break;
           case "work-6":
             if (document.getElementById("work-6") == null) {
               popupCreate(scene, popupPos[6], 6);
-              // FIXME: it seems a bug
-              break;
             }
+            break;
           case "work-7":
             if (document.getElementById("work-7") == null) {
               popupCreate(scene, popupPos[7], 7);
-              // FIXME: it seems a bug
-              break;
             }
+            break;
           case "work-8":
             if (document.getElementById("work-8") == null) {
               popupCreate(scene, popupPos[8], 8);
-              // FIXME: it seems a bug
-              break;
             }
+            break;
           default:
             break;
         }

@@ -12,14 +12,14 @@ import {
   mapUpdateMousePoint,
 } from "../entity/map/interaction";
 import { playerOnMapCreate, playerOnMapUpdate } from "../relation/playerOnMap";
+import { listenRemovePlayerOnPlayer, FLOOR_NAMES } from "./common";
 import {
-  listenRemovePlayerOnPlayers,
-  listenRemovePlayerOnPlayer,
-  FLOOR_NAMES,
-  listenPlayerList,
-  listenAddChat,
-  listenRemoveChat,
-} from "./common";
+  playersContainerListenRemovePlayer,
+  playersContainerListenPlayerList,
+  playersContainerListenAddChat,
+  playersContainerListenRemoveChat,
+} from "./common/playersContainer.js";
+import { playersCreate, playersAddPlayer } from "./common/players";
 
 function backgroundStatic(scene) {
   scene.add.sprite(800 / 2, 608 / 2, "firstFloor-background");
@@ -37,24 +37,24 @@ class FirstFloorScene extends Phaser.Scene {
     this.x = 16 * 5;
     this.y = 16 * 31;
     this.socket = window.socket;
-    this.players = {};
     this.sceneName = FLOOR_NAMES.FirstFloorScene;
+    this.players = playersCreate(this.sceneName);
 
-    listenRemovePlayerOnPlayers(this.socket, this.sceneName, this.players);
+    playersContainerListenRemovePlayer(this, this.socket);
     listenRemovePlayerOnPlayer(
       this.socket,
       this.sceneName,
       () => this.socket.id,
       () => (this.player = null)
     );
-    listenPlayerList({
+    playersContainerListenPlayerList({
       socket: this.socket,
       sceneName: this.sceneName,
       phaserScene: this,
-      players: this.players,
+      container: this,
     });
-    listenAddChat(this.socket, this.sceneName, this.players);
-    listenRemoveChat(this.socket, this.sceneName, this.players);
+    playersContainerListenAddChat(this, this.socket, this.sceneName);
+    playersContainerListenRemoveChat(this, this.socket, this.sceneName);
   }
 
   init(data) {
@@ -102,7 +102,7 @@ class FirstFloorScene extends Phaser.Scene {
       this.socket.id,
       window.playerImgUrl
     ); // 소켓 연결 되면 이 부분을 지워야 함
-    this.players[this.socket.id] = this.player;
+    this.players = playersAddPlayer(this.players, this.socket.id, this.player);
     this.player = playerinitmove(this.player);
 
     this.socket.emit("addPlayer", {

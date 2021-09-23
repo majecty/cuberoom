@@ -25,6 +25,10 @@ import {
   playersContainerListenAddChat,
   playersContainerListenRemoveChat,
 } from "./playersContainer";
+import {
+  rateLimiterCreate,
+  rateLimiterTrigger,
+} from "../../network/rateLimiter";
 
 /**
  * initialize map, player, cursors, playerOnMap, socket, sceneName, players
@@ -38,6 +42,7 @@ export function baseSceneConstructor(selfScene, sceneName) {
   selfScene.socket = window.socket;
   selfScene.sceneName = sceneName;
   selfScene.players = playersCreate(sceneName);
+  selfScene.rateLimiter = rateLimiterCreate();
 
   playersContainerListenRemovePlayer(selfScene, selfScene.socket);
   listenRemovePlayerOnPlayer(
@@ -176,12 +181,14 @@ export function baseSceneUpdate(selfScene) {
     (Math.abs(selfScene.destinationX - selfScene.player.phaser.x) > 20 ||
       Math.abs(selfScene.destinationY - selfScene.player.phaser.y) > 20)
   ) {
-    selfScene.socket.emit("movePlayer", {
-      id: selfScene.socket.id,
-      floor: selfScene.sceneName,
-      direction: selfScene.player.prevMove,
-      x: selfScene.player.phaser.x,
-      y: selfScene.player.phaser.y,
+    rateLimiterTrigger(selfScene.rateLimiter, () => {
+      selfScene.socket.emit("movePlayer", {
+        id: selfScene.socket.id,
+        floor: selfScene.sceneName,
+        direction: selfScene.player.prevMove,
+        x: selfScene.player.phaser.x,
+        y: selfScene.player.phaser.y,
+      });
     });
   }
 }

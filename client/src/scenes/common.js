@@ -28,3 +28,9 @@ export function listenRemovePlayerOnPlayer(
     }
   });
 }
+
+export function cameraInit({ phaserScene, mapWidth, mapHeight, player }) {
+  phaserScene.cameras.main.setBounds(0, 0, mapWidth, mapHeight);
+  phaserScene.cameras.main.startFollow(player.phaser, true, 0.1, 0.1);
+  phaserScene.cameras.main.fadeIn(500);
+}

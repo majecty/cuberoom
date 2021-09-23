@@ -380,3 +380,11 @@ export function loadPlayerImages(phaserScene, playerFromServer, debug) {
     }
   }
 }
+
+export function playerMoveNameLabelAndChatBubble(player) {
+  player.nameLabel.x = player.phaser.x;
+  player.chatBubble.x = player.phaser.x;
+  player.nameLabel.y = player.phaser.y - 30;
+  player.chatBubble.y = player.phaser.y - 50;
+  return player;
+}

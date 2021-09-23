@@ -3,6 +3,7 @@ import {
   playerCreate,
   playerFollowClickUpdate,
   playerinitmove,
+  playerMoveNameLabelAndChatBubble,
 } from "../entity/player";
 import { allCharacterImageNames } from "../entity/player/image";
 import { playerCreateAnimations } from "../entity/player/animation";
@@ -12,7 +13,7 @@ import {
   mapUpdateMousePoint,
 } from "../entity/map/interaction";
 import { playerOnMapCreate, playerOnMapUpdate } from "../relation/playerOnMap";
-import { listenRemovePlayerOnPlayer, FLOOR_NAMES } from "./common";
+import { listenRemovePlayerOnPlayer, FLOOR_NAMES, cameraInit } from "./common";
 import {
   playersContainerListenRemovePlayer,
   playersContainerListenPlayerList,
@@ -58,8 +59,14 @@ class EntranceScene extends Phaser.Scene {
   }
 
   init(data) {
-    if (data.x) (this.x = data.x), (this.destinationX = data.x);
-    if (data.y) (this.y = data.y), (this.destinationY = data.y);
+    if (data.x) {
+      this.x = data.x;
+      this.destinationX = data.x;
+    }
+    if (data.y) {
+      this.y = data.y;
+      this.destinationY = data.y;
+    }
     console.log("entrance init");
   }
 
@@ -111,23 +118,14 @@ class EntranceScene extends Phaser.Scene {
 
     this.map = mapCreateOverCharacterLayer(this.map, "entrance-background");
 
-    this.cameras.main.setBounds(
-      0,
-      0,
-      this.map.phaser.widthInPixels,
-      this.map.phaser.heightInPixels
-    );
-    this.cameras.main.startFollow(this.player.phaser, true, 0.1, 0.1);
-    this.cameras.main.fadeIn(500);
+    cameraInit({
+      phaserScene: this,
+      mapWidth: this.map.phaser.widthInPixels,
+      mapHeight: this.map.phaser.heightInPixels,
+      player: this.player,
+    });
 
     this.cursors = this.input.keyboard.createCursorKeys();
-    this.input.keyboard.on("keydown-SPACE", () => {
-      if (this.cheat === true) {
-        this.cheat = false;
-      } else {
-        this.cheat = true;
-      }
-    });
 
     this.input.on("pointerdown", (pointer) =>
       mapOnPointerDown(this.map, pointer)
@@ -161,10 +159,7 @@ class EntranceScene extends Phaser.Scene {
       this.destinationY = this.input.activePointer.worldY;
     }
 
-    this.player.nameLabel.x = this.player.phaser.x;
-    this.player.chatBubble.x = this.player.phaser.x;
-    this.player.nameLabel.y = this.player.phaser.y - 30;
-    this.player.chatBubble.y = this.player.phaser.y - 50;
+    this.player = playerMoveNameLabelAndChatBubble();
 
     if (
       this.destinationX &&

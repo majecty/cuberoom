@@ -1,10 +1,11 @@
+/* eslint no-param-reassign: ["error", { "props": false }] */
 import {
   updateAnimation,
-  updateMouseAnimation,
   updateFollowClickAnimation,
   updateInitAnimation,
 } from "./player/animation";
 import { log } from "../log";
+import ENV from "../../ENV";
 
 export function playerCreate(scene, x, y, name, chat, id) {
   let idStr = "";
@@ -312,4 +313,79 @@ export function playerinitmove(player) {
   let newPlayer = updateInitAnimation(player);
   newPlayer = initmove(newPlayer);
   return newPlayer;
+}
+
+/**
+ * @param playerFromServer x, y, id, direction
+ */
+export function playerUpdateFromServer(player, playerFromServer) {
+  if (player.phaser.depth === 0) {
+    // FIXME
+    // 언제 depth가 0이 되는 거지
+    // 이 위치에서 depth를 수정하는 건 이상함.
+    log("playerUpdateFromServer depth 0");
+    player.phaser.setDepth(1);
+    player.nameLabel.setDepth(1);
+    player.chatBubble.setDepth(1);
+  }
+  player.phaser.x = playerFromServer.x;
+  player.phaser.y = playerFromServer.y;
+  player.nameLabel.x = playerFromServer.x;
+  player.nameLabel.y = playerFromServer.y - 30;
+  player.chatBubble.x = playerFromServer.x;
+  player.chatBubble.y = playerFromServer.y - 50;
+  player.phaser.setTexture(
+    `${playerFromServer.id}-${playerFromServer.direction}-${2}`
+  );
+  return {
+    ...player,
+  };
+}
+
+export function playerAddChat(player, chat) {
+  const formattedChat = chat.match(/.{1,12}/g).join("\n");
+  player.chatBubble.setText(formattedChat);
+  player.chatBubble.setPadding(4);
+  return player;
+}
+
+export function playerRemoveChat(player) {
+  player.chatBubble.setText("");
+  player.chatBubble.setPadding(0);
+  return player;
+}
+
+/**
+ * @param playerFromServer field id, imgUrl
+ */
+export function loadPlayerImages(phaserScene, playerFromServer, id, debug) {
+  const directions = ["left", "right", "up", "down"];
+  for (const direction of directions) {
+    for (let i = 1; i < 5; i += 1) {
+      if (
+        !phaserScene.textures.exists(`${playerFromServer.id}-${direction}-${i}`)
+      ) {
+        if (debug) {
+          log(
+            "listenPlayerList load",
+            id.substring(0, 5),
+            `${playerFromServer.id}-${direction}-${i}`,
+            `${ENV.URL_STATIC}${playerFromServer.imgUrl}${direction}-${i}.png`
+          );
+        }
+        phaserScene.load.image(
+          `${playerFromServer.id}-${direction}-${i}`,
+          `${ENV.URL_STATIC}${playerFromServer.imgUrl}${direction}-${i}.png`
+        );
+      }
+    }
+  }
+}
+
+export function playerMoveNameLabelAndChatBubble(player) {
+  player.nameLabel.x = player.phaser.x;
+  player.chatBubble.x = player.phaser.x;
+  player.nameLabel.y = player.phaser.y - 30;
+  player.chatBubble.y = player.phaser.y - 50;
+  return player;
 }

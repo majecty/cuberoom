@@ -1,3 +1,4 @@
+/* eslint no-param-reassign: ["error", { "props": false }] */
 import {
   updateAnimation,
   updateFollowClickAnimation,
@@ -357,7 +358,7 @@ export function playerRemoveChat(player) {
 /**
  * @param playerFromServer field id, imgUrl
  */
-export function loadPlayerImages(phaserScene, playerFromServer, debug) {
+export function loadPlayerImages(phaserScene, playerFromServer, id, debug) {
   const directions = ["left", "right", "up", "down"];
   for (const direction of directions) {
     for (let i = 1; i < 5; i += 1) {

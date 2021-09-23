@@ -41,7 +41,7 @@ export function playersContainerListenPlayerList({
         continue;
       }
 
-      loadPlayerImages(phaserScene, player, debug);
+      loadPlayerImages(phaserScene, player, id, debug);
 
       // FIXME: complete event가 load랑 atomic하게 어울리는지 불안함.
       // load가 로딩 시작한 이미지를 return하고 해당 이미지들이 전부 load되었을 때 호출하자.

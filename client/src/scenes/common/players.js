@@ -1,7 +1,11 @@
 import { log } from "../../log";
 
 export function playersCreate(sceneName) {
-  return { sceneName };
+  return { sceneName, entries: {} };
+}
+
+export function playersEntries(players) {
+  return Object.entries(players.entries);
 }
 
 /**
@@ -10,16 +14,16 @@ export function playersCreate(sceneName) {
  */
 export function playersOnRemovePlayer(players, dataFromServer) {
   const { id } = dataFromServer;
-  if (players[id]) {
+  if (players.entries[id]) {
     log("removePlayers", players.sceneName, id, dataFromServer);
     // FIXME: scene.player와 scene.players가 같은 player를 공유한다.
     // 여기서 player.phaser.destroy를 하면 player도 영향을 받음.
-    players[id].phaser.destroy(true);
-    players[id].nameLabel.destroy(true);
-    players[id].chatBubble.destroy(true);
+    players.entries[id].phaser.destroy(true);
+    players.entries[id].nameLabel.destroy(true);
+    players.entries[id].chatBubble.destroy(true);
 
     const newPlayers = { ...players };
-    delete newPlayers[id];
+    delete newPlayers.entries[id];
     return newPlayers;
   }
   return players;
@@ -29,6 +33,6 @@ export function playersAddPlayer(players, id, player) {
   const newPlayers = {
     ...players,
   };
-  newPlayers[id] = player;
+  newPlayers.entries[id] = player;
   return newPlayers;
 }

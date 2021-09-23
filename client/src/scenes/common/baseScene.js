@@ -5,6 +5,7 @@ import {
   playerinitmove,
   playerFollowClickUpdate,
   playerMoveNameLabelAndChatBubble,
+  playerFollowNetworkPos,
 } from "../../entity/player";
 import {
   mapUpdateMousePoint,
@@ -18,13 +19,17 @@ import {
   playerOnMapUpdate,
 } from "../../relation/playerOnMap";
 import { listenRemovePlayerOnPlayer, cameraInit } from "../common";
-import { playersCreate, playersAddPlayer } from "./players";
+import { playersCreate, playersAddPlayer, playersEntries } from "./players";
 import {
   playersContainerListenRemovePlayer,
   playersContainerListenPlayerList,
   playersContainerListenAddChat,
   playersContainerListenRemoveChat,
 } from "./playersContainer";
+import {
+  rateLimiterCreate,
+  rateLimiterTrigger,
+} from "../../network/rateLimiter";
 
 /**
  * initialize map, player, cursors, playerOnMap, socket, sceneName, players
@@ -38,6 +43,7 @@ export function baseSceneConstructor(selfScene, sceneName) {
   selfScene.socket = window.socket;
   selfScene.sceneName = sceneName;
   selfScene.players = playersCreate(sceneName);
+  selfScene.rateLimiter = rateLimiterCreate();
 
   playersContainerListenRemovePlayer(selfScene, selfScene.socket);
   listenRemovePlayerOnPlayer(
@@ -141,7 +147,7 @@ export function baseSceneCreate(selfScene, mapName, mapBackgroundLayerName) {
   );
 }
 
-export function baseSceneUpdate(selfScene) {
+export function baseSceneUpdate(selfScene, dtMillis) {
   const pointer = selfScene.input.activePointer;
 
   // player can be removed since removePlayer is called
@@ -155,6 +161,14 @@ export function baseSceneUpdate(selfScene) {
     selfScene.destinationY,
     selfScene
   );
+  for (const [id, otherPlayer] of playersEntries(selfScene.players)) {
+    if (otherPlayer !== selfScene.player) {
+      selfScene.players.entries[id] = playerFollowNetworkPos(
+        otherPlayer,
+        dtMillis
+      );
+    }
+  }
   mapUpdateMousePoint(selfScene.map, selfScene);
   selfScene.playerOnMap = playerOnMapUpdate(
     selfScene.playerOnMap,
@@ -176,12 +190,14 @@ export function baseSceneUpdate(selfScene) {
     (Math.abs(selfScene.destinationX - selfScene.player.phaser.x) > 20 ||
       Math.abs(selfScene.destinationY - selfScene.player.phaser.y) > 20)
   ) {
-    selfScene.socket.emit("movePlayer", {
-      id: selfScene.socket.id,
-      floor: selfScene.sceneName,
-      direction: selfScene.player.prevMove,
-      x: selfScene.player.phaser.x,
-      y: selfScene.player.phaser.y,
+    rateLimiterTrigger(selfScene.rateLimiter, () => {
+      selfScene.socket.emit("movePlayer", {
+        id: selfScene.socket.id,
+        floor: selfScene.sceneName,
+        direction: selfScene.player.prevMove,
+        x: selfScene.player.phaser.x,
+        y: selfScene.player.phaser.y,
+      });
     });
   }
 }

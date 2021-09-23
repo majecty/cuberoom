@@ -44,8 +44,8 @@ class EntranceScene extends Phaser.Scene {
     baseSceneCreate(this, "entrance-map", "entrance-background");
   }
 
-  update(_time, _delta) {
-    baseSceneUpdate(this);
+  update(_time, delta) {
+    baseSceneUpdate(this, delta);
   }
 }
 

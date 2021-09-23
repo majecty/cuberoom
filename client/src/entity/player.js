@@ -6,6 +6,12 @@ import {
 } from "./player/animation";
 import { log } from "../log";
 import ENV from "../../ENV";
+import { playerSpeed } from "../constant";
+import {
+  playerNetworkCreate,
+  playerNetworkGetThisFramePosition,
+  playerNetworkUpdate,
+} from "./player/network";
 
 export function playerCreate(scene, x, y, name, chat, id) {
   let idStr = "";
@@ -59,6 +65,11 @@ export function playerCreate(scene, x, y, name, chat, id) {
 
   return {
     phaser,
+    target: {
+      x: null,
+      y: null,
+    },
+    network: playerNetworkCreate(),
     prevAnim: null,
     prevMove: null,
     nameLabel,
@@ -84,27 +95,16 @@ function followClick(player, destinationX, destinationY) {
   const tempX = player.phaser.x;
   const tempY = player.phaser.y;
 
-  let velocity = 50;
+  const velocity = playerSpeed;
 
   let newPrevMove = player.prevMove;
 
-  // if (scene.cheat) {
-  //   velocity *= 10;
-  // }
   if (destinationX + 5 < player.phaser.x) {
-    // velocity *= parseInt(player.phaser.x - destinationX) * 0.007;
-    if (velocity < 100) {
-      velocity = 100;
-    }
     if (player.prevMove !== "left") {
       player.phaser.body.setVelocityX(-velocity);
       newPrevMove = "left";
     }
   } else if (destinationX > 5 + player.phaser.x) {
-    // velocity *= parseInt( destinationX - player.phaser.x) * 0.007;
-    if (velocity < 100) {
-      velocity = 100;
-    }
     if (player.prevMove !== "right") {
       player.phaser.body.setVelocityX(velocity);
       newPrevMove = "right";
@@ -114,19 +114,11 @@ function followClick(player, destinationX, destinationY) {
   }
 
   if (destinationY + 5 < player.phaser.y) {
-    // velocity *= parseInt( player.phaser.y - destinationY) * 0.015;
-    if (velocity < 100) {
-      velocity = 100;
-    }
     if (player.prevMove !== "up") {
       player.phaser.body.setVelocityY(-velocity);
       newPrevMove = "up";
     }
   } else if (player.phaser.y + 5 < destinationY) {
-    // velocity *= parseInt(  destinationY - player.phaser.y) * 0.015;
-    if (velocity < 100) {
-      velocity = 100;
-    }
     if (player.prevMove !== "down") {
       player.phaser.body.setVelocityY(velocity);
       newPrevMove = "down";
@@ -150,7 +142,7 @@ function followClick(player, destinationX, destinationY) {
 
 function move(player, cursors, scene) {
   let moved = false;
-  let velocity = 100;
+  let velocity = playerSpeed;
 
   if (scene.cheat) {
     velocity *= 10;
@@ -158,6 +150,8 @@ function move(player, cursors, scene) {
 
   let newPrevMove = player.prevMove;
 
+  // FIXME: nameLabel과 chatBubble에 velocity를 세팅하는 건 이상해
+  // child로 붙여서 자동으로 움직이게 하는 게 맞다고 생각해.
   if (typeof cursors === "string" || typeof cursors === "undefined") {
     if (cursors === "left") {
       if (player.prevMove !== "left") {
@@ -328,15 +322,49 @@ export function playerUpdateFromServer(player, playerFromServer) {
     player.nameLabel.setDepth(1);
     player.chatBubble.setDepth(1);
   }
-  player.phaser.x = playerFromServer.x;
-  player.phaser.y = playerFromServer.y;
-  player.nameLabel.x = playerFromServer.x;
-  player.nameLabel.y = playerFromServer.y - 30;
-  player.chatBubble.x = playerFromServer.x;
-  player.chatBubble.y = playerFromServer.y - 50;
+  player.network = playerNetworkUpdate(
+    player.network,
+    {
+      x: playerFromServer.x,
+      y: playerFromServer.y,
+    },
+    playerFromServer.target
+  );
+
   player.phaser.setTexture(
     `${playerFromServer.id}-${playerFromServer.direction}-${2}`
   );
+  return {
+    ...player,
+  };
+}
+
+export function playerFollowNetworkPos(player, dtMillis) {
+  if (player.phaser == null) {
+    log("player.phaser == null", player);
+  }
+  const { newX, newY } = playerNetworkGetThisFramePosition({
+    playerNetwork: player.network,
+    currentPosition: {
+      x: player.phaser.x,
+      y: player.phaser.y,
+    },
+    dtMillis,
+  });
+  player.phaser.x = newX;
+  player.phaser.y = newY;
+
+  // FIXME: do not update nameLabel, chatBubble this way
+  player.nameLabel.x = newX;
+  player.nameLabel.y = newY - 30;
+  player.chatBubble.x = newX;
+  player.chatBubble.y = newY - 50;
+
+  // TODO: update direction
+  // player.phaser.setTexture(
+  //   `${playerFromServer.id}-${playerFromServer.direction}-${2}`
+  // );
+
   return {
     ...player,
   };

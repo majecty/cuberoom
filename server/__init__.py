@@ -1,7 +1,11 @@
 from flask import Flask, request, url_for
 from flask.helpers import send_from_directory
-from flask_socketio import SocketIO, emit, join_room, leave_room
+from flask_socketio import SocketIO, emit
 from flask_cors import CORS
+from threading import Lock
+# from eventlet import tpool
+import threading
+# import eventlet
 import time
 import sys
 import os
@@ -46,7 +50,6 @@ def base():
 def home(path):
     return send_from_directory(config_value['public_path'], path)
 
-
 @app.route("/character-selection",methods=['GET', 'POST'])
 def user_information():
     name = request.get_json()["name"]
@@ -60,8 +63,9 @@ def user_information():
     filePath = f"{prefix}/skin{skin}_hairC{hairC}_cloth{cloth}_hairS{hairS}_faceS{faceS}/"
     return url_for('static',filename = filePath)
 
-
 players = {}
+players_changed = False
+players_lock = Lock()
 
 class Player():
     def __init__ (self, id, name, imgUrl, floor, x, y):
@@ -88,29 +92,40 @@ class Player():
 
 @socketio.on('addPlayer')
 def addPlayer(data):
-    global players
+    global players, players_changed, players_lock
+
     player = Player(data['id'], data['name'], data['imgUrl'], data['floor'], data['x'], data['y'])
+    players_lock.acquire()
+    players_changed = True
     players[data['id']] = player.serialize()
-    # join_room(player.floor)
-    time.sleep(0.5)
+    players_lock.release()
+
+# FIXME: players can be changed after emit
     emit('playerList', players, broadcast=True)
 
 @socketio.on('moveFloor')
 def moveFloor(data):
-    global players
+    global players, players_changed, players_lock
+
+    players_lock.acquire()
+    players_changed = True
     prevRoom = players[data['id']]['floor']
     nextRoom = data['floor']
     players[data['id']]['floor'] = nextRoom
-    # leave_room(prevRoom)
-    # join_room(nextRoom)
+    players_lock.release()
+
     emit('removePlayer', { 'id': data['id'] }, broadcast=True)
-    time.sleep(1)
     emit('playerList', players, broadcast=True)
 
 @socketio.on('addChat')
 def addChat(data):
-    global players
+    global players, players_changed, players_lock
+
+    players_lock.acquire()
+    players_changed = True
     players[data['id']]['chat'] = data['chat']
+    players_lock.release()
+
     # emit('addChat', data, broadcast=True, to=players[data['id']]['floor'])
     emit(
         'addChat',
@@ -124,8 +139,12 @@ def addChat(data):
 
 @socketio.on('removeChat')
 def removeChat(data):
-    global players
+    global players, players_changed, players_lock
+
+    players_lock.acquire()
+    players_changed = True
     players[data['id']]['chat'] = ''
+    players_lock.release()
     # emit('removeChat', data, broadcast=True, to=players[data['id']]['floor'])
     emit(
         'removeChat',
@@ -139,13 +158,14 @@ def removeChat(data):
 
 @socketio.on('movePlayer')
 def movePlayer(data):
-    global players
+    global players, players_changed, players_lock
+    players_lock.acquire()
+    players_changed = True
     if data['id'] in players.keys():
         players[data['id']]['x'] = data['x']
         players[data['id']]['y'] = data['y']
         players[data['id']]['direction'] = data['direction']
-        
-        emit('playerList', players, broadcast=True)
+    players_lock.release()
 
 @socketio.on('getPlayers')
 def getPlayers():
@@ -156,9 +176,38 @@ def getPlayers():
 
 @socketio.on('disconnect')
 def disconnect():
-    global players
+    global players, players_changed, players_lock
+    players_lock.acquire()
+    players_changed = True
     players.pop(request.sid, None)
+    players_lock.release()
     emit('removePlayer', { 'id': request.sid })
+
+def broadcastPlayserListLoop():
+    while True:
+        global players_changed
+        socketio.sleep(0.3)
+        players_lock.acquire()
+        players_changed_local = players_changed
+        players_lock.release()
+        if players_changed_local == False:
+            continue
+
+        players_lock.acquire()
+        players_changed = False
+        players_lock.release()
+        socketio.emit('playerList', players, broadcast=True)
+        # with app.app_context():
+        # emit('playerList', players, broadcast=True, skip_sid=True, namespace=None)
+        # emit('playerList', players, broadcast=True, skip_sid=True, namespace=None)
+
+
+thread = None
+@socketio.on('connect')
+def connect_for_main():
+    global thread
+    if thread is None:
+        thread = socketio.start_background_task(target=broadcastPlayserListLoop)
 
 if __name__ == "__main__":
     socketio.run(app, debug=True, port=config_value["port"])

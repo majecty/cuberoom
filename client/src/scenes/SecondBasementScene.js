@@ -44,8 +44,8 @@ class SecondBasementScene extends Phaser.Scene {
     baseSceneCreate(this, "secondBasement-map", "secondBasement-background");
   }
 
-  update(_time, _delta) {
-    baseSceneUpdate(this);
+  update(_time, delta) {
+    baseSceneUpdate(this, delta);
   }
 }
 

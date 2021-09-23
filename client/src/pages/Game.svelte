@@ -11,6 +11,7 @@
   import SecondBasementScene from '../scenes/SecondBasementScene';
   import { io } from 'socket.io-client';
   import ENV from '../../ENV';
+  import { playersEntries } from "../scenes/common/players";
 
   const socket = ENV.ENVIRONMENT === 'production'
     ? io.connect(ENV.URL, { transports: ['websocket'] })
@@ -100,11 +101,12 @@
 
       const players = scene.players;
       if (players != null) {
-        for (const [id, otherPlayer] of Object.entries(players)) {
-        console.log("other player", otherPlayer.nameLabel.text,
-          id.substring(0, 5),
-          otherPlayer.phaser.x, otherPlayer.phaser.y)
-        };
+        for (const [id, otherPlayer] of playersEntries(players)) {
+          console.log("other player", otherPlayer.nameLabel.text,
+            id.substring(0, 5),
+            otherPlayer.phaser.x, otherPlayer.phaser.y
+          );
+        }
       } else {
         console.log("players null");
       }

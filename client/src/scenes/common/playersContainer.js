@@ -51,11 +51,14 @@ export function playersContainerListenPlayerList({
           log("listenPlayerList complete", id.substring(0, 5));
         }
         // FIXME: players[id].phaser.scene == null인 경우를 여기서 체크하는 게 이상함
-        if (players[id] == null || players[id].phaser.scene == null) {
+        if (
+          players.entries[id] == null ||
+          players.entries[id].phaser.scene == null
+        ) {
           if (debug) {
             log("listenPlayerList playerCreate", id.substring(0, 5));
           }
-          players[id] = playerCreate(
+          players.entries[id] = playerCreate(
             phaserScene,
             player.x,
             player.y,
@@ -68,7 +71,10 @@ export function playersContainerListenPlayerList({
             log("listenPlayerList socket.id!==id", id.substring(0, 5));
           }
 
-          players[id] = playerUpdateFromServer(players[id], player);
+          players.entries[id] = playerUpdateFromServer(
+            players.entries[id],
+            player
+          );
         } else if (debug) {
           log("listenPlayerList socket.id===id", id.substring(0, 5));
         }
@@ -87,9 +93,12 @@ export function playersContainerListenAddChat(container, socket, sceneName) {
    */
   socket.on("addChat", (dataFromServer) => {
     const { players } = container;
-    if (dataFromServer.floor === sceneName && players[dataFromServer.id]) {
-      players[dataFromServer.id] = playerAddChat(
-        players[dataFromServer.id],
+    if (
+      dataFromServer.floor === sceneName &&
+      players.entries[dataFromServer.id]
+    ) {
+      players.entries[dataFromServer.id] = playerAddChat(
+        players.entries[dataFromServer.id],
         dataFromServer.chat
       );
     }
@@ -99,8 +108,8 @@ export function playersContainerListenAddChat(container, socket, sceneName) {
 export function playersContainerListenRemoveChat(container, socket, sceneName) {
   socket.on("removeChat", (data) => {
     const { players } = container;
-    if (data.floor === sceneName && players[data.id]) {
-      players[data.id] = playerRemoveChat(players[data.id]);
+    if (data.floor === sceneName && players.entries[data.id]) {
+      players.entries[data.id] = playerRemoveChat(players.entries[data.id]);
     }
   });
 }

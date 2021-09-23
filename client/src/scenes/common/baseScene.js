@@ -5,6 +5,7 @@ import {
   playerinitmove,
   playerFollowClickUpdate,
   playerMoveNameLabelAndChatBubble,
+  playerFollowNetworkPos,
 } from "../../entity/player";
 import {
   mapUpdateMousePoint,
@@ -18,7 +19,7 @@ import {
   playerOnMapUpdate,
 } from "../../relation/playerOnMap";
 import { listenRemovePlayerOnPlayer, cameraInit } from "../common";
-import { playersCreate, playersAddPlayer } from "./players";
+import { playersCreate, playersAddPlayer, playersEntries } from "./players";
 import {
   playersContainerListenRemovePlayer,
   playersContainerListenPlayerList,
@@ -146,7 +147,7 @@ export function baseSceneCreate(selfScene, mapName, mapBackgroundLayerName) {
   );
 }
 
-export function baseSceneUpdate(selfScene) {
+export function baseSceneUpdate(selfScene, dtMillis) {
   const pointer = selfScene.input.activePointer;
 
   // player can be removed since removePlayer is called
@@ -160,6 +161,14 @@ export function baseSceneUpdate(selfScene) {
     selfScene.destinationY,
     selfScene
   );
+  for (const [id, otherPlayer] of playersEntries(selfScene.players)) {
+    if (otherPlayer !== selfScene.player) {
+      selfScene.players.entries[id] = playerFollowNetworkPos(
+        otherPlayer,
+        dtMillis
+      );
+    }
+  }
   mapUpdateMousePoint(selfScene.map, selfScene);
   selfScene.playerOnMap = playerOnMapUpdate(
     selfScene.playerOnMap,

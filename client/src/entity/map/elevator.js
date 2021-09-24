@@ -146,13 +146,13 @@ export function showElevatorPanel(scene, floor) {
   buttonToB2.onclick = () => {
     hideElevatorPanel();
     scene.socket.emit("moveFloor", { id: scene.socket.id, floor: "B2" });
-    startScene(scene, "SecondBasementScene", { x: 16 * 9, y: 16 * 23 });
+    startScene(scene, "SecondBasementScene", { x: 16 * 7, y: 16 * 22 });
   };
   buttonToB2.ontouchstart = () => {
     if (floor !== "B2") {
       hideElevatorPanel();
       scene.socket.emit("moveFloor", { id: scene.socket.id, floor: "B2" });
-      startScene(scene, "SecondBasementScene", { x: 16 * 9, y: 16 * 23 });
+      startScene(scene, "SecondBasementScene", { x: 16 * 7, y: 16 * 22 });
     }
   };
   panel.appendChild(buttonToB2);

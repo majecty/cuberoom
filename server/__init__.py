@@ -115,6 +115,9 @@ def moveFloor(data):
         prevRoom = players[data['id']]['floor']
         nextRoom = data['floor']
         players[data['id']]['floor'] = nextRoom
+        # move player away until the player move to the right position at the next floor
+        players[data['id']]['x'] = 999
+        players[data['id']]['y'] = 999
     finally:
         players_lock.release()
 

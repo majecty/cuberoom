@@ -27,7 +27,7 @@ config_values["production"] = {
   "static_folder": "static",
   "cors_origin": "http://cuberoom.net",
   "public_path": "../cuberoom/public", # please check this in the deployed environment
-  "user_image_prefix": "results",
+  "user_image_prefix": "/results",
   "port": 5000 # default port in flask
 }
 

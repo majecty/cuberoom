@@ -23,11 +23,11 @@ config_values["local"] = {
 }
 
 config_values["production"] = {
-  "static_url_path": "static",
+  "static_url_path": "/static",
   "static_folder": "static",
-  "cors_origin": "http://cuberoom.net",
-  "public_path": "../cuberoom/public", # please check this in the deployed environment
-  "user_image_prefix": "/results",
+  "cors_origin": "http://test.cuberoom.net",
+  "public_path": "../client/public", # please check this in the deployed environment
+  "user_image_prefix": "results",
   "port": 5000 # default port in flask
 }
 
@@ -44,7 +44,7 @@ app.secret_key = "cuberoom"
 socketio = SocketIO(app, cors_allowed_origins="*")
 @app.route("/")
 def base():
-    return send_from_directory('cuberoom/public','index.html')
+    return send_from_directory(config_value['public_path'],'index.html')
 
 @app.route("/<path:path>", methods=['GET', 'POST'])
 def home(path):

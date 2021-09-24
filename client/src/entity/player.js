@@ -1,6 +1,5 @@
 /* eslint no-param-reassign: ["error", { "props": false }] */
 import {
-  updateAnimation,
   updateFollowClickAnimation,
   updateInitAnimation,
 } from "./player/animation";
@@ -41,27 +40,8 @@ export function playerCreate(scene, x, y, name, chat, id) {
 
   nameLabel.setOrigin(0.5, 0.5);
   chatBubble.setOrigin(0.5, 0.5);
-  // nameLabel.setResolution(window.devicePixelRatio / 2)
-  // chatBubble.setResolution(window.devicePixelRatio / 2)
-  // nameLabel.setSize(20 + nameLabel.width, 40 + nameLabel.height)
 
   scene.physics.world.enable([nameLabel, chatBubble]);
-  // scene.physics.world.collide([nameLabel, chatBubble]);
-
-  // const group = scene.physics.add.group({ collideWorldBounds: true, setXY: { x, y }});
-  // group.add(phaser);
-  // group.add(nameLabel);
-  // group.add(chatBubble);
-
-  // phaser.body.setOnCollide(() => {
-  //   nameLabel.body.setVelocityY(0);
-  //   chatBubble.body.setVelocityY(0);
-  // })
-
-  // scene.physics.collide(phaser, undefined, () => {
-  //   nameLabel.body.setVelocityY(0);
-  //   chatBubble.body.setVelocityY(0);
-  // })
 
   return {
     phaser,
@@ -138,153 +118,6 @@ function followClick(player, destinationX, destinationY) {
     ...player,
     prevMove: newPrevMove,
   };
-}
-
-function move(player, cursors, scene) {
-  let moved = false;
-  let velocity = playerSpeed;
-
-  if (scene.cheat) {
-    velocity *= 10;
-  }
-
-  let newPrevMove = player.prevMove;
-
-  // FIXME: nameLabel과 chatBubble에 velocity를 세팅하는 건 이상해
-  // child로 붙여서 자동으로 움직이게 하는 게 맞다고 생각해.
-  if (typeof cursors === "string" || typeof cursors === "undefined") {
-    if (cursors === "left") {
-      if (player.prevMove !== "left") {
-        player.phaser.body.setVelocityX(-velocity);
-        player.nameLabel.body.setVelocityX(-velocity);
-        player.chatBubble.body.setVelocityX(-velocity);
-        // player.nameLabel.x = player.phaser.x;
-        // player.chatBubble.x = player.phaser.x;
-        newPrevMove = "left";
-      }
-      moved = true;
-    } else if (cursors === "right") {
-      if (player.prevMove !== "right") {
-        player.phaser.body.setVelocityX(velocity);
-        player.nameLabel.body.setVelocityX(velocity);
-        player.chatBubble.body.setVelocityX(velocity);
-        // player.nameLabel.x = player.phaser.x;
-        // player.chatBubble.x = player.phaser.x;
-        newPrevMove = "right";
-      }
-      moved = true;
-    } else {
-      player.phaser.body.setVelocityX(0);
-      player.nameLabel.body.setVelocityX(0);
-      player.chatBubble.body.setVelocityX(0);
-    }
-
-    if (cursors === "up") {
-      if (player.prevMove !== "up") {
-        player.phaser.body.setVelocityY(-velocity);
-        player.nameLabel.body.setVelocityY(-velocity);
-        player.chatBubble.body.setVelocityY(-velocity);
-        // player.nameLabel.y = player.phaser.y - 30;
-        // player.chatBubble.y = player.phaser.y - 45;
-        newPrevMove = "up";
-      }
-      moved = true;
-    } else if (cursors === "down") {
-      if (player.prevMove !== "down") {
-        player.phaser.body.setVelocityY(velocity);
-        player.nameLabel.body.setVelocityY(velocity);
-        player.chatBubble.body.setVelocityY(velocity);
-        // player.nameLabel.y = player.phaser.y - 30;
-        // player.chatBubble.y = player.phaser.y - 45;
-        newPrevMove = "down";
-      }
-      moved = true;
-    } else {
-      player.phaser.body.setVelocityY(0);
-      player.nameLabel.body.setVelocityY(0);
-      player.chatBubble.body.setVelocityY(0);
-    }
-
-    if (moved === false) {
-      player.phaser.body.setVelocity(0);
-      player.nameLabel.body.setVelocityY(0);
-      player.chatBubble.body.setVelocityY(0);
-    }
-
-    return {
-      ...player,
-      prevMove: newPrevMove,
-    };
-  }
-
-  if (cursors.left.isDown) {
-    if (player.prevMove !== "left") {
-      player.phaser.body.setVelocityX(-velocity);
-      player.nameLabel.body.setVelocityX(-velocity);
-      player.chatBubble.body.setVelocityX(-velocity);
-      // player.nameLabel.x = player.phaser.x;
-      // player.chatBubble.x = player.phaser.x;
-      newPrevMove = "left";
-    }
-    moved = true;
-  } else if (cursors.right.isDown) {
-    if (player.prevMove !== "right") {
-      player.phaser.body.setVelocityX(velocity);
-      player.nameLabel.body.setVelocityX(velocity);
-      player.chatBubble.body.setVelocityX(velocity);
-      // player.nameLabel.x = player.phaser.x;
-      // player.chatBubble.x = player.phaser.x;
-      newPrevMove = "right";
-    }
-    moved = true;
-  } else {
-    player.phaser.body.setVelocityX(0);
-    player.nameLabel.body.setVelocityX(0);
-    player.chatBubble.body.setVelocityX(0);
-  }
-
-  if (cursors.up.isDown) {
-    if (player.prevMove !== "up") {
-      player.phaser.body.setVelocityY(-velocity);
-      player.nameLabel.body.setVelocityY(-velocity);
-      player.chatBubble.body.setVelocityY(-velocity);
-      // player.nameLabel.y = player.phaser.y - 30;
-      // player.chatBubble.y = player.phaser.y - 45;
-      newPrevMove = "up";
-    }
-    moved = true;
-  } else if (cursors.down.isDown) {
-    if (player.prevMove !== "down") {
-      player.phaser.body.setVelocityY(velocity);
-      player.nameLabel.body.setVelocityY(velocity);
-      player.chatBubble.body.setVelocityY(velocity);
-      // player.nameLabel.y = player.phaser.y - 30;
-      // player.chatBubble.y = player.phaser.y - 45;
-      newPrevMove = "down";
-    }
-    moved = true;
-  } else {
-    player.phaser.body.setVelocityY(0);
-    player.nameLabel.body.setVelocityY(0);
-    player.chatBubble.body.setVelocityY(0);
-  }
-
-  if (moved === false) {
-    player.phaser.body.setVelocity(0);
-    player.nameLabel.body.setVelocityY(0);
-    player.chatBubble.body.setVelocityY(0);
-  }
-
-  return {
-    ...player,
-    prevMove: newPrevMove,
-  };
-}
-
-export function playerUpdate(player, cursors, scene) {
-  let newPlayer = updateAnimation(player, cursors);
-  newPlayer = move(newPlayer, cursors, scene);
-  return newPlayer;
 }
 
 export function playerFollowClickUpdate(

@@ -45,6 +45,8 @@ export function playerCreate(scene, x, y, name, chat, id) {
 
   return {
     phaser,
+    // we will use target to share the current goal of peer.
+    // It will help estimate peer's next movement
     target: {
       x: null,
       y: null,

@@ -96,9 +96,11 @@ def addPlayer(data):
 
     player = Player(data['id'], data['name'], data['imgUrl'], data['floor'], data['x'], data['y'])
     players_lock.acquire()
-    players_changed = True
-    players[data['id']] = player.serialize()
-    players_lock.release()
+    try:
+        players_changed = True
+        players[data['id']] = player.serialize()
+    finally:
+        players_lock.release()
 
 # FIXME: players can be changed after emit
     emit('playerList', players, broadcast=True)
@@ -108,11 +110,13 @@ def moveFloor(data):
     global players, players_changed, players_lock
 
     players_lock.acquire()
-    players_changed = True
-    prevRoom = players[data['id']]['floor']
-    nextRoom = data['floor']
-    players[data['id']]['floor'] = nextRoom
-    players_lock.release()
+    try:
+        players_changed = True
+        prevRoom = players[data['id']]['floor']
+        nextRoom = data['floor']
+        players[data['id']]['floor'] = nextRoom
+    finally:
+        players_lock.release()
 
     emit('removePlayer', { 'id': data['id'] }, broadcast=True)
     emit('playerList', players, broadcast=True)
@@ -122,9 +126,11 @@ def addChat(data):
     global players, players_changed, players_lock
 
     players_lock.acquire()
-    players_changed = True
-    players[data['id']]['chat'] = data['chat']
-    players_lock.release()
+    try:
+        players_changed = True
+        players[data['id']]['chat'] = data['chat']
+    finally:
+        players_lock.release()
 
     # emit('addChat', data, broadcast=True, to=players[data['id']]['floor'])
     emit(
@@ -142,10 +148,12 @@ def removeChat(data):
     global players, players_changed, players_lock
 
     players_lock.acquire()
-    players_changed = True
-    players[data['id']]['chat'] = ''
-    players_lock.release()
-    # emit('removeChat', data, broadcast=True, to=players[data['id']]['floor'])
+    try:
+        players_changed = True
+        players[data['id']]['chat'] = ''
+    finally:
+        players_lock.release()
+
     emit(
         'removeChat',
         {
@@ -159,13 +167,16 @@ def removeChat(data):
 @socketio.on('movePlayer')
 def movePlayer(data):
     global players, players_changed, players_lock
+
     players_lock.acquire()
-    players_changed = True
-    if data['id'] in players.keys():
-        players[data['id']]['x'] = data['x']
-        players[data['id']]['y'] = data['y']
-        players[data['id']]['direction'] = data['direction']
-    players_lock.release()
+    try:
+        players_changed = True
+        if data['id'] in players.keys():
+            players[data['id']]['x'] = data['x']
+            players[data['id']]['y'] = data['y']
+            players[data['id']]['direction'] = data['direction']
+    finally:
+        players_lock.release()
 
 @socketio.on('getPlayers')
 def getPlayers():
@@ -177,16 +188,20 @@ def getPlayers():
 @socketio.on('disconnect')
 def disconnect():
     global players, players_changed, players_lock
+
     players_lock.acquire()
-    players_changed = True
-    players.pop(request.sid, None)
-    players_lock.release()
+    try:
+        players_changed = True
+        players.pop(request.sid, None)
+    finally:
+        players_lock.release()
     emit('removePlayer', { 'id': request.sid })
 
 def broadcastPlayserListLoop():
     while True:
         global players_changed
         socketio.sleep(0.3)
+
         players_lock.acquire()
         players_changed_local = players_changed
         players_lock.release()

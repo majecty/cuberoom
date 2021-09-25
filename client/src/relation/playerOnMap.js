@@ -10,6 +10,53 @@ export function playerOnMapCreate() {
   };
 }
 
+function entranceInteraction(scene, curTileName) {
+  switch (curTileName) {
+    case "up":
+      // 이거 다른 경우에도 추가하기?
+      scene.socket.emit("moveFloor", {
+        id: scene.socket.id,
+        floor: "1F",
+      });
+      startScene(scene, "FirstFloorScene", { x: 16 * 5, y: 16 * 29 });
+      break;
+    default:
+      break;
+  }
+}
+
+function firstFloorInteraction(scene, curTileName) {
+  switch (curTileName) {
+    case "up":
+      scene.socket.emit("moveFloor", {
+        id: scene.socket.id,
+        floor: "2F",
+      });
+      startScene(scene, "SecondFloorScene", { x: 16 * 3, y: 16 * 11 });
+      break;
+    case "down":
+      scene.socket.emit("moveFloor", {
+        id: scene.socket.id,
+        floor: "B1",
+      });
+      startScene(scene, "FirstBasementScene", { x: 16 * 6, y: 16 * 32 });
+      break;
+    case "elevator":
+      showElevatorPanel(scene, "1F");
+      break;
+    case "out":
+      scene.socket.emit("moveFloor", {
+        id: scene.socket.id,
+        floor: "entrance",
+      });
+      // 이거왜안됨..
+      startScene(scene, "EntranceScene", { x: 16 * 27, y: 16 * 29 });
+      break;
+    default:
+      break;
+  }
+}
+
 /**
  * 플레이어가 위치한 타일에 따라 특정 동작을 함
  */
@@ -36,51 +83,13 @@ export function playerOnMapUpdate(playerOnMap, player, map, scene) {
       popupDestroy();
 
     // FIXME: it's hard to debug nested switch statement
+    // scene 별로 구분되니까 씬 별로 코드를 추가하자.
     switch (scene.scene.key) {
       case "EntranceScene":
-        switch (curTileName) {
-          case "up":
-            // 이거 다른 경우에도 추가하기?
-            scene.socket.emit("moveFloor", {
-              id: scene.socket.id,
-              floor: "1F",
-            });
-            startScene(scene, "FirstFloorScene", { x: 16 * 5, y: 16 * 29 });
-            break;
-          default:
-            break;
-        }
+        entranceInteraction(scene, curTileName);
         break;
       case "FirstFloorScene":
-        switch (curTileName) {
-          case "up":
-            scene.socket.emit("moveFloor", {
-              id: scene.socket.id,
-              floor: "2F",
-            });
-            startScene(scene, "SecondFloorScene", { x: 16 * 3, y: 16 * 11 });
-            break;
-          case "down":
-            scene.socket.emit("moveFloor", {
-              id: scene.socket.id,
-              floor: "B1",
-            });
-            startScene(scene, "FirstBasementScene", { x: 16 * 6, y: 16 * 32 });
-            break;
-          case "elevator":
-            showElevatorPanel(scene, "1F");
-            break;
-          case "out":
-            scene.socket.emit("moveFloor", {
-              id: scene.socket.id,
-              floor: "entrance",
-            });
-            // 이거왜안됨..
-            startScene(scene, "EntranceScene", { x: 16 * 27, y: 16 * 29 });
-            break;
-          default:
-            break;
-        }
+        firstFloorInteraction(scene, curTileName);
         break;
       case "SecondFloorScene":
         switch (curTileName) {

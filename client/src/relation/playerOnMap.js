@@ -3,10 +3,16 @@ import { showElevatorPanel, hideElevatorPanel } from "../entity/map/elevator";
 import { popupPos } from "../entity/works";
 import startScene from "../entity/map/startScene";
 
-export function playerOnMapCreate() {
+/**
+ * @param onMoveToTile ((tileName: string) => void)
+ */
+export function playerOnMapCreate(onMoveToTile) {
   return {
     prevTile: null,
     prevTileName: null,
+
+    // FIXME: remove default value after finishing refactoring
+    onMoveToTile: onMoveToTile == null ? () => {} : onMoveToTile,
   };
 }
 
@@ -79,8 +85,11 @@ export function playerOnMapUpdate(playerOnMap, player, map, scene) {
         "work-7",
         "work-8",
       ].includes(playerOnMap.prevTileName)
-    )
+    ) {
       popupDestroy();
+    }
+
+    playerOnMap.onMoveToTile(curTileName);
 
     // FIXME: it's hard to debug nested switch statement
     // scene 별로 구분되니까 씬 별로 코드를 추가하자.

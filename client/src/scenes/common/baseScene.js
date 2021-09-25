@@ -87,14 +87,15 @@ export function baseSceneInit(selfScene, data) {
 
 export function baseScenePreload(selfScene) {
   log(selfScene.sceneName, "preload");
-  for (const [key, file] of allCharacterImageNames(window.playerImgUrl)) {
+  // FIXME: move this to player code
+  for (const [key, file] of allCharacterImageNames(selfScene.socket.id, window.playerImgUrl)) {
     selfScene.load.image(key, file);
   }
 }
 
 export function baseSceneCreate(selfScene, mapName, mapBackgroundLayerName) {
   log(selfScene.sceneName, "create");
-  playerCreateAnimations(selfScene);
+  playerCreateAnimations(selfScene.socket.id, selfScene);
 
   selfScene.map = mapCreate(selfScene, mapName);
   selfScene.player = playerCreate(
@@ -162,7 +163,7 @@ export function baseSceneUpdate(selfScene, dtMillis) {
     selfScene
   );
   for (const [id, otherPlayer] of playersEntries(selfScene.players)) {
-    if (otherPlayer !== selfScene.player) {
+    if (id !== selfScene.player.id) {
       selfScene.players.entries[id] = playerFollowNetworkPos(
         otherPlayer,
         dtMillis
@@ -191,6 +192,13 @@ export function baseSceneUpdate(selfScene, dtMillis) {
       Math.abs(selfScene.destinationY - selfScene.player.phaser.y) > 20)
   ) {
     rateLimiterTrigger(selfScene.rateLimiter, () => {
+      // 씬을 이동할 경우 씬이 끝난 뒤에 이 코드가 호출될 수 있음.
+      // rateLimiter의 경우 마지막 요청이 timeout 뒤에 호출함.
+      // rateLimiter가 호출할 때 callback을 부를 수 없는 경우를 처리함.
+      // 이보다 잘 처리할 방법이 필요.
+      if (selfScene.player == null) {
+        return;
+      }
       selfScene.socket.emit("movePlayer", {
         id: selfScene.socket.id,
         floor: selfScene.sceneName,

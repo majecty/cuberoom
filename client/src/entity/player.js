@@ -213,16 +213,12 @@ export function playerFollowNetworkPos(player, dtMillis) {
   player.chatBubble.depth = depth.nameLabel;
   player.nameLabel.depth = depth.nameLabel;
 
-  updatePeerPlayerAnimation(player, newX - prevX, newY - prevY, stop);
-
   // TODO: update direction
   // player.phaser.setTexture(
   //   `${playerFromServer.id}-${playerFromServer.direction}-${2}`
   // );
 
-  return {
-    ...player,
-  };
+  return updatePeerPlayerAnimation(player, newX - prevX, newY - prevY, stop);
 }
 
 export function playerAddChat(player, chat) {

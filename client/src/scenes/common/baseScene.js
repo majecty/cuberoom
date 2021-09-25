@@ -88,7 +88,10 @@ export function baseSceneInit(selfScene, data) {
 export function baseScenePreload(selfScene) {
   log(selfScene.sceneName, "preload");
   // FIXME: move this to player code
-  for (const [key, file] of allCharacterImageNames(selfScene.socket.id, window.playerImgUrl)) {
+  for (const [key, file] of allCharacterImageNames(
+    selfScene.socket.id,
+    window.playerImgUrl
+  )) {
     selfScene.load.image(key, file);
   }
 }

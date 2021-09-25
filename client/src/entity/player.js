@@ -6,7 +6,7 @@ import {
 } from "./player/animation";
 import { log } from "../log";
 import ENV from "../../ENV";
-import { playerSpeed } from "../constant";
+import { playerSpeed, depth } from "../constant";
 import {
   playerNetworkCreate,
   playerNetworkGetThisFramePosition,
@@ -23,6 +23,7 @@ export function playerCreate(scene, x, y, name, chat, id) {
   log("playerCreate", scene.sceneName, name, idStr.substring(0, 5));
   const phaser = scene.physics.add.sprite(x, y, `${id}-down-2`, 1);
   phaser.setSize(20, 20, false).setOffset(0, 20);
+  phaser.depth = depth.player;
 
   const nameLabel = scene.add.text(x, y - 30, name || "이름없음", {
     fontFamily: "28px NeoDunggeunmo",
@@ -41,6 +42,8 @@ export function playerCreate(scene, x, y, name, chat, id) {
 
   nameLabel.setOrigin(0.5, 0.5);
   chatBubble.setOrigin(0.5, 0.5);
+  nameLabel.depth = depth.nameLabel;
+  chatBubble.depth = depth.nameLabel;
 
   scene.physics.world.enable([nameLabel, chatBubble]);
 
@@ -72,6 +75,10 @@ function initmove(player) {
     ...player,
     prevMove: newPrevMove,
   };
+}
+
+function getPlayerDepth(player) {
+  return depth.player + player.phaser.y / 10000;
 }
 
 function followClick(player, destinationX, destinationY) {
@@ -136,6 +143,9 @@ export function playerFollowClickUpdate(
     destinationY
   );
   newPlayer = followClick(newPlayer, destinationX, destinationY, scene);
+  newPlayer.phaser.depth = getPlayerDepth(newPlayer);
+  newPlayer.chatBubble.depth = depth.nameLabel;
+  newPlayer.nameLabel.depth = depth.nameLabel;
   return newPlayer;
 }
 
@@ -199,6 +209,9 @@ export function playerFollowNetworkPos(player, dtMillis) {
   player.nameLabel.y = newY - 30;
   player.chatBubble.x = newX;
   player.chatBubble.y = newY - 50;
+  player.phaser.depth = getPlayerDepth(player);
+  player.chatBubble.depth = depth.nameLabel;
+  player.nameLabel.depth = depth.nameLabel;
 
   updatePeerPlayerAnimation(player, newX - prevX, newY - prevY, stop);
 

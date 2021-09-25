@@ -1,6 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 
 import { assert } from "../assert";
+import { depth } from "../constant";
 
 function extractObjects(phaserObjectLayer) {
   const results = {};
@@ -70,12 +71,13 @@ export function mapCreateOverCharacterLayer(map, tilesetImage) {
   const b2Cylinder = map.phaser.addTilesetImage("cylinder", "b2-cylinder");
   const b2Cube = map.phaser.addTilesetImage("cube", "b2-cube");
   const b2Pink = map.phaser.addTilesetImage("pink", "b2-pink");
-  map.phaser.createLayer(
+  const overLayer = map.phaser.createLayer(
     "overCharacter",
     [backgroundTileset, b2Cylinder, b2Cube, b2Pink],
     0,
     0
   );
+  overLayer.depth = depth.overPlayer;
   return {
     ...map,
     backgroundTileset,

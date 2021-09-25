@@ -162,7 +162,7 @@ export function baseSceneUpdate(selfScene, dtMillis) {
     selfScene
   );
   for (const [id, otherPlayer] of playersEntries(selfScene.players)) {
-    if (otherPlayer !== selfScene.player) {
+    if (id !== selfScene.socket.id) {
       selfScene.players.entries[id] = playerFollowNetworkPos(
         otherPlayer,
         dtMillis

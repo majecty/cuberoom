@@ -21,7 +21,7 @@ export function playerCreate(scene, x, y, name, chat, id) {
     idStr = id;
   }
   log("playerCreate", scene.sceneName, name, idStr.substring(0, 5));
-  const phaser = scene.physics.add.sprite(x, y, `${id}-down-2`, 1);
+  const phaser = scene.physics.add.sprite(x, y, `player-${id}-down-2`, 1);
   phaser.setSize(20, 20, false).setOffset(0, 20);
   phaser.depth = depth.player;
 
@@ -176,10 +176,6 @@ export function playerUpdateFromServer(player, playerFromServer) {
     },
     playerFromServer.target
   );
-
-  player.phaser.setTexture(
-    `${playerFromServer.id}-${playerFromServer.direction}-${2}`
-  );
   return {
     ...player,
   };
@@ -237,23 +233,23 @@ export function playerRemoveChat(player) {
 /**
  * @param playerFromServer field id, imgUrl
  */
-export function loadPlayerImages(phaserScene, playerFromServer, id, debug) {
+export function loadPlayerImages(phaserScene, playerFromServer, id) {
   const directions = ["left", "right", "up", "down"];
   for (const direction of directions) {
     for (let i = 1; i < 5; i += 1) {
       if (
-        !phaserScene.textures.exists(`${playerFromServer.id}-${direction}-${i}`)
+        !phaserScene.textures.exists(
+          `player-${id}-${direction}-${i}`
+        )
       ) {
-        if (debug) {
-          log(
-            "listenPlayerList load",
-            id.substring(0, 5),
-            `${playerFromServer.id}-${direction}-${i}`,
-            `${ENV.URL_STATIC}${playerFromServer.imgUrl}${direction}-${i}.png`
-          );
-        }
+        log(
+          "listenPlayerList load",
+          id.substring(0, 5),
+          `player-${id}-${direction}-${i}`,
+          `${ENV.URL_STATIC}${playerFromServer.imgUrl}${direction}-${i}.png`
+        );
         phaserScene.load.image(
-          `${playerFromServer.id}-${direction}-${i}`,
+          `player-${id}-${direction}-${i}`,
           `${ENV.URL_STATIC}${playerFromServer.imgUrl}${direction}-${i}.png`
         );
       }

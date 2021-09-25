@@ -87,14 +87,15 @@ export function baseSceneInit(selfScene, data) {
 
 export function baseScenePreload(selfScene) {
   log(selfScene.sceneName, "preload");
-  for (const [key, file] of allCharacterImageNames(window.playerImgUrl)) {
+  // FIXME: move this to player code
+  for (const [key, file] of allCharacterImageNames(selfScene.socket.id, window.playerImgUrl)) {
     selfScene.load.image(key, file);
   }
 }
 
 export function baseSceneCreate(selfScene, mapName, mapBackgroundLayerName) {
   log(selfScene.sceneName, "create");
-  playerCreateAnimations(selfScene);
+  playerCreateAnimations(selfScene.socket.id, selfScene);
 
   selfScene.map = mapCreate(selfScene, mapName);
   selfScene.player = playerCreate(
@@ -162,7 +163,7 @@ export function baseSceneUpdate(selfScene, dtMillis) {
     selfScene
   );
   for (const [id, otherPlayer] of playersEntries(selfScene.players)) {
-    if (id !== selfScene.socket.id) {
+    if (id !== selfScene.player.id) {
       selfScene.players.entries[id] = playerFollowNetworkPos(
         otherPlayer,
         dtMillis

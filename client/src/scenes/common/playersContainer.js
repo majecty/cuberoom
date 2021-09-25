@@ -6,6 +6,7 @@ import {
   playerUpdateFromServer,
   loadPlayerImages,
 } from "../../entity/player";
+import { playerCreateAnimations } from "../../entity/player/animation";
 import { log } from "../../log";
 
 /* eslint no-param-reassign: ["error", { "props": false }] */
@@ -58,6 +59,7 @@ export function playersContainerListenPlayerList({
           if (debug) {
             log("listenPlayerList playerCreate", id.substring(0, 5));
           }
+          playerCreateAnimations(id, phaserScene);
           players.entries[id] = playerCreate(
             phaserScene,
             player.x,

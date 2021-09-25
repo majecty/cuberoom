@@ -41,7 +41,11 @@ class EntranceScene extends Phaser.Scene {
 
   create() {
     backgroundStatic(this);
-    baseSceneCreate(this, "entrance-map", "entrance-background");
+    baseSceneCreate({
+      selfScene: this,
+      mapName: "entrance-map",
+      mapBackgroundLayerName: "entrance-background",
+    });
   }
 
   update(_time, delta) {

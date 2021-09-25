@@ -38,7 +38,11 @@ class FirstBasementScene extends Phaser.Scene {
 
   create() {
     backgroundStatic(this);
-    baseSceneCreate(this, "firstBasement-map", "firstBasement-background");
+    baseSceneCreate({
+      selfScene: this,
+      mapName: "firstBasement-map",
+      mapBackgroundLayerName: "firstBasement-background",
+    });
   }
 
   update(_time, delta) {

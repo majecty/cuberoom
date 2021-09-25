@@ -38,7 +38,11 @@ class SeventhFloorScene extends Phaser.Scene {
 
   create() {
     backgroundStatic(this);
-    baseSceneCreate(this, "seventhFloor-map", "seventhFloor-background");
+    baseSceneCreate({
+      selfScene: this,
+      mapName: "seventhFloor-map",
+      mapBackgroundLayerName: "seventhFloor-background",
+    });
   }
 
   update(_time, delta) {

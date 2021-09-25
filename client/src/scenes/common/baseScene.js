@@ -96,7 +96,11 @@ export function baseScenePreload(selfScene) {
   }
 }
 
-export function baseSceneCreate(selfScene, mapName, mapBackgroundLayerName) {
+export function baseSceneCreate({
+  selfScene,
+  mapName,
+  mapBackgroundLayerName,
+}) {
   log(selfScene.sceneName, "create");
   playerCreateAnimations(selfScene.socket.id, selfScene);
 

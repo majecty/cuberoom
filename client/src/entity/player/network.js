@@ -20,6 +20,7 @@ function moveTo({ current, goal, speed, dtMillis }) {
     return {
       newX: goal.x,
       newY: goal.y,
+      stop: true,
     };
   }
 
@@ -34,6 +35,7 @@ function moveTo({ current, goal, speed, dtMillis }) {
       to: goal.y,
       t: frameDistance / goalDitances,
     }),
+    stop: false,
   };
 }
 
@@ -66,6 +68,7 @@ export function playerNetworkGetThisFramePosition({
     return {
       newX: currentPosition.x,
       newY: currentPosition.y,
+      stop: true,
     };
   }
 
@@ -75,26 +78,27 @@ export function playerNetworkGetThisFramePosition({
     return {
       newX: lastReceivedPosition.x,
       newY: lastReceivedPosition.y,
+      stop: true,
     };
   }
   if (distance > 2 * normalDistancePerNetworkTick) {
-    const { newX, newY } = moveTo({
+    const { newX, newY, stop } = moveTo({
       current: currentPosition,
       goal: lastReceivedPosition,
       speed: playerSpeed * 2,
       dtMillis,
     });
-    return { newX, newY };
+    return { newX, newY, stop };
   }
   const dust = 3;
   if (distance < dust) {
-    return { newX: currentPosition.x, newY: currentPosition.y };
+    return { newX: currentPosition.x, newY: currentPosition.y, stop: true };
   }
-  const { newX, newY } = moveTo({
+  const { newX, newY, stop } = moveTo({
     current: currentPosition,
     goal: lastReceivedPosition,
     speed: playerSpeed,
     dtMillis,
   });
-  return { newX, newY };
+  return { newX, newY, stop };
 }

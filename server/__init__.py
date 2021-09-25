@@ -1,11 +1,9 @@
 from flask import Flask, request, url_for
 from flask.helpers import send_from_directory
-from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO, emit, join_room, leave_room
 from flask_cors import CORS
 from threading import Lock
-# from eventlet import tpool
 import threading
-# import eventlet
 import time
 import sys
 import os
@@ -37,7 +35,7 @@ if cuberoom_env not in ["local", "production"]:
 config_value = config_values[cuberoom_env]
 
 app = Flask(__name__, static_url_path=config_value["static_url_path"],
-  static_folder=config_value["static_folder"])#, static_url_path='', static_folder='')
+  static_folder=config_value["static_folder"])
 CORS(app, resources={r'*': {'origins': config_value["cors_origin"]}})
 
 app.secret_key = "cuberoom"
@@ -102,8 +100,10 @@ def addPlayer(data):
     finally:
         players_lock.release()
 
-# FIXME: players can be changed after emit
-    emit('playerList', players, broadcast=True)
+    join_room(player.floor)
+
+    # FIXME: players can be changed after emit
+    emit('playerList', players, broadcast=True, to=player.floor)
 
 @socketio.on('moveFloor')
 def moveFloor(data):
@@ -115,11 +115,17 @@ def moveFloor(data):
         prevRoom = players[data['id']]['floor']
         nextRoom = data['floor']
         players[data['id']]['floor'] = nextRoom
+        # move player away until the player move to the right position at the next floor
+        players[data['id']]['x'] = 999
+        players[data['id']]['y'] = 999
     finally:
         players_lock.release()
 
+    leave_room(prevRoom)
+    join_room(nextRoom)
+
     emit('removePlayer', { 'id': data['id'] }, broadcast=True)
-    emit('playerList', players, broadcast=True)
+    emit('playerList', players, broadcast=True, to=nextRoom)
 
 @socketio.on('addChat')
 def addChat(data):
@@ -131,16 +137,17 @@ def addChat(data):
         players[data['id']]['chat'] = data['chat']
     finally:
         players_lock.release()
+    floor = players[data['id']]['floor']
 
-    # emit('addChat', data, broadcast=True, to=players[data['id']]['floor'])
     emit(
         'addChat',
         {
             'id': data['id'],
             'chat': data['chat'],
-            'floor': players[data['id']]['floor'],
+            'floor': floor,
         },
-        broadcast=True
+        broadcast=True,
+        to=floor
     )
 
 @socketio.on('removeChat')
@@ -153,15 +160,17 @@ def removeChat(data):
         players[data['id']]['chat'] = ''
     finally:
         players_lock.release()
+    floor = players[data['id']]['floor']
 
     emit(
         'removeChat',
         {
             'id': data['id'],
             'chat': '',
-            'floor': players[data['id']]['floor'],
+            'floor': floor,
         },
-        broadcast=True
+        broadcast=True,
+        to=floor
     )
 
 @socketio.on('movePlayer')
@@ -181,7 +190,6 @@ def movePlayer(data):
 @socketio.on('getPlayers')
 def getPlayers():
     global players
-#    emit('playerList', players)
     emit('debugPlayerList', players)
     emit('debugMessage', players)
 
@@ -211,11 +219,8 @@ def broadcastPlayserListLoop():
         players_lock.acquire()
         players_changed = False
         players_lock.release()
+        # TODO: only send players room by room
         socketio.emit('playerList', players, broadcast=True)
-        # with app.app_context():
-        # emit('playerList', players, broadcast=True, skip_sid=True, namespace=None)
-        # emit('playerList', players, broadcast=True, skip_sid=True, namespace=None)
-
 
 thread = None
 @socketio.on('connect')

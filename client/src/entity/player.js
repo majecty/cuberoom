@@ -1,12 +1,12 @@
 /* eslint no-param-reassign: ["error", { "props": false }] */
 import {
-  updateAnimation,
   updateFollowClickAnimation,
   updateInitAnimation,
+  updatePeerPlayerAnimation,
 } from "./player/animation";
 import { log } from "../log";
 import ENV from "../../ENV";
-import { playerSpeed } from "../constant";
+import { playerSpeed, depth } from "../constant";
 import {
   playerNetworkCreate,
   playerNetworkGetThisFramePosition,
@@ -23,6 +23,7 @@ export function playerCreate(scene, x, y, name, chat, id) {
   log("playerCreate", scene.sceneName, name, idStr.substring(0, 5));
   const phaser = scene.physics.add.sprite(x, y, `${id}-down-2`, 1);
   phaser.setSize(20, 20, false).setOffset(0, 20);
+  phaser.depth = depth.player;
 
   const nameLabel = scene.add.text(x, y - 30, name || "이름없음", {
     fontFamily: "28px NeoDunggeunmo",
@@ -41,30 +42,15 @@ export function playerCreate(scene, x, y, name, chat, id) {
 
   nameLabel.setOrigin(0.5, 0.5);
   chatBubble.setOrigin(0.5, 0.5);
-  // nameLabel.setResolution(window.devicePixelRatio / 2)
-  // chatBubble.setResolution(window.devicePixelRatio / 2)
-  // nameLabel.setSize(20 + nameLabel.width, 40 + nameLabel.height)
+  nameLabel.depth = depth.nameLabel;
+  chatBubble.depth = depth.nameLabel;
 
   scene.physics.world.enable([nameLabel, chatBubble]);
-  // scene.physics.world.collide([nameLabel, chatBubble]);
-
-  // const group = scene.physics.add.group({ collideWorldBounds: true, setXY: { x, y }});
-  // group.add(phaser);
-  // group.add(nameLabel);
-  // group.add(chatBubble);
-
-  // phaser.body.setOnCollide(() => {
-  //   nameLabel.body.setVelocityY(0);
-  //   chatBubble.body.setVelocityY(0);
-  // })
-
-  // scene.physics.collide(phaser, undefined, () => {
-  //   nameLabel.body.setVelocityY(0);
-  //   chatBubble.body.setVelocityY(0);
-  // })
 
   return {
     phaser,
+    // we will use target to share the current goal of peer.
+    // It will help estimate peer's next movement
     target: {
       x: null,
       y: null,
@@ -89,6 +75,10 @@ function initmove(player) {
     ...player,
     prevMove: newPrevMove,
   };
+}
+
+function getPlayerDepth(player) {
+  return depth.player + player.phaser.y / 10000;
 }
 
 function followClick(player, destinationX, destinationY) {
@@ -140,153 +130,6 @@ function followClick(player, destinationX, destinationY) {
   };
 }
 
-function move(player, cursors, scene) {
-  let moved = false;
-  let velocity = playerSpeed;
-
-  if (scene.cheat) {
-    velocity *= 10;
-  }
-
-  let newPrevMove = player.prevMove;
-
-  // FIXME: nameLabel과 chatBubble에 velocity를 세팅하는 건 이상해
-  // child로 붙여서 자동으로 움직이게 하는 게 맞다고 생각해.
-  if (typeof cursors === "string" || typeof cursors === "undefined") {
-    if (cursors === "left") {
-      if (player.prevMove !== "left") {
-        player.phaser.body.setVelocityX(-velocity);
-        player.nameLabel.body.setVelocityX(-velocity);
-        player.chatBubble.body.setVelocityX(-velocity);
-        // player.nameLabel.x = player.phaser.x;
-        // player.chatBubble.x = player.phaser.x;
-        newPrevMove = "left";
-      }
-      moved = true;
-    } else if (cursors === "right") {
-      if (player.prevMove !== "right") {
-        player.phaser.body.setVelocityX(velocity);
-        player.nameLabel.body.setVelocityX(velocity);
-        player.chatBubble.body.setVelocityX(velocity);
-        // player.nameLabel.x = player.phaser.x;
-        // player.chatBubble.x = player.phaser.x;
-        newPrevMove = "right";
-      }
-      moved = true;
-    } else {
-      player.phaser.body.setVelocityX(0);
-      player.nameLabel.body.setVelocityX(0);
-      player.chatBubble.body.setVelocityX(0);
-    }
-
-    if (cursors === "up") {
-      if (player.prevMove !== "up") {
-        player.phaser.body.setVelocityY(-velocity);
-        player.nameLabel.body.setVelocityY(-velocity);
-        player.chatBubble.body.setVelocityY(-velocity);
-        // player.nameLabel.y = player.phaser.y - 30;
-        // player.chatBubble.y = player.phaser.y - 45;
-        newPrevMove = "up";
-      }
-      moved = true;
-    } else if (cursors === "down") {
-      if (player.prevMove !== "down") {
-        player.phaser.body.setVelocityY(velocity);
-        player.nameLabel.body.setVelocityY(velocity);
-        player.chatBubble.body.setVelocityY(velocity);
-        // player.nameLabel.y = player.phaser.y - 30;
-        // player.chatBubble.y = player.phaser.y - 45;
-        newPrevMove = "down";
-      }
-      moved = true;
-    } else {
-      player.phaser.body.setVelocityY(0);
-      player.nameLabel.body.setVelocityY(0);
-      player.chatBubble.body.setVelocityY(0);
-    }
-
-    if (moved === false) {
-      player.phaser.body.setVelocity(0);
-      player.nameLabel.body.setVelocityY(0);
-      player.chatBubble.body.setVelocityY(0);
-    }
-
-    return {
-      ...player,
-      prevMove: newPrevMove,
-    };
-  }
-
-  if (cursors.left.isDown) {
-    if (player.prevMove !== "left") {
-      player.phaser.body.setVelocityX(-velocity);
-      player.nameLabel.body.setVelocityX(-velocity);
-      player.chatBubble.body.setVelocityX(-velocity);
-      // player.nameLabel.x = player.phaser.x;
-      // player.chatBubble.x = player.phaser.x;
-      newPrevMove = "left";
-    }
-    moved = true;
-  } else if (cursors.right.isDown) {
-    if (player.prevMove !== "right") {
-      player.phaser.body.setVelocityX(velocity);
-      player.nameLabel.body.setVelocityX(velocity);
-      player.chatBubble.body.setVelocityX(velocity);
-      // player.nameLabel.x = player.phaser.x;
-      // player.chatBubble.x = player.phaser.x;
-      newPrevMove = "right";
-    }
-    moved = true;
-  } else {
-    player.phaser.body.setVelocityX(0);
-    player.nameLabel.body.setVelocityX(0);
-    player.chatBubble.body.setVelocityX(0);
-  }
-
-  if (cursors.up.isDown) {
-    if (player.prevMove !== "up") {
-      player.phaser.body.setVelocityY(-velocity);
-      player.nameLabel.body.setVelocityY(-velocity);
-      player.chatBubble.body.setVelocityY(-velocity);
-      // player.nameLabel.y = player.phaser.y - 30;
-      // player.chatBubble.y = player.phaser.y - 45;
-      newPrevMove = "up";
-    }
-    moved = true;
-  } else if (cursors.down.isDown) {
-    if (player.prevMove !== "down") {
-      player.phaser.body.setVelocityY(velocity);
-      player.nameLabel.body.setVelocityY(velocity);
-      player.chatBubble.body.setVelocityY(velocity);
-      // player.nameLabel.y = player.phaser.y - 30;
-      // player.chatBubble.y = player.phaser.y - 45;
-      newPrevMove = "down";
-    }
-    moved = true;
-  } else {
-    player.phaser.body.setVelocityY(0);
-    player.nameLabel.body.setVelocityY(0);
-    player.chatBubble.body.setVelocityY(0);
-  }
-
-  if (moved === false) {
-    player.phaser.body.setVelocity(0);
-    player.nameLabel.body.setVelocityY(0);
-    player.chatBubble.body.setVelocityY(0);
-  }
-
-  return {
-    ...player,
-    prevMove: newPrevMove,
-  };
-}
-
-export function playerUpdate(player, cursors, scene) {
-  let newPlayer = updateAnimation(player, cursors);
-  newPlayer = move(newPlayer, cursors, scene);
-  return newPlayer;
-}
-
 export function playerFollowClickUpdate(
   player,
   destinationX,
@@ -300,6 +143,9 @@ export function playerFollowClickUpdate(
     destinationY
   );
   newPlayer = followClick(newPlayer, destinationX, destinationY, scene);
+  newPlayer.phaser.depth = getPlayerDepth(newPlayer);
+  newPlayer.chatBubble.depth = depth.nameLabel;
+  newPlayer.nameLabel.depth = depth.nameLabel;
   return newPlayer;
 }
 
@@ -343,7 +189,7 @@ export function playerFollowNetworkPos(player, dtMillis) {
   if (player.phaser == null) {
     log("player.phaser == null", player);
   }
-  const { newX, newY } = playerNetworkGetThisFramePosition({
+  const { newX, newY, stop } = playerNetworkGetThisFramePosition({
     playerNetwork: player.network,
     currentPosition: {
       x: player.phaser.x,
@@ -351,6 +197,10 @@ export function playerFollowNetworkPos(player, dtMillis) {
     },
     dtMillis,
   });
+
+  const prevX = player.phaser.x;
+  const prevY = player.phaser.y;
+
   player.phaser.x = newX;
   player.phaser.y = newY;
 
@@ -359,6 +209,11 @@ export function playerFollowNetworkPos(player, dtMillis) {
   player.nameLabel.y = newY - 30;
   player.chatBubble.x = newX;
   player.chatBubble.y = newY - 50;
+  player.phaser.depth = getPlayerDepth(player);
+  player.chatBubble.depth = depth.nameLabel;
+  player.nameLabel.depth = depth.nameLabel;
+
+  updatePeerPlayerAnimation(player, newX - prevX, newY - prevY, stop);
 
   // TODO: update direction
   // player.phaser.setTexture(

@@ -2,6 +2,7 @@
 import {
   updateFollowClickAnimation,
   updateInitAnimation,
+  updatePeerPlayerAnimation,
 } from "./player/animation";
 import { log } from "../log";
 import ENV from "../../ENV";
@@ -178,7 +179,7 @@ export function playerFollowNetworkPos(player, dtMillis) {
   if (player.phaser == null) {
     log("player.phaser == null", player);
   }
-  const { newX, newY } = playerNetworkGetThisFramePosition({
+  const { newX, newY, stop } = playerNetworkGetThisFramePosition({
     playerNetwork: player.network,
     currentPosition: {
       x: player.phaser.x,
@@ -186,6 +187,10 @@ export function playerFollowNetworkPos(player, dtMillis) {
     },
     dtMillis,
   });
+
+  const prevX = player.phaser.x;
+  const prevY = player.phaser.y;
+
   player.phaser.x = newX;
   player.phaser.y = newY;
 
@@ -194,6 +199,8 @@ export function playerFollowNetworkPos(player, dtMillis) {
   player.nameLabel.y = newY - 30;
   player.chatBubble.x = newX;
   player.chatBubble.y = newY - 50;
+
+  updatePeerPlayerAnimation(player, newX - prevX, newY - prevY, stop);
 
   // TODO: update direction
   // player.phaser.setTexture(

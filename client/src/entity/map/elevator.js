@@ -1,5 +1,6 @@
 import startScene from "./startScene";
 import { spawnPoints } from "../../scenes/common/constants";
+import { protocol } from "../../network/protocol";
 
 let panelContainer;
 
@@ -56,13 +57,13 @@ export function showElevatorPanel(scene, floor) {
   const buttonTo1F = elButton(56, 276, "1F");
   buttonTo1F.onclick = () => {
     hideElevatorPanel();
-    scene.socket.emit("moveFloor", { id: scene.socket.id, floor: "1F" });
+    protocol.moveFloor(scene.socket, "1F");
     startScene(scene, "FirstFloorScene", spawnPoints.floor1F.elevator);
   };
   buttonTo1F.ontouchstart = () => {
     if (floor !== "1F") {
       hideElevatorPanel();
-      scene.socket.emit("moveFloor", { id: scene.socket.id, floor: "1F" });
+      protocol.moveFloor(scene.socket, "1F");
       startScene(scene, "FirstFloorScene", spawnPoints.floor1F.elevator);
     }
   };
@@ -71,13 +72,13 @@ export function showElevatorPanel(scene, floor) {
   const buttonTo2F = elButton(120, 276, "2F");
   buttonTo2F.onclick = () => {
     hideElevatorPanel();
-    scene.socket.emit("moveFloor", { id: scene.socket.id, floor: "2F" });
+    protocol.moveFloor(scene.socket, "2F");
     startScene(scene, "SecondFloorScene", spawnPoints.floor2F.elevator);
   };
   buttonTo2F.ontouchstart = () => {
     if (floor !== "2F") {
       hideElevatorPanel();
-      scene.socket.emit("moveFloor", { id: scene.socket.id, floor: "2F" });
+      protocol.moveFloor(scene.socket, "2F");
       startScene(scene, "SecondFloorScene", spawnPoints.floor2F.elevator);
     }
   };
@@ -86,13 +87,13 @@ export function showElevatorPanel(scene, floor) {
   const buttonTo5F = elButton(56, 212, "5F");
   buttonTo5F.onclick = () => {
     hideElevatorPanel();
-    scene.socket.emit("moveFloor", { id: scene.socket.id, floor: "5F" });
+    protocol.moveFloor(scene.socket, "5F");
     startScene(scene, "FifthFloorScene", spawnPoints.floor5F.elevator);
   };
   buttonTo5F.ontouchstart = () => {
     if (floor !== "5F") {
       hideElevatorPanel();
-      scene.socket.emit("moveFloor", { id: scene.socket.id, floor: "5F" });
+      protocol.moveFloor(scene.socket, "5F");
       startScene(scene, "FifthFloorScene", spawnPoints.floor5F.elevator);
     }
   };
@@ -101,13 +102,13 @@ export function showElevatorPanel(scene, floor) {
   const buttonTo6F = elButton(120, 212, "6F");
   buttonTo6F.onclick = () => {
     hideElevatorPanel();
-    scene.socket.emit("moveFloor", { id: scene.socket.id, floor: "6F" });
+    protocol.moveFloor(scene.socket, "6F");
     startScene(scene, "SixthFloorScene", spawnPoints.floor6F.elevator);
   };
   buttonTo6F.ontouchstart = () => {
     if (floor !== "6F") {
       hideElevatorPanel();
-      scene.socket.emit("moveFloor", { id: scene.socket.id, floor: "6F" });
+      protocol.moveFloor(scene.socket, "6F");
       startScene(scene, "SixthFloorScene", spawnPoints.floor6F.elevator);
     }
   };
@@ -116,13 +117,13 @@ export function showElevatorPanel(scene, floor) {
   const buttonTo7F = elButton(56, 148, "7F");
   buttonTo7F.onclick = () => {
     hideElevatorPanel();
-    scene.socket.emit("moveFloor", { id: scene.socket.id, floor: "7F" });
+    protocol.moveFloor(scene.socket, "7F");
     startScene(scene, "SeventhFloorScene", spawnPoints.floor7F.elevator);
   };
   buttonTo7F.ontouchstart = () => {
     if (floor !== "7F") {
       hideElevatorPanel();
-      scene.socket.emit("moveFloor", { id: scene.socket.id, floor: "7F" });
+      protocol.moveFloor(scene.socket, "7F");
       startScene(scene, "SeventhFloorScene", spawnPoints.floor7F.elevator);
     }
   };
@@ -131,13 +132,13 @@ export function showElevatorPanel(scene, floor) {
   const buttonToB1 = elButton(120, 340, "B1");
   buttonToB1.onclick = () => {
     hideElevatorPanel();
-    scene.socket.emit("moveFloor", { id: scene.socket.id, floor: "B1" });
+    protocol.moveFloor(scene.socket, "B1");
     startScene(scene, "FirstBasementScene", spawnPoints.floorB1.elevator);
   };
   buttonToB1.ontouchstart = () => {
     if (floor !== "B1") {
       hideElevatorPanel();
-      scene.socket.emit("moveFloor", { id: scene.socket.id, floor: "B1" });
+      protocol.moveFloor(scene.socket, "B1");
       startScene(scene, "FirstBasementScene", spawnPoints.floorB1.elevator);
     }
   };
@@ -146,13 +147,13 @@ export function showElevatorPanel(scene, floor) {
   const buttonToB2 = elButton(56, 340, "B2");
   buttonToB2.onclick = () => {
     hideElevatorPanel();
-    scene.socket.emit("moveFloor", { id: scene.socket.id, floor: "B2" });
+    protocol.moveFloor(scene.socket, "B2");
     startScene(scene, "SecondBasementScene", spawnPoints.floorB2.elevator);
   };
   buttonToB2.ontouchstart = () => {
     if (floor !== "B2") {
       hideElevatorPanel();
-      scene.socket.emit("moveFloor", { id: scene.socket.id, floor: "B2" });
+      protocol.moveFloor(scene.socket, "B2");
       startScene(scene, "SecondBasementScene", spawnPoints.floorB2.elevator);
     }
   };

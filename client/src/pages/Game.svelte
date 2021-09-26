@@ -13,6 +13,7 @@
   import ENV from '../../ENV';
   import { playersEntries } from "../scenes/common/players";
   import { saveToBrowserStorage, loadFromBrowserStorage } from "./storage";
+  import { protocol } from "../network/protocol"
 
   const socket = ENV.ENVIRONMENT === 'production'
     ? io.connect(ENV.URL, { transports: ['websocket'] })
@@ -34,9 +35,9 @@
 
   function addChat() {
     clearTimeout(chatTimer);
-    socket.emit('addChat', { id: socket.id, chat });
+    protocol.addChat(socket, chat);
     chat = '';
-    chatTimer = setTimeout(() => socket.emit('removeChat', { id: socket.id }), 3000); // 3초 뒤에 말풍선 삭제
+    chatTimer = setTimeout(() => protocol.removeChat(socket), 3000); // 3초 뒤에 말풍선 삭제
   }
 
   function getSceneConstructor(floor) {
@@ -170,7 +171,7 @@
   }
 
   function getPlayersFromServer() {
-    window.socket.emit('getPlayers');
+    protocol.getPlayers(window.socket);
   }
 </script>
 

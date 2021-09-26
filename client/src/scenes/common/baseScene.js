@@ -34,6 +34,7 @@ import {
   saveToBrowserStorage,
   loadFromBrowserStorage,
 } from "../../pages/storage";
+import { protocol } from "../../network/protocol";
 
 /**
  * @typedef {import("../../relation/playerOnMap").OnMoveToTile} OnMoveToTile
@@ -135,8 +136,7 @@ export function baseSceneCreate({
   );
   selfScene.player = playerinitmove(selfScene.player);
 
-  selfScene.socket.emit("addPlayer", {
-    id: selfScene.socket.id,
+  protocol.addPlayer(selfScene.socket, {
     name: loadFromBrowserStorage("playerName"),
     imgUrl: loadFromBrowserStorage("playerImgUrl"),
     floor: selfScene.sceneName,
@@ -224,8 +224,7 @@ export function baseSceneUpdate(selfScene, dtMillis) {
       saveToBrowserStorage("playerX", selfScene.player.phaser.x);
       saveToBrowserStorage("playerY", selfScene.player.phaser.y);
 
-      selfScene.socket.emit("movePlayer", {
-        id: selfScene.socket.id,
+      protocol.movePlayer(selfScene.socket, {
         floor: selfScene.sceneName,
         direction: selfScene.player.prevMove,
         x: selfScene.player.phaser.x,

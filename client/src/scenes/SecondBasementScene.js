@@ -12,6 +12,7 @@ import { showElevatorPanel } from "../entity/map/elevator";
 import { popupCreate } from "../entity/popup";
 import { popupPos } from "../entity/works";
 import { spawnPoints } from "./common/constants";
+import { protocol } from "../network/protocol";
 
 function backgroundStatic(scene) {
   scene.add.sprite(800 / 2, 736 / 2, "secondBasement-background");
@@ -20,20 +21,14 @@ function backgroundStatic(scene) {
 function tileInteraction(scene, curTileName) {
   switch (curTileName) {
     case "up":
-      scene.socket.emit("moveFloor", {
-        id: scene.socket.id,
-        floor: "B1",
-      });
+      protocol.moveFloor(scene.socket, "B1");
       startScene(scene, "FirstBasementScene", spawnPoints.floorB1.fromB2);
       break;
     case "elevator":
       showElevatorPanel(scene, "B2");
       break;
     case "up3":
-      scene.socket.emit("moveFloor", {
-        id: scene.socket.id,
-        floor: "B1",
-      });
+      protocol.moveFloor(scene.socket, "B1");
       startScene(scene, "FirstBasementScene", spawnPoints.floorB1.fromB2_2);
       break;
     case "work-5":
@@ -74,7 +69,10 @@ class SecondBasementScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image("secondBasement-background", "/static/img/b2_background.png");
+    this.load.image(
+      "secondBasement-background",
+      "/static/img/b2_background.png"
+    );
     this.load.image("collision-tileset", "/static/tilemap/simple_tile.png");
     this.load.image("interactive-tile", "/static/tilemap/interactive-tile.png");
     this.load.image("b2-cylinder", "/static/tilemap/b2_cylinder.png");

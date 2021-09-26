@@ -10,6 +10,7 @@ import { FLOOR_NAMES } from "./common";
 import startScene from "../entity/map/startScene";
 import { showElevatorPanel } from "../entity/map/elevator";
 import { spawnPoints } from "./common/constants";
+import { protocol } from "../network/protocol";
 
 function backgroundStatic(scene) {
   scene.add.sprite(800 / 2, 608 / 2, "seventhFloor-background");
@@ -18,17 +19,11 @@ function backgroundStatic(scene) {
 function tileInteraction(scene, curTileName) {
   switch (curTileName) {
     case "up":
-      scene.socket.emit("moveFloor", {
-        id: scene.socket.id,
-        floor: "8F",
-      });
+      protocol.moveFloor(scene.socket, "8F");
       startScene(scene, "EighthFloorScene", spawnPoints.floor8F.from7F);
       break;
     case "down":
-      scene.socket.emit("moveFloor", {
-        id: scene.socket.id,
-        floor: "6F",
-      });
+      protocol.moveFloor(scene.socket, "6F");
       startScene(scene, "SixthFloorScene", spawnPoints.floor6F.from7F);
       break;
     case "elevator":

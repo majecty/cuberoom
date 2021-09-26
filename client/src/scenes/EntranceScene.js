@@ -9,6 +9,7 @@ import {
 } from "./common/baseScene";
 import startScene from "../entity/map/startScene";
 import { spawnPoints } from "./common/constants";
+import { protocol } from "../network/protocol";
 
 function backgroundStatic(scene) {
   scene.add.sprite(1200 / 2, 800 / 2, "entrance-background");
@@ -18,10 +19,7 @@ function tileInteraction(scene, curTileName) {
   switch (curTileName) {
     case "up":
       // 이거 다른 경우에도 추가하기?
-      scene.socket.emit("moveFloor", {
-        id: scene.socket.id,
-        floor: "1F",
-      });
+      protocol.moveFloor(scene.socket, "1F");
       startScene(scene, "FirstFloorScene", spawnPoints.floor1F.fromEntrance);
       break;
     default:

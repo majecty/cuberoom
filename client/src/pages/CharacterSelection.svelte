@@ -3,6 +3,7 @@
   import axios from 'axios';
   import ENV from '../../ENV';
   import names from '../entity/names';
+  import { saveToBrowserStorage, loadFromBrowserStorage } from "./storage";
 
   let skinNum = 1;
   let eyeNum = 1;
@@ -77,8 +78,8 @@
       cloth: clothesNum,
     })
     .then((res) => {
-      window.playerImgUrl = res.data; // 약간 임시방편..ㅠㅠ
-      window.playerName = name; // 이것도,,,,
+      saveToBrowserStorage("playerImgUrl", res.data);
+      saveToBrowserStorage("playerName", name);
       navigate('/map');
     })
     .catch((err) => {

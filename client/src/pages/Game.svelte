@@ -12,6 +12,7 @@
   import { io } from 'socket.io-client';
   import ENV from '../../ENV';
   import { playersEntries } from "../scenes/common/players";
+  import { saveToBrowserStorage, loadFromBrowserStorage } from "./storage";
 
   const socket = ENV.ENVIRONMENT === 'production'
     ? io.connect(ENV.URL, { transports: ['websocket'] })
@@ -24,7 +25,7 @@
 
   socket.on('disconnect', () => {
     window.socket = undefined;
-    window.playerImgUrl = undefined;
+    saveToBrowserStorage("playerImgUrl", null);
   })
 
   socket.on('connect_error', (err) => {

@@ -30,6 +30,7 @@ import {
   rateLimiterCreate,
   rateLimiterTrigger,
 } from "../../network/rateLimiter";
+import { saveToBrowserStorage, loadFromBrowserStorage } from "../../pages/storage";
 
 /**
  * @typedef {import("../../relation/playerOnMap").OnMoveToTile} OnMoveToTile
@@ -94,7 +95,7 @@ export function baseScenePreload(selfScene) {
   // FIXME: move this to player code
   for (const [key, file] of allCharacterImageNames(
     selfScene.socket.id,
-    window.playerImgUrl
+    loadFromBrowserStorage("playerImgUrl")
   )) {
     selfScene.load.image(key, file);
   }
@@ -118,10 +119,10 @@ export function baseSceneCreate({
     selfScene,
     selfScene.x,
     selfScene.y,
-    window.playerName,
+    loadFromBrowserStorage("playerName"),
     "",
     selfScene.socket.id,
-    window.playerImgUrl
+    loadFromBrowserStorage("playerImgUrl"),
   ); // 소켓 연결 되면 이 부분을 지워야 함
   selfScene.players = playersAddPlayer(
     selfScene.players,
@@ -132,8 +133,8 @@ export function baseSceneCreate({
 
   selfScene.socket.emit("addPlayer", {
     id: selfScene.socket.id,
-    name: window.playerName,
-    imgUrl: window.playerImgUrl,
+    name: loadFromBrowserStorage("playerName"),
+    imgUrl: loadFromBrowserStorage("playerImgUrl"),
     floor: selfScene.sceneName,
     x: selfScene.x,
     y: selfScene.y,

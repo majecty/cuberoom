@@ -190,8 +190,7 @@ export function baseSceneUpdate(selfScene, dtMillis) {
   selfScene.playerOnMap = playerOnMapUpdate(
     selfScene.playerOnMap,
     selfScene.player,
-    selfScene.map,
-    selfScene
+    selfScene.map
   );
 
   if (pointer.isDown) {

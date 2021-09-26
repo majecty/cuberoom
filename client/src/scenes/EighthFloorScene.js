@@ -7,9 +7,30 @@ import {
   baseSceneCreate,
   baseSceneUpdate,
 } from "./common/baseScene";
+import startScene from "../entity/map/startScene";
 
 function backgroundStatic(scene) {
   scene.add.sprite(800 / 2, 770 / 2, "eighthFloor-background");
+}
+
+function tileInteraction(scene, curTileName) {
+  switch (curTileName) {
+    case "up":
+      break;
+    case "down":
+      scene.socket.emit("moveFloor", {
+        id: scene.socket.id,
+        floor: "7F",
+      });
+      startScene(scene, "SeventhFloorScene", { x: 16 * 6, y: 16 * 13 });
+      break;
+    case "elevator":
+      break;
+    case "popup":
+      break;
+    default:
+      break;
+  }
 }
 
 class EighthFloorScene extends Phaser.Scene {
@@ -42,6 +63,9 @@ class EighthFloorScene extends Phaser.Scene {
       selfScene: this,
       mapName: "eighthFloor-map",
       mapBackgroundLayerName: "eighthFloor-background",
+      onMoveToTile: (tileName) => {
+        tileInteraction(this, tileName);
+      },
     });
   }
 

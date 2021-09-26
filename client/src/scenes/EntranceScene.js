@@ -7,12 +7,13 @@ import {
   baseSceneCreate,
   baseSceneUpdate,
 } from "./common/baseScene";
+import startScene from "../entity/map/startScene";
 
 function backgroundStatic(scene) {
   scene.add.sprite(1200 / 2, 800 / 2, "entrance-background");
 }
 
-function entranceInteraction(scene, curTileName) {
+function tileInteraction(scene, curTileName) {
   switch (curTileName) {
     case "up":
       // 이거 다른 경우에도 추가하기?
@@ -61,7 +62,7 @@ class EntranceScene extends Phaser.Scene {
       mapName: "entrance-map",
       mapBackgroundLayerName: "entrance-background",
       onMoveToTile: (tileName) => {
-        entranceInteraction(this, tileName);
+        tileInteraction(this, tileName);
       },
     });
   }

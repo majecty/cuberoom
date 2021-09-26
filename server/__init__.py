@@ -14,7 +14,7 @@ config_values = {}
 config_values["local"] = {
   "static_url_path": "",
   "static_folder": "",
-  "cors_origin": "http://localhost:5000",
+  "cors_origin": "*",
   "public_path": "../client/public",
   "user_image_prefix": "", # empty
   "port": 3000
@@ -230,4 +230,4 @@ def connect_for_main():
         thread = socketio.start_background_task(target=broadcastPlayserListLoop)
 
 if __name__ == "__main__":
-    socketio.run(app, debug=True, port=config_value["port"])
+    socketio.run(app, debug=True, port=config_value["port"], host="0.0.0.0")

@@ -10,7 +10,7 @@ function elButton(x, y, floor) {
   button.style.top = `${y}px`;
   button.style.left = `${x}px`;
   button.style.border = "none";
-  button.style.backgroundImage = `url("/img/ui-map/el_${floor}.png")`;
+  button.style.backgroundImage = `url("/static/img/ui-map/el_${floor}.png")`;
   button.style.opacity = 0;
   button.style.cursor = "pointer";
 
@@ -177,6 +177,6 @@ export function showElevatorPanel(scene, floor) {
   };
   panel.appendChild(buttonClose);
 
-  panel.style.backgroundImage = `url("/img/ui-map/el_panel_${floor}.png")`;
+  panel.style.backgroundImage = `url("/static/img/ui-map/el_panel_${floor}.png")`;
   document.body.appendChild(panelContainer);
 }

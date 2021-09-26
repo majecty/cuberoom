@@ -12,7 +12,7 @@ export const popupPos = {
 const works = {
   1: {
     id: "work-1",
-    imgUrl: "/img/artist-profile/work01_aaajiao.png",
+    imgUrl: "/static/img/artist-profile/work01_aaajiao.png",
     popupname: "사람은 싫지만 너는 사랑해",
     title: "아지아오, 사람은 싫지만 너는 사랑해, 2017",
     medium: "단채널 비디오, 컬러, 사운드, 25분 4초",
@@ -26,7 +26,7 @@ const works = {
   },
   2: {
     id: "work-2",
-    imgUrl: "/img/artist-profile/work02_Kim Hyojae.png",
+    imgUrl: "/static/img/artist-profile/work02_Kim Hyojae.png",
     popupname: "디폴트/썰",
     title: "김효재, 디폴트, 2018-19/2021",
     title2: "김효재, 썰, 2019",
@@ -44,7 +44,7 @@ const works = {
   },
   3: {
     id: "work-3",
-    imgUrl: "/img/artist-profile/work03_Sondra Perry.png",
+    imgUrl: "/static/img/artist-profile/work03_Sondra Perry.png",
     popupname: "잇츠 인 더 게임",
     title:
       "손드라 페리, 잇츠 인 더 게임 ’17 혹은 진열과 보호를 위한 미러 개그, 2017",
@@ -57,7 +57,7 @@ const works = {
   },
   4: {
     id: "work-4",
-    imgUrl: "/img/artist-profile/work04_Lu Yang.png",
+    imgUrl: "/static/img/artist-profile/work04_Lu Yang.png",
     popupname: "루도쿠쇼 도쿠시 헬로 월드",
     title: "루양, 루도쿠쇼 도쿠시 헬로 월드, 2021",
     medium: "단채널 HD 비디오, 컬러, 사운드, 3분 25초",
@@ -72,7 +72,7 @@ const works = {
   },
   5: {
     id: "work-5",
-    imgUrl: "/img/artist-profile/work05_Kim Heeuk.png",
+    imgUrl: "/static/img/artist-profile/work05_Kim Heeuk.png",
     popupname: "소울포미",
     title: "김희욱, 소울포미: ‘당신은 누구입니까?’, 2021",
     medium:
@@ -85,7 +85,7 @@ const works = {
   },
   6: {
     id: "work-6",
-    imgUrl: "/img/artist-profile/work06_LaTurbo Avedon.png",
+    imgUrl: "/static/img/artist-profile/work06_LaTurbo Avedon.png",
     popupname: "그 누구도 아닌 나",
     title: "라터보 아베돈, 그 누구도 아닌 나, 2019",
     medium: "단채널 비디오, 컬러, 사운드, 22분 3초",
@@ -96,7 +96,7 @@ const works = {
   },
   7: {
     id: "work-7",
-    imgUrl: "/img/artist-profile/work07_An Gayoung.png",
+    imgUrl: "/static/img/artist-profile/work07_An Gayoung.png",
     popupname: "KIN거운 생활",
     title: "안가영, KIN거운 생활: 온라인, 2020-21",
     medium: "머시니마, 단채널 FHD 비디오, 컬러, 사운드, 20분 13초",
@@ -114,7 +114,7 @@ const works = {
   },
   8: {
     id: "work-8",
-    imgUrl: "/img/artist-profile/work08_Molly Soda.png",
+    imgUrl: "/static/img/artist-profile/work08_Molly Soda.png",
     popupname: "미 앤 마이 걸스",
     title: "몰리 소다, 미 앤 마이 걸스, 2021",
     medium:

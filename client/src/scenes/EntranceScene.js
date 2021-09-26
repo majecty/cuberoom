@@ -43,14 +43,14 @@ class EntranceScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image("entrance-background", "/img/entrance_background.png");
-    this.load.image("collision-tileset", "/tilemap/simple_tile.png");
-    this.load.image("interactive-tile", "/tilemap/interactive-tile.png");
-    this.load.image("popup", "/img/ui-map/popup.png");
+    this.load.image("entrance-background", "/static/img/entrance_background.png");
+    this.load.image("collision-tileset", "/static/tilemap/simple_tile.png");
+    this.load.image("interactive-tile", "/static/tilemap/interactive-tile.png");
+    this.load.image("popup", "/static/img/ui-map/popup.png");
 
     this.load.tilemapTiledJSON({
       key: "entrance-map",
-      url: "/tilemap/entrance.json",
+      url: "/static/tilemap/entrance.json",
     });
     baseScenePreload(this);
   }

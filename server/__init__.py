@@ -13,19 +13,19 @@ cuberoom_env = os.getenv('CUBEROOM_ENV')
 config_values = {}
 config_values["local"] = {
   "static_url_path": "",
-  "static_folder": "",
+  "static_folder": "../client/public/static",
   "cors_origin": "*",
   "public_path": "../client/public",
-  "user_image_prefix": "", # empty
+  "user_image_prefix": "character-resource", # empty
   "port": 3000
 }
 
 config_values["production"] = {
   "static_url_path": "/static",
-  "static_folder": "static",
+  "static_folder": "../client/public/static",
   "cors_origin": "http://test.cuberoom.net",
   "public_path": "../client/public", # please check this in the deployed environment
-  "user_image_prefix": "results",
+  "user_image_prefix": "character-results",
   "port": 5000 # default port in flask
 }
 
@@ -40,13 +40,9 @@ CORS(app, resources={r'*': {'origins': config_value["cors_origin"]}})
 
 app.secret_key = "cuberoom"
 socketio = SocketIO(app, cors_allowed_origins="*")
-@app.route("/")
+@app.route("/*")
 def base():
     return send_from_directory(config_value['public_path'],'index.html')
-
-@app.route("/<path:path>", methods=['GET', 'POST'])
-def home(path):
-    return send_from_directory(config_value['public_path'], path)
 
 @app.route("/character-selection",methods=['GET', 'POST'])
 def user_information():

@@ -60,16 +60,16 @@ class FirstFloorScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image("firstFloor-background", "/img/1f_background.png");
-    this.load.image("collision-tileset", "/tilemap/simple_tile.png");
-    this.load.image("interactive-tile", "/tilemap/interactive-tile.png");
-    this.load.image("popup", "/img/ui-map/popup.png");
-    this.load.image("welcome1", "/img/ui-map/welcome1.png");
-    this.load.image("welcome2", "/img/ui-map/welcome2.png");
-    this.load.image("welcome3", "/img/ui-map/welcome3.png");
+    this.load.image("firstFloor-background", "/static/img/1f_background.png");
+    this.load.image("collision-tileset", "/static/tilemap/simple_tile.png");
+    this.load.image("interactive-tile", "/static/tilemap/interactive-tile.png");
+    this.load.image("popup", "/static/img/ui-map/popup.png");
+    this.load.image("welcome1", "/static/img/ui-map/welcome1.png");
+    this.load.image("welcome2", "/static/img/ui-map/welcome2.png");
+    this.load.image("welcome3", "/static/img/ui-map/welcome3.png");
     this.load.tilemapTiledJSON({
       key: "firstFloor-map",
-      url: "/tilemap/first-floor.json",
+      url: "/static/tilemap/first-floor.json",
     });
     baseScenePreload(this);
   }

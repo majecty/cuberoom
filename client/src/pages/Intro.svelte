@@ -3,10 +3,10 @@
 </script>
 
 <main>
-  <img class="title" src="/img/ui/title.png" alt="큐브 룸" />
+  <img class="title" src="/static/img/ui/title.png" alt="큐브 룸" />
   <div style="text-align: center;">
     <Link to="character-selection">
-      <img  class="start" src="/img/ui/start.png" alt="시작하기" />
+      <img  class="start" src="/static/img/ui/start.png" alt="시작하기" />
     </Link>
   </div>
 </main>
@@ -14,7 +14,7 @@
 <style>
   main {
     height: 100%;
-    background-image: url('/img/ui/intro_background.jpg');
+    background-image: url('/static/img/ui/intro_background.jpg');
     background-repeat: no-repeat;
     background-size: cover;
     display: flex;

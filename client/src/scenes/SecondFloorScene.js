@@ -53,13 +53,13 @@ class SecondFloorScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image("secondFloor-background", "/img/2f_background.png");
-    this.load.image("collision-tileset", "/tilemap/simple_tile.png");
-    this.load.image("interactive-tile", "/tilemap/interactive-tile.png");
-    this.load.image("popup", "/img/ui-map/popup.png");
+    this.load.image("secondFloor-background", "/static/img/2f_background.png");
+    this.load.image("collision-tileset", "/static/tilemap/simple_tile.png");
+    this.load.image("interactive-tile", "/static/tilemap/interactive-tile.png");
+    this.load.image("popup", "/static/img/ui-map/popup.png");
     this.load.tilemapTiledJSON({
       key: "secondFloor-map",
-      url: "/tilemap/second-floor.json",
+      url: "/static/tilemap/second-floor.json",
     });
     baseScenePreload(this);
   }

@@ -1,6 +1,6 @@
 const devEnv = {
   URL: "http://localhost:3000",
-  URL_STATIC: "http://localhost:3000/static",
+  URL_STATIC: "/static",
   ENVIRONMENT: "development",
   tracesSampleRate: 1.0,
   version: `${process.env.VERSION}-dev`,

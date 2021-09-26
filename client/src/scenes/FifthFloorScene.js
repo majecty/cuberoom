@@ -58,14 +58,14 @@ class FifthFloorScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image("fifthFloor-background", "/img/5f_background.png");
-    this.load.image("collision-tileset", "/tilemap/simple_tile.png");
-    this.load.image("interactive-tile", "/tilemap/interactive-tile.png");
-    this.load.image("popup", "/img/ui-map/popup.png");
+    this.load.image("fifthFloor-background", "/static/img/5f_background.png");
+    this.load.image("collision-tileset", "/static/tilemap/simple_tile.png");
+    this.load.image("interactive-tile", "/static/tilemap/interactive-tile.png");
+    this.load.image("popup", "/static/img/ui-map/popup.png");
 
     this.load.tilemapTiledJSON({
       key: "fifthFloor-map",
-      url: "/tilemap/fifth-floor.json",
+      url: "/static/tilemap/fifth-floor.json",
     });
     baseScenePreload(this);
   }

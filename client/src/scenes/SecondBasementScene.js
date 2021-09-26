@@ -73,16 +73,16 @@ class SecondBasementScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image("secondBasement-background", "/img/b2_background.png");
-    this.load.image("collision-tileset", "/tilemap/simple_tile.png");
-    this.load.image("interactive-tile", "/tilemap/interactive-tile.png");
-    this.load.image("b2-cylinder", "/tilemap/b2_cylinder.png");
-    this.load.image("b2-cube", "/tilemap/b2_cube.png");
-    this.load.image("b2-pink", "/tilemap/b2_pink.png");
-    this.load.image("popup", "/img/ui-map/popup.png");
+    this.load.image("secondBasement-background", "/static/img/b2_background.png");
+    this.load.image("collision-tileset", "/static/tilemap/simple_tile.png");
+    this.load.image("interactive-tile", "/static/tilemap/interactive-tile.png");
+    this.load.image("b2-cylinder", "/static/tilemap/b2_cylinder.png");
+    this.load.image("b2-cube", "/static/tilemap/b2_cube.png");
+    this.load.image("b2-pink", "/static/tilemap/b2_pink.png");
+    this.load.image("popup", "/static/img/ui-map/popup.png");
     this.load.tilemapTiledJSON({
       key: "secondBasement-map",
-      url: "/tilemap/second-basement.json",
+      url: "/static/tilemap/second-basement.json",
     });
     baseScenePreload(this);
   }

@@ -3,6 +3,7 @@ const devEnv = {
   URL_STATIC: "http://localhost:3000/static",
   ENVIRONMENT: "development",
   tracesSampleRate: 1.0,
+  version: `${process.env.VERSION}-dev`,
 };
 
 const productionEnv = {
@@ -10,6 +11,7 @@ const productionEnv = {
   URL_STATIC: "http://test.cuberoom.net",
   ENVIRONMENT: "production",
   tracesSampleRate: 0.1,
+  version: `${process.env.VERSION}-prod`,
 };
 
 let ENV = devEnv;

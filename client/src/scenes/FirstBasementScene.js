@@ -7,9 +7,75 @@ import {
   baseSceneCreate,
   baseSceneUpdate,
 } from "./common/baseScene";
+import startScene from "../entity/map/startScene";
+import { showElevatorPanel } from "../entity/map/elevator";
+import { popupCreate } from "../entity/popup";
+import { popupPos } from "../entity/works";
 
 function backgroundStatic(scene) {
   scene.add.sprite(800 / 2, 1220 / 2, "firstBasement-background");
+}
+
+function tileInteraction(scene, curTileName) {
+  switch (curTileName) {
+    case "up":
+      scene.socket.emit("moveFloor", {
+        id: scene.socket.id,
+        floor: "1F",
+      });
+      startScene(scene, "FirstFloorScene", { x: 16 * 3, y: 16 * 13 });
+      break;
+    case "down":
+      scene.socket.emit("moveFloor", {
+        id: scene.socket.id,
+        floor: "B2",
+      });
+      startScene(scene, "SecondBasementScene", { x: 16 * 6, y: 16 * 13 });
+      break;
+    case "elevator":
+      showElevatorPanel(scene, "B1");
+      break;
+    case "down2":
+      scene.socket.emit("moveFloor", {
+        id: scene.socket.id,
+        floor: "B2",
+      });
+      startScene(scene, "SecondBasementScene", {
+        x: 16 * 37,
+        y: 16 * 16,
+      });
+      break;
+    case "down3":
+      scene.socket.emit("moveFloor", {
+        id: scene.socket.id,
+        floor: "B2",
+      });
+      startScene(scene, "SecondBasementScene", { x: 16 * 3, y: 16 * 35 });
+      break;
+    case "work-1":
+      if (document.getElementById("work-1") == null) {
+        popupCreate(scene, popupPos[1], 1);
+      }
+      break;
+
+    case "work-2":
+      if (document.getElementById("work-2") == null) {
+        popupCreate(scene, popupPos[2], 2);
+      }
+      break;
+    case "work-3":
+      if (document.getElementById("work-3") == null) {
+        popupCreate(scene, popupPos[3], 3);
+      }
+      break;
+    case "work-4":
+      if (document.getElementById("work-4") == null) {
+        popupCreate(scene, popupPos[4], 4);
+      }
+      break;
+    default:
+      break;
+  }
 }
 
 class FirstBasementScene extends Phaser.Scene {
@@ -38,7 +104,14 @@ class FirstBasementScene extends Phaser.Scene {
 
   create() {
     backgroundStatic(this);
-    baseSceneCreate(this, "firstBasement-map", "firstBasement-background");
+    baseSceneCreate({
+      selfScene: this,
+      mapName: "firstBasement-map",
+      mapBackgroundLayerName: "firstBasement-background",
+      onMoveToTile: (tileName) => {
+        tileInteraction(this, tileName);
+      },
+    });
   }
 
   update(_time, delta) {

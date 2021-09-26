@@ -7,9 +7,25 @@ import {
   baseSceneCreate,
   baseSceneUpdate,
 } from "./common/baseScene";
+import startScene from "../entity/map/startScene";
 
 function backgroundStatic(scene) {
   scene.add.sprite(1200 / 2, 800 / 2, "entrance-background");
+}
+
+function tileInteraction(scene, curTileName) {
+  switch (curTileName) {
+    case "up":
+      // 이거 다른 경우에도 추가하기?
+      scene.socket.emit("moveFloor", {
+        id: scene.socket.id,
+        floor: "1F",
+      });
+      startScene(scene, "FirstFloorScene", { x: 16 * 5, y: 16 * 29 });
+      break;
+    default:
+      break;
+  }
 }
 
 class EntranceScene extends Phaser.Scene {
@@ -41,7 +57,14 @@ class EntranceScene extends Phaser.Scene {
 
   create() {
     backgroundStatic(this);
-    baseSceneCreate(this, "entrance-map", "entrance-background");
+    baseSceneCreate({
+      selfScene: this,
+      mapName: "entrance-map",
+      mapBackgroundLayerName: "entrance-background",
+      onMoveToTile: (tileName) => {
+        tileInteraction(this, tileName);
+      },
+    });
   }
 
   update(_time, delta) {

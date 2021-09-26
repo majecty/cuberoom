@@ -7,9 +7,42 @@ import {
   baseSceneCreate,
   baseSceneUpdate,
 } from "./common/baseScene";
+import startScene from "../entity/map/startScene";
+import { showElevatorPanel } from "../entity/map/elevator";
 
 function backgroundStatic(scene) {
   scene.add.sprite(800 / 2, 608 / 2, "firstFloor-background");
+}
+
+function tileInteraction(scene, curTileName) {
+  switch (curTileName) {
+    case "up":
+      scene.socket.emit("moveFloor", {
+        id: scene.socket.id,
+        floor: "2F",
+      });
+      startScene(scene, "SecondFloorScene", { x: 16 * 3, y: 16 * 11 });
+      break;
+    case "down":
+      scene.socket.emit("moveFloor", {
+        id: scene.socket.id,
+        floor: "B1",
+      });
+      startScene(scene, "FirstBasementScene", { x: 16 * 6, y: 16 * 32 });
+      break;
+    case "elevator":
+      showElevatorPanel(scene, "1F");
+      break;
+    case "out":
+      scene.socket.emit("moveFloor", {
+        id: scene.socket.id,
+        floor: "entrance",
+      });
+      startScene(scene, "EntranceScene", { x: 16 * 27, y: 16 * 29 });
+      break;
+    default:
+      break;
+  }
 }
 
 class FirstFloorScene extends Phaser.Scene {
@@ -43,7 +76,14 @@ class FirstFloorScene extends Phaser.Scene {
 
   create() {
     backgroundStatic(this);
-    baseSceneCreate(this, "firstFloor-map", "firstFloor-background");
+    baseSceneCreate({
+      selfScene: this,
+      mapName: "firstFloor-map",
+      mapBackgroundLayerName: "firstFloor-background",
+      onMoveToTile: (tileName) => {
+        tileInteraction(this, tileName);
+      },
+    });
   }
 
   update(_time, delta) {

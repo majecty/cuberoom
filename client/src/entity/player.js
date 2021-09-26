@@ -237,11 +237,7 @@ export function loadPlayerImages(phaserScene, playerFromServer, id) {
   const directions = ["left", "right", "up", "down"];
   for (const direction of directions) {
     for (let i = 1; i < 5; i += 1) {
-      if (
-        !phaserScene.textures.exists(
-          `player-${id}-${direction}-${i}`
-        )
-      ) {
+      if (!phaserScene.textures.exists(`player-${id}-${direction}-${i}`)) {
         log(
           "listenPlayerList load",
           id.substring(0, 5),

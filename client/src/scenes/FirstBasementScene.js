@@ -11,6 +11,7 @@ import startScene from "../entity/map/startScene";
 import { showElevatorPanel } from "../entity/map/elevator";
 import { popupCreate } from "../entity/popup";
 import { popupPos } from "../entity/works";
+import { spawnPoints } from "./common/constants";
 
 function backgroundStatic(scene) {
   scene.add.sprite(800 / 2, 1220 / 2, "firstBasement-background");
@@ -23,14 +24,14 @@ function tileInteraction(scene, curTileName) {
         id: scene.socket.id,
         floor: "1F",
       });
-      startScene(scene, "FirstFloorScene", { x: 16 * 3, y: 16 * 13 });
+      startScene(scene, "FirstFloorScene", spawnPoints.floor1F.fromB1);
       break;
     case "down":
       scene.socket.emit("moveFloor", {
         id: scene.socket.id,
         floor: "B2",
       });
-      startScene(scene, "SecondBasementScene", { x: 16 * 6, y: 16 * 13 });
+      startScene(scene, "SecondBasementScene", spawnPoints.floorB2.fromB1);
       break;
     case "elevator":
       showElevatorPanel(scene, "B1");
@@ -40,17 +41,14 @@ function tileInteraction(scene, curTileName) {
         id: scene.socket.id,
         floor: "B2",
       });
-      startScene(scene, "SecondBasementScene", {
-        x: 16 * 37,
-        y: 16 * 16,
-      });
+      startScene(scene, "SecondBasementScene", spawnPoints.floorB2.fromB1_2);
       break;
     case "down3":
       scene.socket.emit("moveFloor", {
         id: scene.socket.id,
         floor: "B2",
       });
-      startScene(scene, "SecondBasementScene", { x: 16 * 3, y: 16 * 35 });
+      startScene(scene, "SecondBasementScene", spawnPoints.floorB2.fromB1_3);
       break;
     case "work-1":
       if (document.getElementById("work-1") == null) {

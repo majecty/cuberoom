@@ -39,6 +39,61 @@
     chatTimer = setTimeout(() => socket.emit('removeChat', { id: socket.id }), 3000); // 3초 뒤에 말풍선 삭제
   }
 
+  function getSceneConstructor(floor) {
+    switch (floor) {
+      case "entrance":
+        return EntranceScene;
+      case "1F":
+        return FirstFloorScene;
+      case "2F":
+        return SecondFloorScene;
+      case "5F":
+        return FifthFloorScene;
+      case "6F":
+        return SixthFloorScene;
+      case "7F":
+        return SeventhFloorScene;
+      case "8F":
+        return EighthFloorScene;
+      case "B1":
+        return FirstBasementScene;
+      case "B2":
+        return SecondBasementScene;
+    }
+    return null;
+  }
+
+  function moveThisFirst(firstScene, allScenes) {
+    const others = [];
+
+    for (const otherScene of allScenes) {
+      if (firstScene !== otherScene) {
+        others.push(otherScene);
+      }
+    }
+    others.unshift(firstScene);
+    return others;
+  }
+
+  // 저장된 씬부터 시작
+  function createSceneList() {
+    const floor = loadFromBrowserStorage("floor");
+    const firstSceneConstructor = getSceneConstructor(floor);
+    const allScenes = [
+      EntranceScene, FirstFloorScene, FirstBasementScene,
+      SecondFloorScene, FifthFloorScene, SixthFloorScene,
+      SeventhFloorScene, EighthFloorScene, SecondBasementScene
+    ];
+    if (firstSceneConstructor == null) {
+      console.log("scene list", allScenes);
+      return allScenes;
+    } else {
+      const scenes = moveThisFirst(firstSceneConstructor, allScenes);
+      console.log("scene list", scenes);
+      return scenes;
+    }
+   }
+
   const config = {
     type: Phaser.AUTO,
     zoom: 2,
@@ -53,7 +108,7 @@
         gravity: { y: 0 },
       },
     },
-    scene: [EntranceScene, FirstFloorScene, FirstBasementScene, SecondFloorScene, FifthFloorScene, SixthFloorScene, SeventhFloorScene, EighthFloorScene, SecondBasementScene],
+    scene: createSceneList(),
   };
 
   window.socket.on('debugMessage', (data) => {

@@ -30,7 +30,10 @@ import {
   rateLimiterCreate,
   rateLimiterTrigger,
 } from "../../network/rateLimiter";
-import { saveToBrowserStorage, loadFromBrowserStorage } from "../../pages/storage";
+import {
+  saveToBrowserStorage,
+  loadFromBrowserStorage,
+} from "../../pages/storage";
 
 /**
  * @typedef {import("../../relation/playerOnMap").OnMoveToTile} OnMoveToTile
@@ -80,6 +83,7 @@ export function baseSceneConstructor(selfScene, sceneName) {
 // data는 어디서 온 데이터지?
 export function baseSceneInit(selfScene, data) {
   log(selfScene.sceneName, "init");
+
   if (data.x) {
     selfScene.x = data.x;
     selfScene.destinationX = data.x;
@@ -122,7 +126,7 @@ export function baseSceneCreate({
     loadFromBrowserStorage("playerName"),
     "",
     selfScene.socket.id,
-    loadFromBrowserStorage("playerImgUrl"),
+    loadFromBrowserStorage("playerImgUrl")
   ); // 소켓 연결 되면 이 부분을 지워야 함
   selfScene.players = playersAddPlayer(
     selfScene.players,
@@ -215,6 +219,11 @@ export function baseSceneUpdate(selfScene, dtMillis) {
       if (selfScene.player == null) {
         return;
       }
+
+      saveToBrowserStorage("floor", selfScene.sceneName);
+      saveToBrowserStorage("playerX", selfScene.player.phaser.x);
+      saveToBrowserStorage("playerY", selfScene.player.phaser.y);
+
       selfScene.socket.emit("movePlayer", {
         id: selfScene.socket.id,
         floor: selfScene.sceneName,

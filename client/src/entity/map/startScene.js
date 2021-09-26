@@ -28,7 +28,6 @@ export function getFloorName(sceneName) {
 export default function startScene(currentScene, targetSceneName, spawnPos) {
   log("call startScene");
   currentScene.cameras.main.fadeOut(500);
-  // window.socket.emit('moveFloor', { id: this.socket.id, floor: getFloorName(sceneName) });
   currentScene.cameras.main.on("camerafadeoutcomplete", () => {
     log("start next scene");
     currentScene.scene.pause(currentScene.scene.key);

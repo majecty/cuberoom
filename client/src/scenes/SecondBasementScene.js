@@ -11,6 +11,7 @@ import startScene from "../entity/map/startScene";
 import { showElevatorPanel } from "../entity/map/elevator";
 import { popupCreate } from "../entity/popup";
 import { popupPos } from "../entity/works";
+import { spawnPoints } from "./common/constants";
 
 function backgroundStatic(scene) {
   scene.add.sprite(800 / 2, 736 / 2, "secondBasement-background");
@@ -23,7 +24,7 @@ function tileInteraction(scene, curTileName) {
         id: scene.socket.id,
         floor: "B1",
       });
-      startScene(scene, "FirstBasementScene", { x: 16 * 6, y: 16 * 32 });
+      startScene(scene, "FirstBasementScene", spawnPoints.floorB1.fromB2);
       break;
     case "elevator":
       showElevatorPanel(scene, "B2");
@@ -33,7 +34,7 @@ function tileInteraction(scene, curTileName) {
         id: scene.socket.id,
         floor: "B1",
       });
-      startScene(scene, "FirstBasementScene", { x: 16 * 3, y: 16 * 55 });
+      startScene(scene, "FirstBasementScene", spawnPoints.floorB1.fromB2_2);
       break;
     case "work-5":
       if (document.getElementById("work-5") == null) {

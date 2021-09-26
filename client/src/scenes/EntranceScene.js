@@ -8,6 +8,7 @@ import {
   baseSceneUpdate,
 } from "./common/baseScene";
 import startScene from "../entity/map/startScene";
+import { spawnPoints } from "./common/constants";
 
 function backgroundStatic(scene) {
   scene.add.sprite(1200 / 2, 800 / 2, "entrance-background");
@@ -21,7 +22,7 @@ function tileInteraction(scene, curTileName) {
         id: scene.socket.id,
         floor: "1F",
       });
-      startScene(scene, "FirstFloorScene", { x: 16 * 5, y: 16 * 29 });
+      startScene(scene, "FirstFloorScene", spawnPoints.floor1F.fromEntrance);
       break;
     default:
       break;

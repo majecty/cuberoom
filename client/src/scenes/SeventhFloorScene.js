@@ -9,6 +9,7 @@ import {
 import { FLOOR_NAMES } from "./common";
 import startScene from "../entity/map/startScene";
 import { showElevatorPanel } from "../entity/map/elevator";
+import { spawnPoints } from "./common/constants";
 
 function backgroundStatic(scene) {
   scene.add.sprite(800 / 2, 608 / 2, "seventhFloor-background");
@@ -21,14 +22,14 @@ function tileInteraction(scene, curTileName) {
         id: scene.socket.id,
         floor: "8F",
       });
-      startScene(scene, "EighthFloorScene", { x: 16 * 3, y: 16 * 20 });
+      startScene(scene, "EighthFloorScene", spawnPoints.floor8F.from7F);
       break;
     case "down":
       scene.socket.emit("moveFloor", {
         id: scene.socket.id,
         floor: "6F",
       });
-      startScene(scene, "SixthFloorScene", { x: 16 * 6, y: 16 * 21 });
+      startScene(scene, "SixthFloorScene", spawnPoints.floor6F.from7F);
       break;
     case "elevator":
       showElevatorPanel(scene, "7F");
@@ -45,7 +46,7 @@ class SeventhFloorScene extends Phaser.Scene {
     super("SeventhFloorScene");
     this.x = 16 * 5;
     this.y = 16 * 32;
-    baseSceneConstructor(this, FLOOR_NAMES.EighthFloorScene);
+    baseSceneConstructor(this, FLOOR_NAMES.SeventhFloorScene);
   }
 
   init(data) {

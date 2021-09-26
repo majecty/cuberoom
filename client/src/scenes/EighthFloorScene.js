@@ -8,6 +8,7 @@ import {
   baseSceneUpdate,
 } from "./common/baseScene";
 import startScene from "../entity/map/startScene";
+import { spawnPoints } from "./common/constants";
 
 function backgroundStatic(scene) {
   scene.add.sprite(800 / 2, 770 / 2, "eighthFloor-background");
@@ -22,7 +23,7 @@ function tileInteraction(scene, curTileName) {
         id: scene.socket.id,
         floor: "7F",
       });
-      startScene(scene, "SeventhFloorScene", { x: 16 * 6, y: 16 * 13 });
+      startScene(scene, "SeventhFloorScene", spawnPoints.floor7F.from8F);
       break;
     case "elevator":
       break;

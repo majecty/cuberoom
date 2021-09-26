@@ -32,6 +32,10 @@ import {
 } from "../../network/rateLimiter";
 
 /**
+ * @typedef {import("../../relation/playerOnMap").OnMoveToTile} OnMoveToTile
+ */
+
+/**
  * initialize map, player, cursors, playerOnMap, socket, sceneName, players
  */
 export function baseSceneConstructor(selfScene, sceneName) {
@@ -96,10 +100,15 @@ export function baseScenePreload(selfScene) {
   }
 }
 
+/**
+ * @param {Object} arg
+ * @param {OnMoveToTile} arg.onMoveToTile
+ */
 export function baseSceneCreate({
   selfScene,
   mapName,
   mapBackgroundLayerName,
+  onMoveToTile,
 }) {
   log(selfScene.sceneName, "create");
   playerCreateAnimations(selfScene.socket.id, selfScene);
@@ -130,7 +139,7 @@ export function baseSceneCreate({
     y: selfScene.y,
   });
 
-  selfScene.playerOnMap = playerOnMapCreate();
+  selfScene.playerOnMap = playerOnMapCreate(onMoveToTile);
   selfScene.physics.add.collider(
     selfScene.player.phaser,
     selfScene.map.collisionLayer

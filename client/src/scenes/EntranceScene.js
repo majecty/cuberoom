@@ -12,6 +12,21 @@ function backgroundStatic(scene) {
   scene.add.sprite(1200 / 2, 800 / 2, "entrance-background");
 }
 
+function entranceInteraction(scene, curTileName) {
+  switch (curTileName) {
+    case "up":
+      // 이거 다른 경우에도 추가하기?
+      scene.socket.emit("moveFloor", {
+        id: scene.socket.id,
+        floor: "1F",
+      });
+      startScene(scene, "FirstFloorScene", { x: 16 * 5, y: 16 * 29 });
+      break;
+    default:
+      break;
+  }
+}
+
 class EntranceScene extends Phaser.Scene {
   constructor() {
     super("EntranceScene");
@@ -45,6 +60,9 @@ class EntranceScene extends Phaser.Scene {
       selfScene: this,
       mapName: "entrance-map",
       mapBackgroundLayerName: "entrance-background",
+      onMoveToTile: (tileName) => {
+        entranceInteraction(this, tileName);
+      },
     });
   }
 

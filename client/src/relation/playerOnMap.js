@@ -4,7 +4,11 @@ import { popupPos } from "../entity/works";
 import startScene from "../entity/map/startScene";
 
 /**
- * @param onMoveToTile ((tileName: string) => void)
+ * @typedef {(tileName: string) => void} OnMoveToTile
+ */
+
+/**
+ * @param {OnMoveToTile} onMoveToTile
  */
 export function playerOnMapCreate(onMoveToTile) {
   return {
@@ -16,20 +20,6 @@ export function playerOnMapCreate(onMoveToTile) {
   };
 }
 
-function entranceInteraction(scene, curTileName) {
-  switch (curTileName) {
-    case "up":
-      // 이거 다른 경우에도 추가하기?
-      scene.socket.emit("moveFloor", {
-        id: scene.socket.id,
-        floor: "1F",
-      });
-      startScene(scene, "FirstFloorScene", { x: 16 * 5, y: 16 * 29 });
-      break;
-    default:
-      break;
-  }
-}
 
 function firstFloorInteraction(scene, curTileName) {
   switch (curTileName) {
@@ -94,9 +84,6 @@ export function playerOnMapUpdate(playerOnMap, player, map, scene) {
     // FIXME: it's hard to debug nested switch statement
     // scene 별로 구분되니까 씬 별로 코드를 추가하자.
     switch (scene.scene.key) {
-      case "EntranceScene":
-        entranceInteraction(scene, curTileName);
-        break;
       case "FirstFloorScene":
         firstFloorInteraction(scene, curTileName);
         break;

@@ -116,7 +116,6 @@
   function getPlayersFromServer() {
     window.socket.emit('getPlayers');
   }
-
 </script>
 
 <form

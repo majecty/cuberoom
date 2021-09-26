@@ -38,7 +38,6 @@ function tileInteraction(scene, curTileName) {
         id: scene.socket.id,
         floor: "entrance",
       });
-      // 이거왜안됨..
       startScene(scene, "EntranceScene", { x: 16 * 27, y: 16 * 29 });
       break;
     default:

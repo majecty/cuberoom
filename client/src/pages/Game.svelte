@@ -15,6 +15,14 @@
   import { saveToBrowserStorage, loadFromBrowserStorage } from "./storage";
   import { protocol } from "../network/protocol"
 
+  const requiredKeys = ["id", "password", "playerImgUrl", "playerName"];
+  for (const key of requiredKeys) {
+    if (loadFromBrowserStorage(key) == null) {
+      console.log("no", key);
+      window.location.pathname = "/"
+    }
+  }
+
   function initializeSocket() {
     const socket = ENV.ENVIRONMENT === 'production'
       ? io.connect(ENV.URL, { transports: ['websocket'] })

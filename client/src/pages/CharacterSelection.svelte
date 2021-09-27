@@ -3,7 +3,7 @@
   import axios from 'axios';
   import ENV from '../../ENV';
   import names from '../entity/names';
-  import { saveToBrowserStorage, loadFromBrowserStorage } from "./storage";
+  import { saveToBrowserStorage } from "./storage";
   import { uuidv4, randomPassword } from "../util/random";
 
   const uniqueId = uuidv4();

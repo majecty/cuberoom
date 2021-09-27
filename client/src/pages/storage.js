@@ -1,17 +1,15 @@
 export function saveToBrowserStorage(key, value) {
-  localStorage.setItem(key, value);
-//  if (window.cuberoomPageDB == null) {
-//    window.cuberoomPageDB = {};
-//  }
-//  window.cuberoomPageDB[key] = value;
+  const urlParams = new URLSearchParams(window.location.search);
+  const prefix = urlParams.get("idprefix");
+  const prefixedKey = prefix != null ? prefix + key : key;
+  localStorage.setItem(prefixedKey, value);
 }
 
 export function loadFromBrowserStorage(key) {
-  return localStorage.getItem(key);
-//  if (window.cuberoomPageDB == null) {
-//    window.cuberoomPageDB = {};
-//  }
-//  return window.cuberoomPageDB[key];
+  const urlParams = new URLSearchParams(window.location.search);
+  const prefix = urlParams.get("idprefix");
+  const prefixedKey = prefix != null ? prefix + key : key;
+  return localStorage.getItem(prefixedKey);
 }
 
 // 그러니까

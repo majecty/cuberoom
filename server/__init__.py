@@ -25,7 +25,7 @@ config_values["production"] = {
   "static_folder": "../client/public/static",
   "cors_origin": "http://test.cuberoom.net",
   "public_path": "../client/public", # please check this in the deployed environment
-  "user_image_prefix": "character-results",
+  "user_image_prefix": "character-resource",
   "port": 5000 # default port in flask
 }
 
@@ -55,7 +55,7 @@ def user_information():
     prefix = config_value["user_image_prefix"]
 
     filePath = f"{prefix}/skin{skin}_hairC{hairC}_cloth{cloth}_hairS{hairS}_faceS{faceS}/"
-    return url_for('static',filename = filePath)
+    return url_for('static', filename = filePath)
 
 # map by id
 players = {}

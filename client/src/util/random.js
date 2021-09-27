@@ -9,7 +9,9 @@ export function uuidv4() {
 
 // copied from https://w3collective.com/random-password-generator-javascript/
 export function randomPassword() {
-  const length = 16
+  const alpha = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const characters = alpha;
+  const length = 16;
   let password = "";
   for (let i = 0; i < length; i++) {
     password += characters.charAt(

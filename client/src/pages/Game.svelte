@@ -15,23 +15,68 @@
   import { saveToBrowserStorage, loadFromBrowserStorage } from "./storage";
   import { protocol } from "../network/protocol"
 
-  const socket = ENV.ENVIRONMENT === 'production'
-    ? io.connect(ENV.URL, { transports: ['websocket'] })
-    : io.connect(ENV.URL);
+  function initializeSocket() {
+    const socket = ENV.ENVIRONMENT === 'production'
+      ? io.connect(ENV.URL, { transports: ['websocket'] })
+      : io.connect(ENV.URL);
 
-  window.socket = socket;
+    window.socket = socket;
+
+    socket.on('disconnect', (reason) => {
+      console.log("disconnected", reason);
+      if (reason === "io server disconnect") {
+        console.log("manual reconnect");
+        socket.connect();
+      }
+    });
+
+    socket.on('connect_error', (err) => {
+      console.error(err);
+    });
+
+    socket.on("needLogin", () => {
+      if (window.scene != null) {
+        window.scene.login();
+      }
+    });
+
+    window.socket.on('debugMessage', (data) => {
+      console.log("debugMessage", data);
+    });
+
+    window.socket.on("connect", () => {
+      console.log("connected");
+      if (window.game == null) {
+        const config = {
+          type: Phaser.AUTO,
+          zoom: 2,
+          parent: "phaser-parent",
+          width: window.innerWidth / 2,
+          height: window.innerHeight / 2,
+
+          pixelArt: true,
+          physics: {
+            default: "arcade",
+            arcade: {
+              gravity: { y: 0 },
+            },
+          },
+          scene: createSceneList(),
+        };
+
+        const game = new Phaser.Game(config);
+        window.game = game;
+      } else {
+        if (window.scene != null) {
+          console.log("send relogin");
+          window.scene.login();
+        }
+      }
+    });
+  }
 
   let chat = '';
   let chatTimer;
-
-  socket.on('disconnect', () => {
-    window.socket = undefined;
-    saveToBrowserStorage("playerImgUrl", null);
-  })
-
-  socket.on('connect_error', (err) => {
-    console.error(err);
-  });
 
   function addChat() {
     clearTimeout(chatTimer);
@@ -95,33 +140,8 @@
     }
    }
 
-  const config = {
-    type: Phaser.AUTO,
-    zoom: 2,
-    parent: "phaser-parent",
-    width: window.innerWidth / 2,
-    height: window.innerHeight / 2,
-
-    pixelArt: true,
-    physics: {
-      default: "arcade",
-      arcade: {
-        gravity: { y: 0 },
-      },
-    },
-    scene: createSceneList(),
-  };
-
-  window.socket.on('debugMessage', (data) => {
-    console.log("debugMessage", data);
-  });
   window.scenes = {};
-  window.socket.on("connect", () => {
-    if (window.game == null) {
-      const game = new Phaser.Game(config);
-      window.game = game;
-    }
-  });
+  initializeSocket();
 
   let key;
   let keyCode;

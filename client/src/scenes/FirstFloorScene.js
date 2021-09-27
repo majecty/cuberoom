@@ -41,7 +41,6 @@ function tileInteraction(scene, curTileName) {
 class FirstFloorScene extends Phaser.Scene {
   constructor() {
     super("FirstFloorScene");
-    window.scenes.firstFloor = this;
 
     this.x = 16 * 5;
     this.y = 16 * 31;

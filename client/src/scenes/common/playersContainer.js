@@ -8,6 +8,7 @@ import {
 } from "../../entity/player";
 import { playerCreateAnimations } from "../../entity/player/animation";
 import { log } from "../../log";
+import { getPlayerId } from "../../network/protocol";
 
 /* eslint no-param-reassign: ["error", { "props": false }] */
 export function playersContainerListenRemovePlayer(container, socket) {
@@ -68,7 +69,7 @@ export function playersContainerListenPlayerList({
             player.chat,
             player.id
           );
-        } else if (socket.id !== id) {
+        } else if (getPlayerId() !== id) {
           if (debug) {
             log("listenPlayerList socket.id!==id", id.substring(0, 5));
           }

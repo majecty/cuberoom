@@ -1,5 +1,10 @@
 import { loadFromBrowserStorage } from "../pages/storage";
 
+export function getPlayerId() {
+  const id = loadFromBrowserStorage("id");
+  return id;
+}
+
 function loadIdAndPassword() {
   const id = loadFromBrowserStorage("id");
   const password = loadFromBrowserStorage("password");
@@ -10,6 +15,9 @@ function loadIdAndPassword() {
 }
 
 function getPlayers(socket) {
+  if (socket.disconnected) {
+    return;
+  }
   socket.emit("getPlayers");
 }
 
@@ -17,6 +25,9 @@ function getPlayers(socket) {
  * @param {string} floor
  */
 function moveFloor(socket, floor) {
+  if (socket.disconnected) {
+    return;
+  }
   socket.emit("moveFloor", {
     ...loadIdAndPassword(),
     floor,
@@ -24,6 +35,9 @@ function moveFloor(socket, floor) {
 }
 
 function addPlayer(socket, { name, imgUrl, floor, x, y }) {
+  if (socket.disconnected) {
+    return;
+  }
   socket.emit("addPlayer", {
     ...loadIdAndPassword(),
     name,
@@ -35,6 +49,9 @@ function addPlayer(socket, { name, imgUrl, floor, x, y }) {
 }
 
 function addChat(socket, chat) {
+  if (socket.disconnected) {
+    return;
+  }
   socket.emit("addChat", {
     ...loadIdAndPassword(),
     chat,
@@ -42,8 +59,24 @@ function addChat(socket, chat) {
 }
 
 function removeChat(socket) {
+  if (socket.disconnected) {
+    return;
+  }
   socket.emit("removeChat", {
     ...loadIdAndPassword(),
+  });
+}
+
+function movePlayer(socket, { floor, direction, x, y }) {
+  if (socket.disconnected) {
+    return;
+  }
+  socket.emit("movePlayer", {
+    ...loadIdAndPassword(),
+    floor,
+    direction,
+    x,
+    y,
   });
 }
 
@@ -53,4 +86,5 @@ export const protocol = {
   addPlayer,
   addChat,
   removeChat,
+  movePlayer
 };

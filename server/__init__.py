@@ -57,7 +57,10 @@ def user_information():
     filePath = f"{prefix}/skin{skin}_hairC{hairC}_cloth{cloth}_hairS{hairS}_faceS{faceS}/"
     return url_for('static',filename = filePath)
 
+# map by id
 players = {}
+players_sid_to_id = {}
+players_id_to_password = {}
 players_changed = False
 players_lock = Lock()
 
@@ -84,6 +87,36 @@ class Player():
             'direction': self.direction,
         }
 
+def validatePassword(sid, data):
+    "do not use in the players_lock"
+    global players, players_sid_to_id, players_id_to_password
+    id = data["id"]
+    password = data["password"]
+
+    match_password = players_id_to_password.get(id) == password
+    match_sid = players_sid_to_id.get(sid) == id
+
+    if match_password == False:
+        return "fail"
+
+    if match_sid == True:
+        return "success"
+
+    return "relogin"
+
+def beforeRequest(sid, data):
+    global players_lock, players_sid_to_id
+    validation_result = validatePassword(sid, data)
+    if validation_result == "fail":
+        emit('debugMessage', "invalid password")
+        emit('needLogin')
+        return "fail"
+    if validation_result == "relogin":
+        emit('debugMessage', "relogin")
+        emit('needLogin')
+        return "fail"
+    return "success"
+
 @socketio.on('addPlayer')
 def addPlayer(data):
     global players, players_changed, players_lock
@@ -92,6 +125,8 @@ def addPlayer(data):
     players_lock.acquire()
     try:
         players_changed = True
+        players_sid_to_id[request.sid] = data['id']
+        players_id_to_password[data['id']] = data['password']
         players[data['id']] = player.serialize()
     finally:
         players_lock.release()
@@ -104,6 +139,10 @@ def addPlayer(data):
 @socketio.on('moveFloor')
 def moveFloor(data):
     global players, players_changed, players_lock
+
+    validation_result = beforeRequest(request.sid, data)
+    if validation_result == "fail":
+        return
 
     players_lock.acquire()
     try:
@@ -126,6 +165,10 @@ def moveFloor(data):
 @socketio.on('addChat')
 def addChat(data):
     global players, players_changed, players_lock
+
+    validation_result = beforeRequest(request.sid, data)
+    if validation_result == "fail":
+        return
 
     players_lock.acquire()
     try:
@@ -150,6 +193,10 @@ def addChat(data):
 def removeChat(data):
     global players, players_changed, players_lock
 
+    validation_result = beforeRequest(request.sid, data)
+    if validation_result == "fail":
+        return
+
     players_lock.acquire()
     try:
         players_changed = True
@@ -172,6 +219,10 @@ def removeChat(data):
 @socketio.on('movePlayer')
 def movePlayer(data):
     global players, players_changed, players_lock
+
+    validation_result = beforeRequest(request.sid, data)
+    if validation_result == "fail":
+        return
 
     players_lock.acquire()
     try:
@@ -196,7 +247,10 @@ def disconnect():
     players_lock.acquire()
     try:
         players_changed = True
-        players.pop(request.sid, None)
+        id = players_sid_to_id.get(request.sid)
+        players.pop(id, None)
+        players_sid_to_id.pop(request.sid)
+        players_id_to_password.pop(id)
     finally:
         players_lock.release()
     emit('removePlayer', { 'id': request.sid })

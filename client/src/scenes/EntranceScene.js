@@ -30,7 +30,6 @@ function tileInteraction(scene, curTileName) {
 class EntranceScene extends Phaser.Scene {
   constructor() {
     super("EntranceScene");
-    window.scenes.entrance = this;
     this.x = 16 * 5;
     this.y = 16 * 30;
 

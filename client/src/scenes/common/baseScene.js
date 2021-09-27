@@ -34,7 +34,7 @@ import {
   saveToBrowserStorage,
   loadFromBrowserStorage,
 } from "../../pages/storage";
-import { protocol } from "../../network/protocol";
+import { protocol, getPlayerId } from "../../network/protocol";
 
 /**
  * @typedef {import("../../relation/playerOnMap").OnMoveToTile} OnMoveToTile
@@ -58,7 +58,7 @@ export function baseSceneConstructor(selfScene, sceneName) {
   listenRemovePlayerOnPlayer(
     selfScene.socket,
     selfScene.sceneName,
-    () => selfScene.socket.id,
+    () => getPlayerId(),
     () => {
       selfScene.player = null;
     }
@@ -79,6 +79,7 @@ export function baseSceneConstructor(selfScene, sceneName) {
     selfScene.socket,
     selfScene.sceneName
   );
+  window.scenes[sceneName] = selfScene;
 }
 
 // data는 어디서 온 데이터지?
@@ -99,7 +100,7 @@ export function baseScenePreload(selfScene) {
   log(selfScene.sceneName, "preload");
   // FIXME: move this to player code
   for (const [key, file] of allCharacterImageNames(
-    selfScene.socket.id,
+    getPlayerId(),
     loadFromBrowserStorage("playerImgUrl")
   )) {
     selfScene.load.image(key, file);
@@ -116,8 +117,9 @@ export function baseSceneCreate({
   mapBackgroundLayerName,
   onMoveToTile,
 }) {
+  window.scene = selfScene;
   log(selfScene.sceneName, "create");
-  playerCreateAnimations(selfScene.socket.id, selfScene);
+  playerCreateAnimations(getPlayerId(), selfScene);
 
   selfScene.map = mapCreate(selfScene, mapName);
   selfScene.player = playerCreate(
@@ -126,12 +128,12 @@ export function baseSceneCreate({
     selfScene.y,
     loadFromBrowserStorage("playerName"),
     "",
-    selfScene.socket.id,
+    getPlayerId(),
     loadFromBrowserStorage("playerImgUrl")
   ); // 소켓 연결 되면 이 부분을 지워야 함
   selfScene.players = playersAddPlayer(
     selfScene.players,
-    selfScene.socket.id,
+    getPlayerId(),
     selfScene.player
   );
   selfScene.player = playerinitmove(selfScene.player);
@@ -143,6 +145,15 @@ export function baseSceneCreate({
     x: selfScene.x,
     y: selfScene.y,
   });
+  selfScene.login = () => {
+    protocol.addPlayer(selfScene.socket, {
+      name: loadFromBrowserStorage("playerName"),
+      imgUrl: loadFromBrowserStorage("playerImgUrl"),
+      floor: selfScene.sceneName,
+      x: selfScene.x,
+      y: selfScene.y,
+    });
+  };
 
   selfScene.playerOnMap = playerOnMapCreate(onMoveToTile);
   selfScene.physics.add.collider(

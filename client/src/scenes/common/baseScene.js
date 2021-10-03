@@ -30,10 +30,7 @@ import {
   rateLimiterCreate,
   rateLimiterTrigger,
 } from "../../network/rateLimiter";
-import {
-  saveToBrowserStorage,
-  loadFromBrowserStorage,
-} from "../../pages/storage";
+import { saveMovement, loadFromBrowserStorage } from "../../pages/storage";
 import { protocol, getPlayerId } from "../../network/protocol";
 
 /**
@@ -231,9 +228,11 @@ export function baseSceneUpdate(selfScene, dtMillis) {
         return;
       }
 
-      saveToBrowserStorage("floor", selfScene.sceneName);
-      saveToBrowserStorage("playerX", selfScene.player.phaser.x);
-      saveToBrowserStorage("playerY", selfScene.player.phaser.y);
+      saveMovement(
+        selfScene.sceneName,
+        selfScene.player.phaser.x,
+        selfScene.player.phaser.y
+      );
 
       protocol.movePlayer(selfScene.socket, {
         floor: selfScene.sceneName,

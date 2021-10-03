@@ -1,3 +1,19 @@
+export function saveIdAndPassword(id, password) {
+  saveToBrowserStorage("id", id);
+  saveToBrowserStorage("password", password);
+}
+
+export function saveCharacterSelection(playerImgUrl, playerName) {
+  saveToBrowserStorage("playerImgUrl", playerImgUrl);
+  saveToBrowserStorage("playerName", playerName);
+}
+
+export function saveMovement(floor, x, y) {
+  saveToBrowserStorage("floor", floor);
+  saveToBrowserStorage("playerX", x);
+  saveToBrowserStorage("playerY", y);
+}
+
 export function saveToBrowserStorage(key, value) {
   const urlParams = new URLSearchParams(window.location.search);
   const prefix = urlParams.get("idprefix");

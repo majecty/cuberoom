@@ -12,7 +12,7 @@
   import { io } from 'socket.io-client';
   import ENV from '../../ENV';
   import { playersEntries } from "../scenes/common/players";
-  import { saveToBrowserStorage, loadFromBrowserStorage } from "./storage";
+  import { saveCharacterSelection, saveIdAndPassword, loadFromBrowserStorage } from "./storage";
   import { protocol } from "../network/protocol"
   import names from '../entity/names';
   import { getRandomInt, uuidv4, randomPassword } from "../util/random";
@@ -32,17 +32,15 @@
     if (debug != null) {
       const uniqueId = uuidv4();
       const password = randomPassword();
-      saveToBrowserStorage("id", uniqueId);
-      saveToBrowserStorage("password", password);
+      saveIdAndPassword(uniqueId, password);
       let skin = getRandomInt(1, 4);
       let faceS= getRandomInt(1, 13);
       let hairC = getRandomInt(1, 5);
       let hairS = getRandomInt(1, 13);
       let cloth = getRandomInt(1, 13);
       const imgUrl = `/character-resource/skin${skin}_hairC${hairC}_cloth${cloth}_hairS${hairS}_faceS${faceS}/`;
-      saveToBrowserStorage("playerImgUrl", imgUrl);
       const name = names[Math.floor(Math.random() * names.length)];
-      saveToBrowserStorage("playerName", name);
+      saveCharacterSelection(imgUrl, name);
     } else {
       window.location.pathname = "/"
     }

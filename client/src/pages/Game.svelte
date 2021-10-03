@@ -79,6 +79,9 @@
           parent: "phaser-parent",
           width: window.innerWidth / 2,
           height: window.innerHeight / 2,
+          scale: {
+            mode: Phaser.Scale.ScaleModes.RESIZE,
+          },
 
           pixelArt: true,
           physics: {

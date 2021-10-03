@@ -79,7 +79,7 @@ export function baseSceneConstructor(selfScene, sceneName) {
   window.scenes[sceneName] = selfScene;
 }
 
-// data는 어디서 온 데이터지?
+// data는 씬 전환하는 함수에서 주입해줌
 export function baseSceneInit(selfScene, data) {
   log(selfScene.sceneName, "init");
 

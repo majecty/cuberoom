@@ -86,5 +86,5 @@ export const protocol = {
   addPlayer,
   addChat,
   removeChat,
-  movePlayer
+  movePlayer,
 };

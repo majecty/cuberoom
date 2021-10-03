@@ -230,10 +230,15 @@ export function baseSceneUpdate(selfScene, dtMillis) {
   );
   for (const [id, otherPlayer] of playersEntries(selfScene.players)) {
     if (id !== selfScene.player.id) {
-      selfScene.players.entries[id] = playerFollowNetworkPos(
-        otherPlayer,
-        dtMillis
-      );
+      try {
+        selfScene.players.entries[id] = playerFollowNetworkPos(
+          otherPlayer,
+          dtMillis
+        );
+      } catch(err) {
+        console.error("failed to update network pos", id);
+        console.error(err);
+      }
     }
   }
   mapUpdateMousePoint(selfScene.map, selfScene);

@@ -16,13 +16,13 @@
   import { protocol } from "../network/protocol"
   import names from '../entity/names';
   import { getRandomInt, uuidv4, randomPassword } from "../util/random";
+  import { readDebug } from "../common/urlParam";
 
   const requiredKeys = ["id", "password", "playerImgUrl", "playerName"];
   const savePrepared = isSavePrepared();
 
   if (!savePrepared) {
-    const urlParams = new URLSearchParams(window.location.search);
-    const debug = urlParams.get("debug");
+    const debug = readDebug();
     if (debug != null) {
       const uniqueId = uuidv4();
       const password = randomPassword();

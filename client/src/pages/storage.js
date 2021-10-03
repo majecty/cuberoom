@@ -1,3 +1,5 @@
+import { readIdPrefix } from "../common/urlParam";
+
 // storage 접근 코드랑 high level 코드 나누기
 
 export function resetSave() {
@@ -5,16 +7,14 @@ export function resetSave() {
 }
 
 export function saveToBrowserStorage(key, value) {
-  const urlParams = new URLSearchParams(window.location.search);
-  const prefix = urlParams.get("idprefix");
-  const prefixedKey = prefix != null ? prefix + key : key;
+  const prefix = readIdPrefix();
+  const prefixedKey = `${prefix}${key}`;
   localStorage.setItem(prefixedKey, value);
 }
 
 export function loadFromBrowserStorage(key) {
-  const urlParams = new URLSearchParams(window.location.search);
-  const prefix = urlParams.get("idprefix");
-  const prefixedKey = prefix != null ? prefix + key : key;
+  const prefix = readIdPrefix();
+  const prefixedKey = `${prefix}${key}`;
   return localStorage.getItem(prefixedKey);
 }
 

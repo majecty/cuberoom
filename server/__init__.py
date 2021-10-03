@@ -240,6 +240,10 @@ def getPlayers():
     emit('debugPlayerList', players)
     emit('debugMessage', players)
 
+@socketio.on("debugMessage")
+def debugMessage(data):
+    print(data)
+
 @socketio.on('disconnect')
 def disconnect():
     global players, players_changed, players_lock

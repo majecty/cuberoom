@@ -238,12 +238,12 @@ export function loadPlayerImages(phaserScene, playerFromServer, id) {
   for (const direction of directions) {
     for (let i = 1; i < 5; i += 1) {
       if (!phaserScene.textures.exists(`player-${id}-${direction}-${i}`)) {
-        log(
-          "listenPlayerList load",
-          id.substring(0, 5),
-          `player-${id}-${direction}-${i}`,
-          `${ENV.URL_STATIC}${playerFromServer.imgUrl}${direction}-${i}.png`
-        );
+        // log(
+        //   "listenPlayerList load",
+        //   id.substring(0, 5),
+        //   `player-${id}-${direction}-${i}`,
+        //   `${ENV.URL_STATIC}${playerFromServer.imgUrl}${direction}-${i}.png`
+        // );
         phaserScene.load.image(
           `player-${id}-${direction}-${i}`,
           `${ENV.URL_STATIC}${playerFromServer.imgUrl}${direction}-${i}.png`

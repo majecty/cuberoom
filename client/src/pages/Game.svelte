@@ -18,6 +18,7 @@
   import { getRandomInt, uuidv4, randomPassword } from "../util/random";
   import { readDebug, urlParam } from "../common/urlParam";
   import { ifDebug } from "../common/debug";
+  import { onMount } from 'svelte';
 
   const requiredKeys = ["id", "password", "playerImgUrl", "playerName"];
   const savePrepared = isSavePrepared();
@@ -38,6 +39,26 @@
     }
     ifDebug(generateDebugData, () => {
       window.location.pathname = "/"
+    });
+  }
+
+  window.addEventListener("resize", () => {
+    if (window.game == null) {
+      return;
+    }
+    setTimeout(() => {
+      window.game.scale.resize(window.innerWidth / 2, window.innerHeight / 2);
+    }, 50);
+  }, false);
+
+  if (window.visualViewport != null) {
+    window.visualViewport.addEventListener('resize', () => {
+      if (window.game != null) {
+        return;
+      }
+      setTimeout(() => {
+        window.game.scale.resize(window.visualViewport.width / 2, window.visualViewport.height / 2);
+      }, 100);
     });
   }
 
@@ -76,12 +97,8 @@
         const config = {
           type: Phaser.AUTO,
           zoom: 2,
-          parent: "phaser-parent",
           width: window.innerWidth / 2,
           height: window.innerHeight / 2,
-          scale: {
-            mode: Phaser.Scale.ScaleModes.RESIZE,
-          },
 
           pixelArt: true,
           physics: {
@@ -174,7 +191,10 @@
    }
 
   window.scenes = {};
-  initializeSocket();
+  onMount(() => {
+    console.log("mounted");
+    initializeSocket();
+  });
 
   let key;
   let keyCode;
@@ -251,7 +271,6 @@
     padding: 10px;
     z-index : 3;
   }
-
 
   #chat input {
     flex: 1;

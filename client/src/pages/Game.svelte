@@ -43,8 +43,8 @@
 
   function initializeSocket() {
     const socket = ENV.ENVIRONMENT === 'production'
-      ? io.connect(ENV.URL, { transports: ['websocket'] })
-      : io.connect(ENV.URL);
+      ? io.connect(ENV.GET_SOCKETIO_URL(), { transports: ['websocket'] })
+      : io.connect(ENV.GET_SOCKETIO_URL());
 
     window.socket = socket;
 

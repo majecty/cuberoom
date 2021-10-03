@@ -1,5 +1,7 @@
 const devEnv = {
-  URL: "http://localhost:3000",
+  GET_SOCKETIO_URL: () => "https://cuberoom.i.juhyung.dev/",
+  GET_SERVER_URL: () => "https://rest-cuberoom.i.juhyung.dev/",
+//  URL: "http://localhost:3000",
   URL_STATIC: "/static",
   ENVIRONMENT: "development",
   tracesSampleRate: 1.0,
@@ -7,7 +9,8 @@ const devEnv = {
 };
 
 const productionEnv = {
-  URL: "http://test.cuberoom.net",
+  GET_SOCKETIO_URL: () => "http://test.cuberoom.net",
+  GET_SERVER_URL: () => "http://test.cuberoom.net",
   URL_STATIC: "http://test.cuberoom.net",
   ENVIRONMENT: "production",
   tracesSampleRate: 0.1,

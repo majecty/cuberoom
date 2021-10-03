@@ -12,37 +12,29 @@
   import { io } from 'socket.io-client';
   import ENV from '../../ENV';
   import { playersEntries } from "../scenes/common/players";
-  import { saveToBrowserStorage, loadFromBrowserStorage } from "./storage";
+  import { saveCharacterSelection, saveIdAndPassword, loadFloorAndMovement, isSavePrepared } from "./storage";
   import { protocol } from "../network/protocol"
   import names from '../entity/names';
   import { getRandomInt, uuidv4, randomPassword } from "../util/random";
+  import { readDebug, urlParam } from "../common/urlParam";
 
   const requiredKeys = ["id", "password", "playerImgUrl", "playerName"];
-  let noSaveData = false;
-  for (const key of requiredKeys) {
-    if (loadFromBrowserStorage(key) == null) {
-      noSaveData = true;
-      console.log("no", key);
-    }
-  }
+  const savePrepared = isSavePrepared();
 
-  if (noSaveData) {
-    const urlParams = new URLSearchParams(window.location.search);
-    const debug = urlParams.get("debug");
+  if (!savePrepared) {
+    const debug = readDebug();
     if (debug != null) {
       const uniqueId = uuidv4();
       const password = randomPassword();
-      saveToBrowserStorage("id", uniqueId);
-      saveToBrowserStorage("password", password);
+      saveIdAndPassword(uniqueId, password);
       let skin = getRandomInt(1, 4);
       let faceS= getRandomInt(1, 13);
       let hairC = getRandomInt(1, 5);
       let hairS = getRandomInt(1, 13);
       let cloth = getRandomInt(1, 13);
       const imgUrl = `/character-resource/skin${skin}_hairC${hairC}_cloth${cloth}_hairS${hairS}_faceS${faceS}/`;
-      saveToBrowserStorage("playerImgUrl", imgUrl);
       const name = names[Math.floor(Math.random() * names.length)];
-      saveToBrowserStorage("playerName", name);
+      saveCharacterSelection(imgUrl, name);
     } else {
       window.location.pathname = "/"
     }
@@ -156,7 +148,11 @@
 
   // 저장된 씬부터 시작
   function createSceneList() {
-    const floor = loadFromBrowserStorage("floor");
+    let { floor } = loadFloorAndMovement();
+    const floorFromUrl = urlParam.readFloor();
+    if (floorFromUrl != null) {
+      floor = floorFromUrl;
+    }
     const firstSceneConstructor = getSceneConstructor(floor);
     const allScenes = [
       EntranceScene, FirstFloorScene, FirstBasementScene,

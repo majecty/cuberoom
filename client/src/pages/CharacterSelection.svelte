@@ -3,13 +3,13 @@
   import axios from 'axios';
   import ENV from '../../ENV';
   import names from '../entity/names';
-  import { saveToBrowserStorage } from "./storage";
+  import { saveIdAndPassword, saveCharacterSelection, resetSave } from "./storage";
   import { uuidv4, randomPassword } from "../util/random";
 
+  resetSave();
   const uniqueId = uuidv4();
   const password = randomPassword();
-  saveToBrowserStorage("id", uniqueId);
-  saveToBrowserStorage("password", password);
+  saveIdAndPassword(uniqueId, password);
 
   let skinNum = 1;
   let eyeNum = 1;
@@ -84,8 +84,8 @@
       cloth: clothesNum,
     })
     .then((res) => {
-      saveToBrowserStorage("playerImgUrl", res.data);
-      saveToBrowserStorage("playerName", name);
+      const playerImgUrl = res.data;
+      saveCharacterSelection(playerImgUrl, name);
       navigate('/map');
     })
     .catch((err) => {

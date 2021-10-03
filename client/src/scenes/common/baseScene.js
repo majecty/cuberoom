@@ -30,10 +30,7 @@ import {
   rateLimiterCreate,
   rateLimiterTrigger,
 } from "../../network/rateLimiter";
-import {
-  saveToBrowserStorage,
-  loadFromBrowserStorage,
-} from "../../pages/storage";
+import { saveMovement, loadPlayerNameAndImgUrl } from "../../pages/storage";
 import { protocol, getPlayerId } from "../../network/protocol";
 
 /**
@@ -98,10 +95,11 @@ export function baseSceneInit(selfScene, data) {
 
 export function baseScenePreload(selfScene) {
   log(selfScene.sceneName, "preload");
+  const { playerImgUrl } = loadPlayerNameAndImgUrl();
   // FIXME: move this to player code
   for (const [key, file] of allCharacterImageNames(
     getPlayerId(),
-    loadFromBrowserStorage("playerImgUrl")
+    playerImgUrl
   )) {
     selfScene.load.image(key, file);
   }
@@ -122,14 +120,15 @@ export function baseSceneCreate({
   playerCreateAnimations(getPlayerId(), selfScene);
 
   selfScene.map = mapCreate(selfScene, mapName);
+  const { playerName, playerImgUrl } = loadPlayerNameAndImgUrl();
   selfScene.player = playerCreate(
     selfScene,
     selfScene.x,
     selfScene.y,
-    loadFromBrowserStorage("playerName"),
+    playerName,
     "",
     getPlayerId(),
-    loadFromBrowserStorage("playerImgUrl")
+    playerImgUrl
   ); // 소켓 연결 되면 이 부분을 지워야 함
   selfScene.players = playersAddPlayer(
     selfScene.players,
@@ -139,16 +138,16 @@ export function baseSceneCreate({
   selfScene.player = playerinitmove(selfScene.player);
 
   protocol.addPlayer(selfScene.socket, {
-    name: loadFromBrowserStorage("playerName"),
-    imgUrl: loadFromBrowserStorage("playerImgUrl"),
+    name: playerName,
+    imgUrl: playerImgUrl,
     floor: selfScene.sceneName,
     x: selfScene.x,
     y: selfScene.y,
   });
   selfScene.login = () => {
     protocol.addPlayer(selfScene.socket, {
-      name: loadFromBrowserStorage("playerName"),
-      imgUrl: loadFromBrowserStorage("playerImgUrl"),
+      name: playerName,
+      imgUrl: playerImgUrl,
       floor: selfScene.sceneName,
       x: selfScene.x,
       y: selfScene.y,
@@ -231,9 +230,11 @@ export function baseSceneUpdate(selfScene, dtMillis) {
         return;
       }
 
-      saveToBrowserStorage("floor", selfScene.sceneName);
-      saveToBrowserStorage("playerX", selfScene.player.phaser.x);
-      saveToBrowserStorage("playerY", selfScene.player.phaser.y);
+      saveMovement(
+        selfScene.sceneName,
+        selfScene.player.phaser.x,
+        selfScene.player.phaser.y
+      );
 
       protocol.movePlayer(selfScene.socket, {
         floor: selfScene.sceneName,

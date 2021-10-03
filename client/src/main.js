@@ -1,6 +1,6 @@
-import App from "./App.svelte";
 import * as Sentry from "@sentry/browser";
 import { Integrations } from "@sentry/tracing";
+import App from "./App.svelte";
 import ENV from "../ENV";
 
 const app = new App({

@@ -17,7 +17,7 @@
   import names from '../entity/names';
   import { getRandomInt, uuidv4, randomPassword } from "../util/random";
   import { readDebug, urlParam } from "../common/urlParam";
-  import { ifDebug } from "../comon/debug";
+  import { ifDebug } from "../common/debug";
 
   const requiredKeys = ["id", "password", "playerImgUrl", "playerName"];
   const savePrepared = isSavePrepared();

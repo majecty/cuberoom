@@ -9,6 +9,8 @@ import {
 import { FLOOR_NAMES } from "./common";
 import startScene from "../entity/map/startScene";
 import { showElevatorPanel } from "../entity/map/elevator";
+import { spawnPoints } from "./common/constants";
+import { protocol } from "../network/protocol";
 
 function backgroundStatic(scene) {
   scene.add.sprite(800 / 2, 608 / 2, "secondFloor-background");
@@ -17,18 +19,12 @@ function backgroundStatic(scene) {
 function tileInteraction(scene, curTileName) {
   switch (curTileName) {
     case "up":
-      scene.socket.emit("moveFloor", {
-        id: scene.socket.id,
-        floor: "5F",
-      });
-      startScene(scene, "FifthFloorScene", { x: 16 * 3, y: 16 * 14 });
+      protocol.moveFloor(scene.socket, "5F");
+      startScene(scene, "FifthFloorScene", spawnPoints.floor5F.from2F);
       break;
     case "down":
-      scene.socket.emit("moveFloor", {
-        id: scene.socket.id,
-        floor: "1F",
-      });
-      startScene(scene, "FirstFloorScene", { x: 16 * 6, y: 16 * 14 });
+      protocol.moveFloor(scene.socket, "1F");
+      startScene(scene, "FirstFloorScene", spawnPoints.floor1F.from2F);
       break;
     case "elevator":
       showElevatorPanel(scene, "2F");
@@ -53,13 +49,13 @@ class SecondFloorScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image("secondFloor-background", "/img/2f_background.png");
-    this.load.image("collision-tileset", "/tilemap/simple_tile.png");
-    this.load.image("interactive-tile", "/tilemap/interactive-tile.png");
-    this.load.image("popup", "/img/ui-map/popup.png");
+    this.load.image("secondFloor-background", "/static/img/2f_background.png");
+    this.load.image("collision-tileset", "/static/tilemap/simple_tile.png");
+    this.load.image("interactive-tile", "/static/tilemap/interactive-tile.png");
+    this.load.image("popup", "/static/img/ui-map/popup.png");
     this.load.tilemapTiledJSON({
       key: "secondFloor-map",
-      url: "/tilemap/second-floor.json",
+      url: "/static/tilemap/second-floor.json",
     });
     baseScenePreload(this);
   }

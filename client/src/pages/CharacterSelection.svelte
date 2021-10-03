@@ -3,6 +3,13 @@
   import axios from 'axios';
   import ENV from '../../ENV';
   import names from '../entity/names';
+  import { saveToBrowserStorage } from "./storage";
+  import { uuidv4, randomPassword } from "../util/random";
+
+  const uniqueId = uuidv4();
+  const password = randomPassword();
+  saveToBrowserStorage("id", uniqueId);
+  saveToBrowserStorage("password", password);
 
   let skinNum = 1;
   let eyeNum = 1;
@@ -77,8 +84,8 @@
       cloth: clothesNum,
     })
     .then((res) => {
-      window.playerImgUrl = res.data; // 약간 임시방편..ㅠㅠ
-      window.playerName = name; // 이것도,,,,
+      saveToBrowserStorage("playerImgUrl", res.data);
+      saveToBrowserStorage("playerName", name);
       navigate('/map');
     })
     .catch((err) => {
@@ -100,10 +107,10 @@
       </div>
       <div class="row whole">
         <div class="center character">
-          <img src="/img/character/Skincolor ({skinNum}).png" alt="" width="48" style="position: absolute;" />
-          <img src="/img/character/face ({eyeNum}).png" alt="" width="48" style="position: absolute;" />
-          <img src="/img/character/HairC0{hairColorNum} ({hairStyleNum}).png" alt="" width="48" style="position: absolute;" />
-          <img src="/img/character/Clothes ({clothesNum}).png" alt="" width="48" style="position: absolute;" />
+          <img src="/static/img/character/Skincolor ({skinNum}).png" alt="" width="48" style="position: absolute;" />
+          <img src="/static/img/character/face ({eyeNum}).png" alt="" width="48" style="position: absolute;" />
+          <img src="/static/img/character/HairC0{hairColorNum} ({hairStyleNum}).png" alt="" width="48" style="position: absolute;" />
+          <img src="/static/img/character/Clothes ({clothesNum}).png" alt="" width="48" style="position: absolute;" />
         </div>
       </div>
       <div class="row">
@@ -132,19 +139,19 @@
         <button class="right" on:click={increaseSkinNum}></button>
       </div>
       <button class="decide" on:click={decide}>
-        <img src="/img/ui/decide.png" alt="결정" />
+        <img src="/static/img/ui/decide.png" alt="결정" />
       </button>
     </div>
   </div>
   <Link to='/' class="to-main">
-    <img src="/img/ui/back_to_main.png" alt="메인으로" />
+    <img src="/static/img/ui/back_to_main.png" alt="메인으로" />
   </Link>
 </main>
 
 <style>
   main {
     height: 100%;
-    background-image: url('/img/ui/intro_background.jpg');
+    background-image: url('/static/img/ui/intro_background.jpg');
     background-repeat: no-repeat;
     background-size: cover;
   }
@@ -242,21 +249,21 @@
   }
 
   .left {
-    background-image: url('/img/ui/arrow_left.png');
+    background-image: url('/static/img/ui/arrow_left.png');
     margin-right: 12px;
   }
 
   .left:active {
-    background-image: url('/img/ui/arrow_left_pressed.png');
+    background-image: url('/static/img/ui/arrow_left_pressed.png');
   }
 
   .right {
-    background-image: url('/img/ui/arrow_right.png');
+    background-image: url('/static/img/ui/arrow_right.png');
     margin-left: 12px;
   }
 
   .right:active {
-    background-image: url('/img/ui/arrow_right_pressed.png');
+    background-image: url('/static/img/ui/arrow_right_pressed.png');
   }
 
   .decide {

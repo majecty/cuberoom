@@ -9,6 +9,8 @@ import {
 } from "./common/baseScene";
 import startScene from "../entity/map/startScene";
 import { showElevatorPanel } from "../entity/map/elevator";
+import { spawnPoints } from "./common/constants";
+import { protocol } from "../network/protocol";
 
 function backgroundStatic(scene) {
   scene.add.sprite(800 / 2, 608 / 2, "fifthFloor-background");
@@ -17,28 +19,19 @@ function backgroundStatic(scene) {
 function tileInteraction(scene, curTileName) {
   switch (curTileName) {
     case "up":
-      scene.socket.emit("moveFloor", {
-        id: scene.socket.id,
-        floor: "6F",
-      });
-      startScene(scene, "SixthFloorScene", { x: 16 * 3, y: 16 * 21 });
+      protocol.moveFloor(scene.socket, "6F");
+      startScene(scene, "SixthFloorScene", spawnPoints.floor6F.from5F);
       break;
     case "down":
-      scene.socket.emit("moveFloor", {
-        id: scene.socket.id,
-        floor: "2F",
-      });
-      startScene(scene, "SecondFloorScene", { x: 16 * 6, y: 16 * 13 });
+      protocol.moveFloor(scene.socket, "2F");
+      startScene(scene, "SecondFloorScene", spawnPoints.floor2F.from5F);
       break;
     case "elevator":
       showElevatorPanel(scene, "5F");
       break;
     case "up2":
-      scene.socket.emit("moveFloor", {
-        id: scene.socket.id,
-        floor: "6F",
-      });
-      startScene(scene, "SixthFloorScene", { x: 16 * 46, y: 16 * 26 });
+      protocol.moveFloor(scene.socket, "6F");
+      startScene(scene, "SixthFloorScene", spawnPoints.floor6F.from5F_2);
       break;
     default:
       break;
@@ -58,14 +51,14 @@ class FifthFloorScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image("fifthFloor-background", "/img/5f_background.png");
-    this.load.image("collision-tileset", "/tilemap/simple_tile.png");
-    this.load.image("interactive-tile", "/tilemap/interactive-tile.png");
-    this.load.image("popup", "/img/ui-map/popup.png");
+    this.load.image("fifthFloor-background", "/static/img/5f_background.png");
+    this.load.image("collision-tileset", "/static/tilemap/simple_tile.png");
+    this.load.image("interactive-tile", "/static/tilemap/interactive-tile.png");
+    this.load.image("popup", "/static/img/ui-map/popup.png");
 
     this.load.tilemapTiledJSON({
       key: "fifthFloor-map",
-      url: "/tilemap/fifth-floor.json",
+      url: "/static/tilemap/fifth-floor.json",
     });
     baseScenePreload(this);
   }

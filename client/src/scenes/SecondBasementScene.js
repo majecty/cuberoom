@@ -11,6 +11,8 @@ import startScene from "../entity/map/startScene";
 import { showElevatorPanel } from "../entity/map/elevator";
 import { popupCreate } from "../entity/popup";
 import { popupPos } from "../entity/works";
+import { spawnPoints } from "./common/constants";
+import { protocol } from "../network/protocol";
 
 function backgroundStatic(scene) {
   scene.add.sprite(800 / 2, 736 / 2, "secondBasement-background");
@@ -19,21 +21,15 @@ function backgroundStatic(scene) {
 function tileInteraction(scene, curTileName) {
   switch (curTileName) {
     case "up":
-      scene.socket.emit("moveFloor", {
-        id: scene.socket.id,
-        floor: "B1",
-      });
-      startScene(scene, "FirstBasementScene", { x: 16 * 6, y: 16 * 32 });
+      protocol.moveFloor(scene.socket, "B1");
+      startScene(scene, "FirstBasementScene", spawnPoints.floorB1.fromB2);
       break;
     case "elevator":
       showElevatorPanel(scene, "B2");
       break;
     case "up3":
-      scene.socket.emit("moveFloor", {
-        id: scene.socket.id,
-        floor: "B1",
-      });
-      startScene(scene, "FirstBasementScene", { x: 16 * 3, y: 16 * 55 });
+      protocol.moveFloor(scene.socket, "B1");
+      startScene(scene, "FirstBasementScene", spawnPoints.floorB1.fromB2_2);
       break;
     case "work-5":
       if (document.getElementById("work-5") == null) {
@@ -73,16 +69,19 @@ class SecondBasementScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image("secondBasement-background", "/img/b2_background.png");
-    this.load.image("collision-tileset", "/tilemap/simple_tile.png");
-    this.load.image("interactive-tile", "/tilemap/interactive-tile.png");
-    this.load.image("b2-cylinder", "/tilemap/b2_cylinder.png");
-    this.load.image("b2-cube", "/tilemap/b2_cube.png");
-    this.load.image("b2-pink", "/tilemap/b2_pink.png");
-    this.load.image("popup", "/img/ui-map/popup.png");
+    this.load.image(
+      "secondBasement-background",
+      "/static/img/b2_background.png"
+    );
+    this.load.image("collision-tileset", "/static/tilemap/simple_tile.png");
+    this.load.image("interactive-tile", "/static/tilemap/interactive-tile.png");
+    this.load.image("b2-cylinder", "/static/tilemap/b2_cylinder.png");
+    this.load.image("b2-cube", "/static/tilemap/b2_cube.png");
+    this.load.image("b2-pink", "/static/tilemap/b2_pink.png");
+    this.load.image("popup", "/static/img/ui-map/popup.png");
     this.load.tilemapTiledJSON({
       key: "secondBasement-map",
-      url: "/tilemap/second-basement.json",
+      url: "/static/tilemap/second-basement.json",
     });
     baseScenePreload(this);
   }

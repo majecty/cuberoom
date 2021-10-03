@@ -11,6 +11,8 @@ import startScene from "../entity/map/startScene";
 import { showElevatorPanel } from "../entity/map/elevator";
 import { popupCreate } from "../entity/popup";
 import { popupPos } from "../entity/works";
+import { spawnPoints } from "./common/constants";
+import { protocol } from "../network/protocol";
 
 function backgroundStatic(scene) {
   scene.add.sprite(800 / 2, 1220 / 2, "firstBasement-background");
@@ -19,38 +21,23 @@ function backgroundStatic(scene) {
 function tileInteraction(scene, curTileName) {
   switch (curTileName) {
     case "up":
-      scene.socket.emit("moveFloor", {
-        id: scene.socket.id,
-        floor: "1F",
-      });
-      startScene(scene, "FirstFloorScene", { x: 16 * 3, y: 16 * 13 });
+      protocol.moveFloor(scene.socket, "1F");
+      startScene(scene, "FirstFloorScene", spawnPoints.floor1F.fromB1);
       break;
     case "down":
-      scene.socket.emit("moveFloor", {
-        id: scene.socket.id,
-        floor: "B2",
-      });
-      startScene(scene, "SecondBasementScene", { x: 16 * 6, y: 16 * 13 });
+      protocol.moveFloor(scene.socket, "B2");
+      startScene(scene, "SecondBasementScene", spawnPoints.floorB2.fromB1);
       break;
     case "elevator":
       showElevatorPanel(scene, "B1");
       break;
     case "down2":
-      scene.socket.emit("moveFloor", {
-        id: scene.socket.id,
-        floor: "B2",
-      });
-      startScene(scene, "SecondBasementScene", {
-        x: 16 * 37,
-        y: 16 * 16,
-      });
+      protocol.moveFloor(scene.socket, "B2");
+      startScene(scene, "SecondBasementScene", spawnPoints.floorB2.fromB1_2);
       break;
     case "down3":
-      scene.socket.emit("moveFloor", {
-        id: scene.socket.id,
-        floor: "B2",
-      });
-      startScene(scene, "SecondBasementScene", { x: 16 * 3, y: 16 * 35 });
+      protocol.moveFloor(scene.socket, "B2");
+      startScene(scene, "SecondBasementScene", spawnPoints.floorB2.fromB1_3);
       break;
     case "work-1":
       if (document.getElementById("work-1") == null) {
@@ -91,13 +78,16 @@ class FirstBasementScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image("firstBasement-background", "/img/b1_background.png");
-    this.load.image("collision-tileset", "/tilemap/simple_tile.png");
-    this.load.image("interactive-tile", "/tilemap/interactive-tile.png");
-    this.load.image("popup", "/img/ui-map/popup.png");
+    this.load.image(
+      "firstBasement-background",
+      "/static/img/b1_background.png"
+    );
+    this.load.image("collision-tileset", "/static/tilemap/simple_tile.png");
+    this.load.image("interactive-tile", "/static/tilemap/interactive-tile.png");
+    this.load.image("popup", "/static/img/ui-map/popup.png");
     this.load.tilemapTiledJSON({
       key: "firstBasement-map",
-      url: "/tilemap/first-basement.json",
+      url: "/static/tilemap/first-basement.json",
     });
     baseScenePreload(this);
   }

@@ -141,7 +141,7 @@ export function popupCreate(scene, { x, y }, workNum) {
     const closeButton = document.createElement("button");
     closeButton.classList.add("closebutton");
     closeButton.style.border = "none";
-    closeButton.style.backgroundImage = 'url("/img/ui/close.png")';
+    closeButton.style.backgroundImage = 'url("/static/img/ui/close.png")';
     closeButton.style.width = "30px";
     closeButton.style.height = "30px";
     closeButton.style.top = "0px";

@@ -8,6 +8,8 @@ import {
   baseSceneUpdate,
 } from "./common/baseScene";
 import startScene from "../entity/map/startScene";
+import { spawnPoints } from "./common/constants";
+import { protocol } from "../network/protocol";
 
 function backgroundStatic(scene) {
   scene.add.sprite(800 / 2, 770 / 2, "eighthFloor-background");
@@ -18,11 +20,8 @@ function tileInteraction(scene, curTileName) {
     case "up":
       break;
     case "down":
-      scene.socket.emit("moveFloor", {
-        id: scene.socket.id,
-        floor: "7F",
-      });
-      startScene(scene, "SeventhFloorScene", { x: 16 * 6, y: 16 * 13 });
+      protocol.moveFloor(scene.socket, "7F");
+      startScene(scene, "SeventhFloorScene", spawnPoints.floor7F.from8F);
       break;
     case "elevator":
       break;
@@ -46,13 +45,13 @@ class EighthFloorScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image("eighthFloor-background", "/img/8f_background.png");
-    this.load.image("collision-tileset", "/tilemap/simple_tile.png");
-    this.load.image("interactive-tile", "/tilemap/interactive-tile.png");
-    this.load.image("popup", "/img/ui-map/popup.png");
+    this.load.image("eighthFloor-background", "/static/img/8f_background.png");
+    this.load.image("collision-tileset", "/static/tilemap/simple_tile.png");
+    this.load.image("interactive-tile", "/static/tilemap/interactive-tile.png");
+    this.load.image("popup", "/static/img/ui-map/popup.png");
     this.load.tilemapTiledJSON({
       key: "eighthFloor-map",
-      url: "/tilemap/eighth-floor.json",
+      url: "/static/tilemap/eighth-floor.json",
     });
     baseScenePreload(this);
   }

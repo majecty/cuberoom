@@ -8,6 +8,8 @@ import {
   baseSceneUpdate,
 } from "./common/baseScene";
 import startScene from "../entity/map/startScene";
+import { spawnPoints } from "./common/constants";
+import { protocol } from "../network/protocol";
 
 function backgroundStatic(scene) {
   scene.add.sprite(1200 / 2, 800 / 2, "entrance-background");
@@ -17,11 +19,8 @@ function tileInteraction(scene, curTileName) {
   switch (curTileName) {
     case "up":
       // 이거 다른 경우에도 추가하기?
-      scene.socket.emit("moveFloor", {
-        id: scene.socket.id,
-        floor: "1F",
-      });
-      startScene(scene, "FirstFloorScene", { x: 16 * 5, y: 16 * 29 });
+      protocol.moveFloor(scene.socket, "1F");
+      startScene(scene, "FirstFloorScene", spawnPoints.floor1F.fromEntrance);
       break;
     default:
       break;
@@ -31,7 +30,6 @@ function tileInteraction(scene, curTileName) {
 class EntranceScene extends Phaser.Scene {
   constructor() {
     super("EntranceScene");
-    window.scenes.entrance = this;
     this.x = 16 * 5;
     this.y = 16 * 30;
 
@@ -43,14 +41,14 @@ class EntranceScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image("entrance-background", "/img/entrance_background.png");
-    this.load.image("collision-tileset", "/tilemap/simple_tile.png");
-    this.load.image("interactive-tile", "/tilemap/interactive-tile.png");
-    this.load.image("popup", "/img/ui-map/popup.png");
+    this.load.image("entrance-background", "/static/img/entrance_background.png");
+    this.load.image("collision-tileset", "/static/tilemap/simple_tile.png");
+    this.load.image("interactive-tile", "/static/tilemap/interactive-tile.png");
+    this.load.image("popup", "/static/img/ui-map/popup.png");
 
     this.load.tilemapTiledJSON({
       key: "entrance-map",
-      url: "/tilemap/entrance.json",
+      url: "/static/tilemap/entrance.json",
     });
     baseScenePreload(this);
   }

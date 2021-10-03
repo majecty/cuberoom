@@ -12,59 +12,169 @@
   import { io } from 'socket.io-client';
   import ENV from '../../ENV';
   import { playersEntries } from "../scenes/common/players";
+  import { saveToBrowserStorage, loadFromBrowserStorage } from "./storage";
+  import { protocol } from "../network/protocol"
+  import names from '../entity/names';
+  import { getRandomInt, uuidv4, randomPassword } from "../util/random";
 
-  const socket = ENV.ENVIRONMENT === 'production'
-    ? io.connect(ENV.URL, { transports: ['websocket'] })
-    : io.connect(ENV.URL);
+  const requiredKeys = ["id", "password", "playerImgUrl", "playerName"];
+  let noSaveData = false;
+  for (const key of requiredKeys) {
+    if (loadFromBrowserStorage(key) == null) {
+      noSaveData = true;
+      console.log("no", key);
+    }
+  }
 
-  window.socket = socket;
+  if (noSaveData) {
+    const urlParams = new URLSearchParams(window.location.search);
+    const debug = urlParams.get("debug");
+    if (debug != null) {
+      const uniqueId = uuidv4();
+      const password = randomPassword();
+      saveToBrowserStorage("id", uniqueId);
+      saveToBrowserStorage("password", password);
+      let skin = getRandomInt(1, 4);
+      let faceS= getRandomInt(1, 13);
+      let hairC = getRandomInt(1, 5);
+      let hairS = getRandomInt(1, 13);
+      let cloth = getRandomInt(1, 13);
+      const imgUrl = `/character-resource/skin${skin}_hairC${hairC}_cloth${cloth}_hairS${hairS}_faceS${faceS}/`;
+      saveToBrowserStorage("playerImgUrl", imgUrl);
+      const name = names[Math.floor(Math.random() * names.length)];
+      saveToBrowserStorage("playerName", name);
+    } else {
+      window.location.pathname = "/"
+    }
+  }
+
+  function initializeSocket() {
+    const socket = ENV.ENVIRONMENT === 'production'
+      ? io.connect(ENV.URL, { transports: ['websocket'] })
+      : io.connect(ENV.URL);
+
+    window.socket = socket;
+
+    socket.on('disconnect', (reason) => {
+      console.log("disconnected", reason);
+      if (reason === "io server disconnect") {
+        console.log("manual reconnect");
+        socket.connect();
+      }
+    });
+
+    socket.on('connect_error', (err) => {
+      console.error(err);
+    });
+
+    socket.on("needLogin", () => {
+      if (window.scene != null) {
+        window.scene.login();
+      }
+    });
+
+    window.socket.on('debugMessage', (data) => {
+      console.log("debugMessage", data);
+    });
+
+    window.socket.on("connect", () => {
+      console.log("connected");
+      if (window.game == null) {
+        const config = {
+          type: Phaser.AUTO,
+          zoom: 2,
+          parent: "phaser-parent",
+          width: window.innerWidth / 2,
+          height: window.innerHeight / 2,
+
+          pixelArt: true,
+          physics: {
+            default: "arcade",
+            arcade: {
+              gravity: { y: 0 },
+            },
+          },
+          scene: createSceneList(),
+        };
+
+        const game = new Phaser.Game(config);
+        window.game = game;
+      } else {
+        if (window.scene != null) {
+          console.log("send relogin");
+          window.scene.login();
+        }
+      }
+    });
+  }
 
   let chat = '';
   let chatTimer;
 
-  socket.on('disconnect', () => {
-    window.socket = undefined;
-    window.playerImgUrl = undefined;
-  })
-
-  socket.on('connect_error', (err) => {
-    console.error(err);
-  });
-
   function addChat() {
     clearTimeout(chatTimer);
-    socket.emit('addChat', { id: socket.id, chat });
+    protocol.addChat(socket, chat);
     chat = '';
-    chatTimer = setTimeout(() => socket.emit('removeChat', { id: socket.id }), 3000); // 3초 뒤에 말풍선 삭제
+    chatTimer = setTimeout(() => protocol.removeChat(socket), 3000); // 3초 뒤에 말풍선 삭제
   }
 
-  const config = {
-    type: Phaser.AUTO,
-    zoom: 2,
-    parent: "phaser-parent",
-    width: window.innerWidth / 2,
-    height: window.innerHeight / 2,
-
-    pixelArt: true,
-    physics: {
-      default: "arcade",
-      arcade: {
-        gravity: { y: 0 },
-      },
-    },
-    scene: [EntranceScene, FirstFloorScene, FirstBasementScene, SecondFloorScene, FifthFloorScene, SixthFloorScene, SeventhFloorScene, EighthFloorScene, SecondBasementScene],
-  };
-
-  window.socket.on('debugMessage', (data) => {
-    console.log("debugMessage", data);
-  });
-  window.scenes = {};
-  window.socket.on("connect", () => {
-    if (window.game == null) {
-      const game = new Phaser.Game(config);
-      window.game = game;
+  function getSceneConstructor(floor) {
+    switch (floor) {
+      case "entrance":
+        return EntranceScene;
+      case "1F":
+        return FirstFloorScene;
+      case "2F":
+        return SecondFloorScene;
+      case "5F":
+        return FifthFloorScene;
+      case "6F":
+        return SixthFloorScene;
+      case "7F":
+        return SeventhFloorScene;
+      case "8F":
+        return EighthFloorScene;
+      case "B1":
+        return FirstBasementScene;
+      case "B2":
+        return SecondBasementScene;
     }
-  });
+    return null;
+  }
+
+  function moveThisFirst(firstScene, allScenes) {
+    const others = [];
+
+    for (const otherScene of allScenes) {
+      if (firstScene !== otherScene) {
+        others.push(otherScene);
+      }
+    }
+    others.unshift(firstScene);
+    return others;
+  }
+
+  // 저장된 씬부터 시작
+  function createSceneList() {
+    const floor = loadFromBrowserStorage("floor");
+    const firstSceneConstructor = getSceneConstructor(floor);
+    const allScenes = [
+      EntranceScene, FirstFloorScene, FirstBasementScene,
+      SecondFloorScene, FifthFloorScene, SixthFloorScene,
+      SeventhFloorScene, EighthFloorScene, SecondBasementScene
+    ];
+    if (firstSceneConstructor == null) {
+      console.log("scene list", allScenes);
+      return allScenes;
+    } else {
+      const scenes = moveThisFirst(firstSceneConstructor, allScenes);
+      console.log("scene list", scenes);
+      return scenes;
+    }
+   }
+
+  window.scenes = {};
+  initializeSocket();
 
   let key;
   let keyCode;
@@ -114,7 +224,7 @@
   }
 
   function getPlayersFromServer() {
-    window.socket.emit('getPlayers');
+    protocol.getPlayers(window.socket);
   }
 </script>
 

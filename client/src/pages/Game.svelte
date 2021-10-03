@@ -97,6 +97,7 @@
         const config = {
           type: Phaser.AUTO,
           zoom: 2,
+          parent: "phaser-parent",
           width: window.innerWidth / 2,
           height: window.innerHeight / 2,
 

@@ -1,3 +1,7 @@
+export function resetSave() {
+  localStorage.clear();
+}
+
 export function saveToBrowserStorage(key, value) {
   const urlParams = new URLSearchParams(window.location.search);
   const prefix = urlParams.get("idprefix");

@@ -3,9 +3,10 @@
   import axios from 'axios';
   import ENV from '../../ENV';
   import names from '../entity/names';
-  import { saveIdAndPassword, saveCharacterSelection } from "./storage";
+  import { saveIdAndPassword, saveCharacterSelection, resetSave } from "./storage";
   import { uuidv4, randomPassword } from "../util/random";
 
+  resetSave();
   const uniqueId = uuidv4();
   const password = randomPassword();
   saveIdAndPassword(uniqueId, password);

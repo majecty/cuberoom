@@ -19,6 +19,11 @@ body {
 	overflow: hidden;
 }
 
+body > canvas {
+  position: fixed;
+  bottom: 0;
+}
+
 .closebutton {
 	margin-right: -20px;
 	margin-top: -50px;;

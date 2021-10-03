@@ -43,8 +43,8 @@
 
   function initializeSocket() {
     const socket = ENV.ENVIRONMENT === 'production'
-      ? io.connect(ENV.URL, { transports: ['websocket'] })
-      : io.connect(ENV.URL);
+      ? io.connect(ENV.GET_SOCKETIO_URL(), { transports: ['websocket'] })
+      : io.connect(ENV.GET_SOCKETIO_URL());
 
     window.socket = socket;
 
@@ -79,6 +79,9 @@
           parent: "phaser-parent",
           width: window.innerWidth / 2,
           height: window.innerHeight / 2,
+          scale: {
+            mode: Phaser.Scale.ScaleModes.RESIZE,
+          },
 
           pixelArt: true,
           physics: {

@@ -39,6 +39,22 @@ export function updateFollowClickAnimation(
   destinationX,
   destinationY
 ) {
+  try {
+    return updateFollowClickAnimationInner(scene, player, destinationX, destinationY);
+  } catch(err) {
+    // we can ignore animation error.
+    // if the user image is null, animation throws
+    console.error(err);
+    return player;
+  }
+}
+
+function updateFollowClickAnimationInner(
+  scene,
+  player,
+  destinationX,
+  destinationY
+) {
   let newPrevAnim = player.prevAnim;
 
   const playerRight = player.phaser.x + 10;

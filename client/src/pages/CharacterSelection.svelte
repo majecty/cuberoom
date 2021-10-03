@@ -75,7 +75,7 @@
 
   function decide() {
     name = name || names[Math.floor(Math.random() * names.length)];
-    axios.post(`${ENV.URL}/character-selection`, {
+    axios.post(`${ENV.GET_SERVER_URL()}/character-selection`, {
       name,
       faceS: eyeNum,
       hairS: hairStyleNum,

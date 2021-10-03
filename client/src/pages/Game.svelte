@@ -12,21 +12,15 @@
   import { io } from 'socket.io-client';
   import ENV from '../../ENV';
   import { playersEntries } from "../scenes/common/players";
-  import { saveCharacterSelection, saveIdAndPassword, loadFromBrowserStorage } from "./storage";
+  import { saveCharacterSelection, saveIdAndPassword, loadFloorAndMovement, isSavePrepared } from "./storage";
   import { protocol } from "../network/protocol"
   import names from '../entity/names';
   import { getRandomInt, uuidv4, randomPassword } from "../util/random";
 
   const requiredKeys = ["id", "password", "playerImgUrl", "playerName"];
-  let noSaveData = false;
-  for (const key of requiredKeys) {
-    if (loadFromBrowserStorage(key) == null) {
-      noSaveData = true;
-      console.log("no", key);
-    }
-  }
+  const savePrepared = isSavePrepared();
 
-  if (noSaveData) {
+  if (!savePrepared) {
     const urlParams = new URLSearchParams(window.location.search);
     const debug = urlParams.get("debug");
     if (debug != null) {
@@ -154,7 +148,7 @@
 
   // 저장된 씬부터 시작
   function createSceneList() {
-    const floor = loadFromBrowserStorage("floor");
+    const { floor } = loadFloorAndMovement();
     const firstSceneConstructor = getSceneConstructor(floor);
     const allScenes = [
       EntranceScene, FirstFloorScene, FirstBasementScene,

@@ -1,17 +1,8 @@
-import { loadFromBrowserStorage } from "../pages/storage";
+import { loadFromBrowserStorage, loadIdAndPassword } from "../pages/storage";
 
 export function getPlayerId() {
   const id = loadFromBrowserStorage("id");
   return id;
-}
-
-function loadIdAndPassword() {
-  const id = loadFromBrowserStorage("id");
-  const password = loadFromBrowserStorage("password");
-  return {
-    id,
-    password,
-  };
 }
 
 function getPlayers(socket) {

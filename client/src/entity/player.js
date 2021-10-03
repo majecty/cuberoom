@@ -35,8 +35,9 @@ export function playerCreate(scene, x, y, name, chat, id) {
     align: "center",
   });
 
-  const chatBubble = scene.add.text(x, y - 50, chat, {
-    fontFamily: "28px NeoDunggeunmo",
+  const chatBubble = scene.add.text(x, y - 70, chat, {
+    fontFamily: "NeoDunggeunmo",
+    fontSize: "16px",
     fill: "#ffffff",
     align: "center",
     backgroundColor: "rgba(0,0,0,0.5)",
@@ -259,6 +260,6 @@ export function playerMoveNameLabelAndChatBubble(player) {
   player.nameLabel.x = player.phaser.x;
   player.chatBubble.x = player.phaser.x;
   player.nameLabel.y = player.phaser.y - 45;
-  player.chatBubble.y = player.phaser.y - 50;
+  player.chatBubble.y = player.phaser.y - 70;
   return player;
 }

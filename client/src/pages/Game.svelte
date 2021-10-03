@@ -16,7 +16,7 @@
   import { protocol } from "../network/protocol"
   import names from '../entity/names';
   import { getRandomInt, uuidv4, randomPassword } from "../util/random";
-  import { readDebug } from "../common/urlParam";
+  import { readDebug, urlParam } from "../common/urlParam";
 
   const requiredKeys = ["id", "password", "playerImgUrl", "playerName"];
   const savePrepared = isSavePrepared();
@@ -148,7 +148,11 @@
 
   // 저장된 씬부터 시작
   function createSceneList() {
-    const { floor } = loadFloorAndMovement();
+    let { floor } = loadFloorAndMovement();
+    const floorFromUrl = urlParam.readFloor();
+    if (floorFromUrl != null) {
+      floor = floorFromUrl;
+    }
     const firstSceneConstructor = getSceneConstructor(floor);
     const allScenes = [
       EntranceScene, FirstFloorScene, FirstBasementScene,

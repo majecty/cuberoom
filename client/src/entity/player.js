@@ -6,7 +6,7 @@ import {
 } from "./player/animation";
 import { log } from "../log";
 import ENV from "../../ENV";
-import { playerSpeed, depth } from "../constant";
+import { playerSpeed, depth, zoom } from "../constant";
 import {
   playerNetworkCreate,
   playerNetworkGetThisFramePosition,
@@ -24,12 +24,14 @@ export function playerCreate(scene, x, y, name, chat, id) {
   const phaser = scene.physics.add.sprite(x, y, `player-${id}-down-2`, 1);
   phaser.setSize(20, 20, false).setOffset(0, 20);
   phaser.depth = depth.player;
+  phaser.scale = 2 / zoom;
 
-  const nameLabel = scene.add.text(x, y - 30, name || "이름없음", {
-    fontFamily: "28px NeoDunggeunmo",
+  const nameLabel = scene.add.text(x, y - 45, name || "이름없음", {
+    fontFamily: "NeoDunggeunmo",
+    fontSize: "15px",
     fill: "#ffffff",
     stroke: "#000000",
-    strokeThickness: 2,
+    strokeThickness: 5,
     align: "center",
   });
 
@@ -256,7 +258,7 @@ export function loadPlayerImages(phaserScene, playerFromServer, id) {
 export function playerMoveNameLabelAndChatBubble(player) {
   player.nameLabel.x = player.phaser.x;
   player.chatBubble.x = player.phaser.x;
-  player.nameLabel.y = player.phaser.y - 30;
+  player.nameLabel.y = player.phaser.y - 45;
   player.chatBubble.y = player.phaser.y - 50;
   return player;
 }

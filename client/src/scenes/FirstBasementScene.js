@@ -13,9 +13,15 @@ import { popupCreate } from "../entity/popup";
 import { popupPos } from "../entity/works";
 import { spawnPoints } from "./common/constants";
 import { protocol } from "../network/protocol";
+import { zoom } from "../constant";
 
 function backgroundStatic(scene) {
-  scene.add.sprite(800 / 2, 1220 / 2, "firstBasement-background");
+  const sprite = scene.add.sprite(
+    800 / zoom,
+    1220 / zoom,
+    "firstBasement-background"
+  );
+  sprite.scale = 2 / zoom;
 }
 
 function tileInteraction(scene, curTileName) {

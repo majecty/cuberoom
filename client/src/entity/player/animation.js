@@ -1,6 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 
 import { animationFrames } from "./image";
+import { logErr } from "../../log";
 
 const directions = ["down", "up", "left", "right"];
 
@@ -31,22 +32,6 @@ export function playerCreateAnimations(id, scene) {
 
 function isCollTile(scene, x, y) {
   return scene.map.collisionLayer.getTileAtWorldXY(x, y) != null;
-}
-
-export function updateFollowClickAnimation(
-  scene,
-  player,
-  destinationX,
-  destinationY
-) {
-  try {
-    return updateFollowClickAnimationInner(scene, player, destinationX, destinationY);
-  } catch(err) {
-    // we can ignore animation error.
-    // if the user image is null, animation throws
-    console.error(err);
-    return player;
-  }
 }
 
 function updateFollowClickAnimationInner(
@@ -159,6 +144,27 @@ function updateFollowClickAnimationInner(
     ...player,
     prevAnim: newPrevAnim,
   };
+}
+
+export function updateFollowClickAnimation(
+  scene,
+  player,
+  destinationX,
+  destinationY
+) {
+  try {
+    return updateFollowClickAnimationInner(
+      scene,
+      player,
+      destinationX,
+      destinationY
+    );
+  } catch (err) {
+    // we can ignore animation error.
+    // if the user image is null, animation throws
+    logErr(err);
+    return player;
+  }
 }
 
 export function updateInitAnimation(player) {

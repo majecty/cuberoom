@@ -11,9 +11,15 @@ import startScene from "../entity/map/startScene";
 import { showElevatorPanel } from "../entity/map/elevator";
 import { spawnPoints } from "./common/constants";
 import { protocol } from "../network/protocol";
+import { zoom } from "../constant";
 
 function backgroundStatic(scene) {
-  scene.add.sprite(800 / 2, 608 / 2, "firstFloor-background");
+  const sprite = scene.add.sprite(
+    800 / zoom,
+    608 / zoom,
+    "firstFloor-background"
+  );
+  sprite.scale = 2 / zoom;
 }
 
 function tileInteraction(scene, curTileName) {
@@ -42,8 +48,8 @@ class FirstFloorScene extends Phaser.Scene {
   constructor() {
     super("FirstFloorScene");
 
-    this.x = 16 * 5;
-    this.y = 16 * 29;
+    this.x = (32 / zoom) * 5;
+    this.y = (32 / zoom) * 29;
     baseSceneConstructor(this, FLOOR_NAMES.FirstFloorScene);
   }
 

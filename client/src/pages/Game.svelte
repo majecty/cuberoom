@@ -19,6 +19,7 @@
   import { readDebug, urlParam } from "../common/urlParam";
   import { ifDebug } from "../common/debug";
   import { onMount } from 'svelte';
+  import { zoom } from "../constant";
 
   const requiredKeys = ["id", "password", "playerImgUrl", "playerName"];
   const savePrepared = isSavePrepared();
@@ -47,7 +48,7 @@
       return;
     }
     setTimeout(() => {
-      window.game.scale.resize(window.innerWidth / 2, window.innerHeight / 2);
+      window.game.scale.resize(window.innerWidth / zoom, window.innerHeight / zoom);
     }, 50);
   }, false);
 
@@ -57,7 +58,7 @@
         return;
       }
       setTimeout(() => {
-        window.game.scale.resize(window.visualViewport.width / 2, window.visualViewport.height / 2);
+        window.game.scale.resize(window.visualViewport.width / zoom, window.visualViewport.height / zoom);
       }, 100);
     });
   }
@@ -96,10 +97,10 @@
       if (window.game == null) {
         const config = {
           type: Phaser.AUTO,
-          zoom: 2,
+          zoom,
           parent: "phaser-parent",
-          width: window.innerWidth / 2,
-          height: window.innerHeight / 2,
+          width: window.innerWidth / zoom,
+          height: window.innerHeight / zoom,
 
           pixelArt: true,
           physics: {

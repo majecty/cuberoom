@@ -10,9 +10,15 @@ import {
 import startScene from "../entity/map/startScene";
 import { spawnPoints } from "./common/constants";
 import { protocol } from "../network/protocol";
+import { zoom } from "../constant";
 
 function backgroundStatic(scene) {
-  scene.add.sprite(800 / 2, 770 / 2, "eighthFloor-background");
+  const sprite = scene.add.sprite(
+    800 / zoom,
+    770 / zoom,
+    "eighthFloor-background"
+  );
+  sprite.scale = 2 / zoom;
 }
 
 function tileInteraction(scene, curTileName) {

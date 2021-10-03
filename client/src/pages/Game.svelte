@@ -17,13 +17,13 @@
   import names from '../entity/names';
   import { getRandomInt, uuidv4, randomPassword } from "../util/random";
   import { readDebug, urlParam } from "../common/urlParam";
+  import { ifDebug } from "../comon/debug";
 
   const requiredKeys = ["id", "password", "playerImgUrl", "playerName"];
   const savePrepared = isSavePrepared();
 
   if (!savePrepared) {
-    const debug = readDebug();
-    if (debug != null) {
+    function generateDebugData() {
       const uniqueId = uuidv4();
       const password = randomPassword();
       saveIdAndPassword(uniqueId, password);
@@ -35,9 +35,10 @@
       const imgUrl = `/character-resource/skin${skin}_hairC${hairC}_cloth${cloth}_hairS${hairS}_faceS${faceS}/`;
       const name = names[Math.floor(Math.random() * names.length)];
       saveCharacterSelection(imgUrl, name);
-    } else {
-      window.location.pathname = "/"
     }
+    ifDebug(generateDebugData, () => {
+      window.location.pathname = "/"
+    });
   }
 
   function initializeSocket() {

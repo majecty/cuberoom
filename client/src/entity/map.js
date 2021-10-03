@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 
 import { assert } from "../assert";
-import { depth } from "../constant";
+import { depth, zoom } from "../constant";
 
 function extractObjects(phaserObjectLayer) {
   const results = {};
@@ -19,14 +19,16 @@ function extractObjects(phaserObjectLayer) {
 export function mapCreate(scene, key) {
   const phaser = scene.make.tilemap({
     key,
-    tileWidth: 16,
-    tileHeight: 16,
+    tileWidth: 32 / zoom,
+    tileHeight: 32 / zoom,
   });
+  phaser.scale = 2 / zoom;
   const tileset = phaser.addTilesetImage("collision", "collision-tileset");
 
   const collisionLayer = phaser.createLayer("collision", tileset, 0, 0);
   collisionLayer.visible = false;
   collisionLayer.alpha = 0;
+  collisionLayer.scale = 2 / zoom;
 
   const interactiveTileset = phaser.addTilesetImage("interactive-tile");
   const interactionLayer = phaser.createLayer(
@@ -36,6 +38,7 @@ export function mapCreate(scene, key) {
     0
   );
   interactionLayer.visible = false;
+  interactionLayer.scale = 2 / zoom;
 
   phaser.setCollisionByProperty(
     {
@@ -77,6 +80,7 @@ export function mapCreateOverCharacterLayer(map, tilesetImage) {
     0,
     0
   );
+  overLayer.scale = 2 / zoom;
   overLayer.depth = depth.overPlayer;
   return {
     ...map,

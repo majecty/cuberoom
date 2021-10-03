@@ -1,5 +1,6 @@
 export const networkTickMillis = 300;
-export const playerSpeed = 100; // pixel per sec
+export const zoom = 1;
+export const playerSpeed = 200 / zoom; // pixel per sec
 
 // depth가 높으면 앞에 나옴.
 export const depth = {

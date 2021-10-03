@@ -1,4 +1,5 @@
 import { log } from "../log";
+import { zoom } from "../constant";
 
 export const FLOOR_NAMES = {
   EntranceScene: "entrance",
@@ -30,7 +31,12 @@ export function listenRemovePlayerOnPlayer(
 }
 
 export function cameraInit({ phaserScene, mapWidth, mapHeight, player }) {
-  phaserScene.cameras.main.setBounds(0, 0, mapWidth, mapHeight);
+  phaserScene.cameras.main.setBounds(
+    0,
+    0,
+    (mapWidth * 2) / zoom,
+    (mapHeight * 2) / zoom
+  );
   phaserScene.cameras.main.startFollow(player.phaser, true, 0.1, 0.1);
   phaserScene.cameras.main.fadeIn(500);
 }

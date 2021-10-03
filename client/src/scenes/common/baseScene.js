@@ -1,5 +1,5 @@
 /* eslint no-param-reassign: ["error", { "props": false }] */
-import { log } from "../../log";
+import { log, logErr } from "../../log";
 import {
   playerCreate,
   playerinitmove,
@@ -235,9 +235,9 @@ export function baseSceneUpdate(selfScene, dtMillis) {
           otherPlayer,
           dtMillis
         );
-      } catch(err) {
-        console.error("failed to update network pos", id);
-        console.error(err);
+      } catch (err) {
+        logErr("failed to update network pos", id);
+        logErr(err);
       }
     }
   }

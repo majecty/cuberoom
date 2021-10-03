@@ -10,9 +10,15 @@ import {
 import startScene from "../entity/map/startScene";
 import { spawnPoints } from "./common/constants";
 import { protocol } from "../network/protocol";
+import { zoom } from "../constant";
 
 function backgroundStatic(scene) {
-  scene.add.sprite(1200 / 2, 800 / 2, "entrance-background");
+  const sprite = scene.add.sprite(
+    1200 / zoom,
+    800 / zoom,
+    "entrance-background"
+  );
+  sprite.scale = 2 / zoom;
 }
 
 function tileInteraction(scene, curTileName) {
@@ -30,8 +36,8 @@ function tileInteraction(scene, curTileName) {
 class EntranceScene extends Phaser.Scene {
   constructor() {
     super("EntranceScene");
-    this.x = 16 * 5;
-    this.y = 16 * 30;
+    this.x = spawnPoints.entrance.start.x;
+    this.y = spawnPoints.entrance.start.y;
 
     baseSceneConstructor(this, FLOOR_NAMES.EntranceScene);
   }

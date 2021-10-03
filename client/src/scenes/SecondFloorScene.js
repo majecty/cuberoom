@@ -11,9 +11,15 @@ import startScene from "../entity/map/startScene";
 import { showElevatorPanel } from "../entity/map/elevator";
 import { spawnPoints } from "./common/constants";
 import { protocol } from "../network/protocol";
+import { zoom } from "../constant";
 
 function backgroundStatic(scene) {
-  scene.add.sprite(800 / 2, 608 / 2, "secondFloor-background");
+  const sprite = scene.add.sprite(
+    800 / zoom,
+    608 / zoom,
+    "secondFloor-background"
+  );
+  sprite.scale = 2 / zoom;
 }
 
 function tileInteraction(scene, curTileName) {
@@ -39,8 +45,8 @@ function tileInteraction(scene, curTileName) {
 class SecondFloorScene extends Phaser.Scene {
   constructor() {
     super("SecondFloorScene");
-    this.x = 16 * 6;
-    this.y = 16 * 11;
+    this.x = spawnPoints.floor2F.from1F.x;
+    this.y = spawnPoints.floor2F.from1F.y;
     baseSceneConstructor(this, FLOOR_NAMES.SecondFloorScene);
   }
 

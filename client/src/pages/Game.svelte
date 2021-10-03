@@ -19,6 +19,7 @@
   import { readDebug, urlParam } from "../common/urlParam";
   import { ifDebug } from "../common/debug";
   import { onMount } from 'svelte';
+  import { zoom } from "../constant";
 
   const requiredKeys = ["id", "password", "playerImgUrl", "playerName"];
   const savePrepared = isSavePrepared();
@@ -47,17 +48,25 @@
       return;
     }
     setTimeout(() => {
-      window.game.scale.resize(window.innerWidth / 2, window.innerHeight / 2);
+      window.game.scale.resize(window.innerWidth / zoom, window.innerHeight / zoom);
     }, 50);
   }, false);
 
   if (window.visualViewport != null) {
     window.visualViewport.addEventListener('resize', () => {
-      if (window.game != null) {
+      if (window.game == null) {
         return;
       }
+      window.scene.cameras.main.fadeOut(0);
       setTimeout(() => {
-        window.game.scale.resize(window.visualViewport.width / 2, window.visualViewport.height / 2);
+        window.scene.cameras.main.fadeIn(500);
+        ifDebug(() => {
+          window.socket.emit("debugMessage", {
+            width: window.visualViewport.width / zoom,
+            height: window.visualViewport.height / zoom
+          });
+        });
+        window.game.scale.resize(window.visualViewport.width / zoom, window.visualViewport.height / zoom);
       }, 100);
     });
   }
@@ -96,9 +105,10 @@
       if (window.game == null) {
         const config = {
           type: Phaser.AUTO,
-          zoom: 2,
-          width: window.innerWidth / 2,
-          height: window.innerHeight / 2,
+          zoom,
+          parent: "phaser-parent",
+          width: window.innerWidth / zoom,
+          height: window.innerHeight / zoom,
 
           pixelArt: true,
           physics: {

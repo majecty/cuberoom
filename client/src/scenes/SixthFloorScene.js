@@ -11,15 +11,21 @@ import startScene from "../entity/map/startScene";
 import { showElevatorPanel } from "../entity/map/elevator";
 import { spawnPoints } from "./common/constants";
 import { protocol } from "../network/protocol";
+import { zoom } from "../constant";
 
 function backgroundStatic(scene) {
-  scene.add.sprite(800 / 2, 800 / 2, "sixthFloor-background");
+  const sprite = scene.add.sprite(
+    800 / zoom,
+    800 / zoom,
+    "sixthFloor-background"
+  );
+  sprite.scale = 2 / zoom;
 }
 
 function tileInteraction(scene, curTileName) {
   switch (curTileName) {
     case "up":
-      protocol.moveFloor(scene.scoekt, "7F");
+      protocol.moveFloor(scene.socket, "7F");
       startScene(scene, "SeventhFloorScene", spawnPoints.floor7F.from6F);
       break;
     case "down":
@@ -41,8 +47,8 @@ function tileInteraction(scene, curTileName) {
 class SixthFloorScene extends Phaser.Scene {
   constructor() {
     super("SixthFloorScene");
-    this.x = 16 * 5;
-    this.y = 16 * 31;
+    this.x = spawnPoints.floor6F.from5F.x;
+    this.y = spawnPoints.floor6F.from5F.y;
     baseSceneConstructor(this, FLOOR_NAMES.SixthFloorScene);
   }
 

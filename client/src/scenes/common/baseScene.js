@@ -30,8 +30,14 @@ import {
   rateLimiterCreate,
   rateLimiterTrigger,
 } from "../../network/rateLimiter";
-import { saveMovement, loadPlayerNameAndImgUrl } from "../../pages/storage";
+import {
+  saveMovement,
+  loadPlayerNameAndImgUrl,
+  loadFloorAndMovement,
+} from "../../pages/storage";
 import { protocol, getPlayerId } from "../../network/protocol";
+import { ifDebug } from "../../common/debug";
+import { isFirstScene, saveSceneToHistory } from "./history";
 
 /**
  * @typedef {import("../../relation/playerOnMap").OnMoveToTile} OnMoveToTile
@@ -79,9 +85,38 @@ export function baseSceneConstructor(selfScene, sceneName) {
   window.scenes[sceneName] = selfScene;
 }
 
-// data는 어디서 온 데이터지?
+// data는 씬 전환하는 함수에서 주입해줌
 export function baseSceneInit(selfScene, data) {
   log(selfScene.sceneName, "init");
+
+  const isFirstLoadedScene = isFirstScene();
+  saveSceneToHistory(selfScene.sceneName);
+
+  let debugPosUsed = false;
+  if (isFirstLoadedScene) {
+    ifDebug(() => {
+      const { floor, x, y } = loadFloorAndMovement();
+      if (floor !== selfScene.sceneName) {
+        log("floor != scenename", floor, selfScene.sceneName);
+        return;
+      }
+
+      log("use prev pos for debug", {
+        x,
+        y,
+        floor,
+      });
+      debugPosUsed = true;
+      selfScene.x = Number(x);
+      selfScene.destinationX = Number(x);
+      selfScene.y = Number(y);
+      selfScene.destinationY = Number(y);
+    });
+  }
+
+  if (debugPosUsed) {
+    return;
+  }
 
   if (data.x) {
     selfScene.x = data.x;

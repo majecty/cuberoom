@@ -5,6 +5,10 @@
 			 url(fonts/neodgm_pro.ttf) format('ttf');
 }
 
+* {
+  touch-action: pan-y;
+}
+
 html, body {
 	position: relative;
 	width: 100%;

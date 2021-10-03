@@ -28,10 +28,10 @@ export function playerCreate(scene, x, y, name, chat, id) {
 
   const nameLabel = scene.add.text(x, y - 45, name || "이름없음", {
     fontFamily: "NeoDunggeunmo",
-    fontSize: "15px",
+    fontSize: "16px",
     fill: "#ffffff",
     stroke: "#000000",
-    strokeThickness: 5,
+    strokeThickness: 2,
     align: "center",
   });
 

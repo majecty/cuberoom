@@ -18,7 +18,7 @@
   import { getRandomInt, uuidv4, randomPassword } from "../util/random";
 
   const requiredKeys = ["id", "password", "playerImgUrl", "playerName"];
-  let noSaveData = null;
+  let noSaveData = false;
   for (const key of requiredKeys) {
     if (loadFromBrowserStorage(key) == null) {
       noSaveData = true;
@@ -26,24 +26,26 @@
     }
   }
 
-  const urlParams = new URLSearchParams(window.location.search);
-  const debug = urlParams.get("debug");
-  if (debug != null) {
-    const uniqueId = uuidv4();
-    const password = randomPassword();
-    saveToBrowserStorage("id", uniqueId);
-    saveToBrowserStorage("password", password);
-    let skin = getRandomInt(1, 4);
-    let faceS= getRandomInt(1, 13);
-    let hairC = getRandomInt(1, 5);
-    let hairS = getRandomInt(1, 13);
-    let cloth = getRandomInt(1, 13);
-    const imgUrl = `/character-resource/skin${skin}_hairC${hairC}_cloth${cloth}_hairS${hairS}_faceS${faceS}/`;
-    saveToBrowserStorage("playerImgUrl", imgUrl);
-    const name = names[Math.floor(Math.random() * names.length)];
-    saveToBrowserStorage("playerName", name);
-  } else {
-    window.location.pathname = "/"
+  if (noSaveData) {
+    const urlParams = new URLSearchParams(window.location.search);
+    const debug = urlParams.get("debug");
+    if (debug != null) {
+      const uniqueId = uuidv4();
+      const password = randomPassword();
+      saveToBrowserStorage("id", uniqueId);
+      saveToBrowserStorage("password", password);
+      let skin = getRandomInt(1, 4);
+      let faceS= getRandomInt(1, 13);
+      let hairC = getRandomInt(1, 5);
+      let hairS = getRandomInt(1, 13);
+      let cloth = getRandomInt(1, 13);
+      const imgUrl = `/character-resource/skin${skin}_hairC${hairC}_cloth${cloth}_hairS${hairS}_faceS${faceS}/`;
+      saveToBrowserStorage("playerImgUrl", imgUrl);
+      const name = names[Math.floor(Math.random() * names.length)];
+      saveToBrowserStorage("playerName", name);
+    } else {
+      window.location.pathname = "/"
+    }
   }
 
   function initializeSocket() {

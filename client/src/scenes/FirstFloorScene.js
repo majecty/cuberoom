@@ -43,7 +43,7 @@ class FirstFloorScene extends Phaser.Scene {
     super("FirstFloorScene");
 
     this.x = 16 * 5;
-    this.y = 16 * 31;
+    this.y = 16 * 29;
     baseSceneConstructor(this, FLOOR_NAMES.FirstFloorScene);
   }
 

@@ -25,7 +25,7 @@ function backgroundStatic(scene) {
 function tileInteraction(scene, curTileName) {
   switch (curTileName) {
     case "up":
-      protocol.moveFloor(scene.scoekt, "7F");
+      protocol.moveFloor(scene.socket, "7F");
       startScene(scene, "SeventhFloorScene", spawnPoints.floor7F.from6F);
       break;
     case "down":
@@ -47,8 +47,8 @@ function tileInteraction(scene, curTileName) {
 class SixthFloorScene extends Phaser.Scene {
   constructor() {
     super("SixthFloorScene");
-    this.x = 16 * 5;
-    this.y = 16 * 31;
+    this.x = spawnPoints.floor6F.from5F.x;
+    this.y = spawnPoints.floor6F.from5F.y;
     baseSceneConstructor(this, FLOOR_NAMES.SixthFloorScene);
   }
 

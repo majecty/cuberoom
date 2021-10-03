@@ -45,8 +45,8 @@ function tileInteraction(scene, curTileName) {
 class SecondFloorScene extends Phaser.Scene {
   constructor() {
     super("SecondFloorScene");
-    this.x = 16 * 6;
-    this.y = 16 * 11;
+    this.x = spawnPoints.floor2F.from1F.x;
+    this.y = spawnPoints.floor2F.from1F.y;
     baseSceneConstructor(this, FLOOR_NAMES.SecondFloorScene);
   }
 

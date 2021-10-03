@@ -48,8 +48,8 @@ class FirstFloorScene extends Phaser.Scene {
   constructor() {
     super("FirstFloorScene");
 
-    this.x = (32 / zoom) * 5;
-    this.y = (32 / zoom) * 29;
+    this.x = spawnPoints.floor1F.fromEntrance.x;
+    this.y = spawnPoints.floor1F.fromEntrance.y;
     baseSceneConstructor(this, FLOOR_NAMES.FirstFloorScene);
   }
 

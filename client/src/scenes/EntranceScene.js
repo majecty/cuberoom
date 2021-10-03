@@ -36,8 +36,8 @@ function tileInteraction(scene, curTileName) {
 class EntranceScene extends Phaser.Scene {
   constructor() {
     super("EntranceScene");
-    this.x = (32 * 5) / zoom;
-    this.y = (32 * 30) / zoom;
+    this.x = spawnPoints.entrance.start.x;
+    this.y = spawnPoints.entrance.start.y;
 
     baseSceneConstructor(this, FLOOR_NAMES.EntranceScene);
   }

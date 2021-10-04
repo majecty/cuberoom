@@ -214,7 +214,11 @@ export function playerFollowNetworkPos(player, dtMillis) {
 }
 
 export function playerAddChat(player, chat) {
-  const formattedChat = chat.match(/.{1,12}/g).join("\n");
+  let lines = chat.match(/.{1,12}/g);
+  if (lines == null) {
+    lines = [];
+  }
+  const formattedChat = lines.join("\n");
   player.chatBubble.setText(formattedChat);
   player.chatBubble.setPadding(4);
   return player;

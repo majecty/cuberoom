@@ -93,29 +93,21 @@ function followClick(player, destinationX, destinationY) {
   let newPrevMove = player.prevMove;
 
   if (destinationX + 5 < player.phaser.x) {
-    if (player.prevMove !== "left") {
-      player.phaser.body.setVelocityX(-velocity);
-      newPrevMove = "left";
-    }
+    player.phaser.body.setVelocityX(-velocity);
+    newPrevMove = "left";
   } else if (destinationX > 5 + player.phaser.x) {
-    if (player.prevMove !== "right") {
-      player.phaser.body.setVelocityX(velocity);
-      newPrevMove = "right";
-    }
+    player.phaser.body.setVelocityX(velocity);
+    newPrevMove = "right";
   } else {
     player.phaser.body.setVelocityX(0);
   }
 
   if (destinationY + 5 < player.phaser.y) {
-    if (player.prevMove !== "up") {
-      player.phaser.body.setVelocityY(-velocity);
-      newPrevMove = "up";
-    }
+    player.phaser.body.setVelocityY(-velocity);
+    newPrevMove = "up";
   } else if (player.phaser.y + 5 < destinationY) {
-    if (player.prevMove !== "down") {
-      player.phaser.body.setVelocityY(velocity);
-      newPrevMove = "down";
-    }
+    player.phaser.body.setVelocityY(velocity);
+    newPrevMove = "down";
   } else {
     player.phaser.body.setVelocityY(0);
   }
@@ -125,6 +117,7 @@ function followClick(player, destinationX, destinationY) {
     Math.abs(tempY - destinationY) < 11
   ) {
     player.phaser.body.setVelocityY(0);
+    newPrevMove = "stop";
   }
 
   return {

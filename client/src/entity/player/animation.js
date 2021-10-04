@@ -34,115 +34,89 @@ function isCollTile(scene, x, y) {
   return scene.map.collisionLayer.getTileAtWorldXY(x, y) != null;
 }
 
-function updateFollowClickAnimationInner(
-  scene,
-  player,
-  destinationX,
-  destinationY
-) {
-  let newPrevAnim = player.prevAnim;
+function stopAnimation(player) {
+  if (player.prevAnim === `player-${player.id}-down`) {
+    player.phaser.anims.play(`player-down-${player.id}-stop`, true);
+  } else if (player.prevAnim === `player-${player.id}-left`) {
+    player.phaser.anims.play(`player-${player.id}-left-stop`, true);
+  } else if (player.prevAnim === `player-${player.id}-right`) {
+    player.phaser.anims.play(`player-${player.id}-right-stop`, true);
+  } else if (player.prevAnim === `player-${player.id}-up`) {
+    player.phaser.anims.play(`player-${player.id}-up-stop`, true);
+  } else {
+    player.phaser.anims.stop();
+  }
 
+  return {
+    ...player,
+    prevAnim: "player-idle",
+  };
+}
+
+function isCollTileAllDirection(scene, player) {
   const playerRight = player.phaser.x + 10;
   const playerLeft = player.phaser.x - 10;
   const playerUp = player.phaser.y - 10;
   const playerDown = player.phaser.y + 10;
 
   if (
-    Math.abs(player.phaser.x - destinationX) < 5 &&
-    Math.abs(player.phaser.y - destinationY) < 5
-  ) {
-    if (player.prevAnim === `player-${player.id}-down`) {
-      player.phaser.anims.play(`player-down-${player.id}-stop`, true);
-      // newPrevAnim = `player-${player.id}-down`;
-    } else if (player.prevAnim === `player-${player.id}-left`) {
-      player.phaser.anims.play(`player-${player.id}-left-stop`, true);
-      // newPrevAnim = `player-${player.id}-left`;
-    } else if (player.prevAnim === `player-${player.id}-right`) {
-      player.phaser.anims.play(`player-${player.id}-right-stop`, true);
-      // newPrevAnim = `player-${player.id}-right`;
-    } else if (player.prevAnim === `player-${player.id}-up`) {
-      player.phaser.anims.play(`player-${player.id}-up-stop`, true);
-      // newPrevAnim = `player-${player.id}-down`;
-    } else {
-      player.phaser.anims.stop();
-    }
-
-    newPrevAnim = "player-idle";
-  } else if (
     player.prevAnim === `player-${player.id}-down` &&
     isCollTile(scene, player.phaser.x, playerDown)
   ) {
-    player.phaser.anims.stop();
-    newPrevAnim = "player-idle";
-  } else if (
+    return true;
+  }
+  if (
     player.prevAnim === `player-${player.id}-left` &&
     isCollTile(scene, playerLeft, player.phaser.y)
   ) {
-    player.phaser.anims.stop();
-    newPrevAnim = "player-idle";
-  } else if (
+    return true;
+  }
+  if (
     player.prevAnim === `player-${player.id}-right` &&
     isCollTile(scene, playerRight, player.phaser.y)
   ) {
-    player.phaser.anims.stop();
-    newPrevAnim = "player-idle";
-  } else if (
+    return true;
+  }
+  if (
     player.prevAnim === `player-${player.id}-up` &&
     isCollTile(scene, player.phaser.x, playerUp)
   ) {
-    player.phaser.anims.stop();
-    newPrevAnim = "player-idle";
-  } else if (destinationX < player.phaser.x) {
-    if (destinationY + 5 < player.phaser.y) {
-      player.phaser.anims.play(`player-${player.id}-up`, true);
-      newPrevAnim = `player-${player.id}-up`;
-    } else if (destinationY > 5 + player.phaser.y) {
-      player.phaser.anims.play(`player-${player.id}-down`, true);
-      newPrevAnim = `player-${player.id}-down`;
-    } else if (player.prevAnim !== `player-${player.id}-left`) {
-      player.phaser.anims.play(`player-${player.id}-left`, true);
-      newPrevAnim = `player-${player.id}-left`;
-    }
-  } else if (destinationX > player.phaser.x) {
-    if (destinationY + 5 < player.phaser.y) {
-      player.phaser.anims.play(`player-${player.id}-up`, true);
-      newPrevAnim = `player-${player.id}-up`;
-    } else if (destinationY > 5 + player.phaser.y) {
-      player.phaser.anims.play(`player-${player.id}-down`, true);
-      newPrevAnim = `player-${player.id}-down`;
-    } else if (player.prevAnim !== `player-${player.id}-right`) {
-      player.phaser.anims.play(`player-${player.id}-right`, true);
-      newPrevAnim = `player-${player.id}-right`;
-    }
-  } else if (destinationY < player.phaser.y) {
-    if (player.prevAnim !== `player-${player.id}-up`) {
-      player.phaser.anims.play(`player-${player.id}-up`, true);
-      newPrevAnim = `player-${player.id}-up`;
-    }
-  } else if (destinationY > player.phaser.y) {
-    if (player.prevAnim !== `player-${player.id}-down`) {
-      player.phaser.anims.play(`player-${player.id}-down`, true);
-      newPrevAnim = `player-${player.id}-down`;
-    }
-  } else {
-    if (player.prevAnim === `player-${player.id}-up`) {
-      player.phaser.anims.play(`player-${player.id}-up-stop`, true);
-    } else if (player.prevAnim === `player-${player.id}-down`) {
-      player.phaser.anims.play(`player-down-${player.id}-stop`, true);
-    } else if (player.prevAnim === `player-${player.id}-left`) {
-      player.phaser.anims.play(`player-${player.id}-left-stop`, true);
-    } else if (player.prevAnim === `player-${player.id}-right`) {
-      player.phaser.anims.play(`player-${player.id}-right-stop`, true);
-    } else {
-      player.phaser.anims.stop();
-    }
+    return true;
+  }
+  return false;
+}
 
-    newPrevAnim = "player-idle";
+function animFromPrevMove(player, move) {
+  if (move === "stop") {
+    return null;
+  }
+  return `player-${player.id}-${move}`;
+}
+
+function updateFollowClickAnimationInner(scene, player) {
+  if (player.prevMove === "stop") {
+    return stopAnimation(player);
   }
 
+  if (isCollTileAllDirection(scene, player)) {
+    player.phaser.anims.stop();
+    return {
+      ...player,
+      prevAnim: "player-idle",
+    };
+  }
+
+  const newAnim = animFromPrevMove(player, player.prevMove);
+  if (newAnim === player.prevAnim) {
+    return player;
+  }
+  if (newAnim == null) {
+    return player;
+  }
+  player.phaser.anims.play(newAnim, true);
   return {
     ...player,
-    prevAnim: newPrevAnim,
+    prevAnim: newAnim,
   };
 }
 

@@ -59,8 +59,8 @@ export function playerCreate(scene, x, y, name, chat, id) {
       y: null,
     },
     network: playerNetworkCreate(),
-    prevAnim: null,
-    prevMove: null,
+    prevAnim: "player-idle",
+    prevMove: "stop",
     nameLabel,
     chatBubble,
     id,
@@ -90,32 +90,24 @@ function followClick(player, destinationX, destinationY) {
 
   const velocity = playerSpeed;
 
-  let newPrevMove = player.prevMove;
+  let newPrevMove = "stop";
 
   if (destinationX + 5 < player.phaser.x) {
-    if (player.prevMove !== "left") {
-      player.phaser.body.setVelocityX(-velocity);
-      newPrevMove = "left";
-    }
+    player.phaser.body.setVelocityX(-velocity);
+    newPrevMove = "left";
   } else if (destinationX > 5 + player.phaser.x) {
-    if (player.prevMove !== "right") {
-      player.phaser.body.setVelocityX(velocity);
-      newPrevMove = "right";
-    }
+    player.phaser.body.setVelocityX(velocity);
+    newPrevMove = "right";
   } else {
     player.phaser.body.setVelocityX(0);
   }
 
   if (destinationY + 5 < player.phaser.y) {
-    if (player.prevMove !== "up") {
-      player.phaser.body.setVelocityY(-velocity);
-      newPrevMove = "up";
-    }
+    player.phaser.body.setVelocityY(-velocity);
+    newPrevMove = "up";
   } else if (player.phaser.y + 5 < destinationY) {
-    if (player.prevMove !== "down") {
-      player.phaser.body.setVelocityY(velocity);
-      newPrevMove = "down";
-    }
+    player.phaser.body.setVelocityY(velocity);
+    newPrevMove = "down";
   } else {
     player.phaser.body.setVelocityY(0);
   }
@@ -125,6 +117,7 @@ function followClick(player, destinationX, destinationY) {
     Math.abs(tempY - destinationY) < 11
   ) {
     player.phaser.body.setVelocityY(0);
+    newPrevMove = "stop";
   }
 
   return {
@@ -235,9 +228,11 @@ export function playerRemoveChat(player) {
 
 /**
  * @param playerFromServer field id, imgUrl
+ * @returns {string[]} loaded image keys
  */
 export function loadPlayerImages(phaserScene, playerFromServer, id) {
   const directions = ["left", "right", "up", "down"];
+  const loadKeys = [];
   for (const direction of directions) {
     for (let i = 1; i < 5; i += 1) {
       if (!phaserScene.textures.exists(`player-${id}-${direction}-${i}`)) {
@@ -247,13 +242,16 @@ export function loadPlayerImages(phaserScene, playerFromServer, id) {
         //   `player-${id}-${direction}-${i}`,
         //   `${ENV.URL_STATIC}${playerFromServer.imgUrl}${direction}-${i}.png`
         // );
+        const key = `player-${id}-${direction}-${i}`;
+        loadKeys.push(key);
         phaserScene.load.image(
-          `player-${id}-${direction}-${i}`,
+          key,
           `${ENV.URL_STATIC}${playerFromServer.imgUrl}${direction}-${i}.png`
         );
       }
     }
   }
+  return loadKeys;
 }
 
 export function playerMoveNameLabelAndChatBubble(player) {

@@ -57,6 +57,9 @@
       if (window.game == null) {
         return;
       }
+      if (window.scene == null) {
+        return;
+      }
       window.scene.cameras.main.fadeOut(0);
       setTimeout(() => {
         window.scene.cameras.main.fadeIn(500);

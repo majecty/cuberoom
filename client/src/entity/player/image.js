@@ -3,9 +3,13 @@ import ENV from "../../../ENV";
 
 const directions = ["down", "up", "left", "right"];
 
-export function* animationFrames(id, direction) {
+export function* animationFrames(scene, id, direction) {
   for (let i = 1; i < 5; i += 1) {
-    yield { key: `player-${id}-${direction}-${i}` };
+    if (scene.textures.exists(`player-${id}-${direction}-${i}`)) {
+      yield { key: `player-${id}-${direction}-${i}` };
+    } else {
+      yield { key: `player-fallback-${direction}-${i}` };
+    }
   }
 }
 
@@ -15,6 +19,10 @@ export function* allCharacterImageNames(id, playerImgUrl) {
       yield [
         `player-${id}-${direction}-${i}`,
         `${ENV.URL_STATIC}${playerImgUrl}${direction}-${i}.png`,
+      ];
+      yield [
+        `player-fallback-${direction}-${i}`,
+        `${ENV.URL_STATIC}/img/player/${direction}-${i}.png`,
       ];
     }
   }

@@ -60,7 +60,7 @@ export function showElevatorPanel(scene, floor) {
     protocol.moveFloor(scene.socket, "1F");
     startScene(scene, "FirstFloorScene", spawnPoints.floor1F.elevator);
   };
-  buttonTo1F.ontouchstart = () => {
+  buttonTo1F.ontouchend = () => {
     if (floor !== "1F") {
       hideElevatorPanel();
       protocol.moveFloor(scene.socket, "1F");
@@ -75,7 +75,7 @@ export function showElevatorPanel(scene, floor) {
     protocol.moveFloor(scene.socket, "2F");
     startScene(scene, "SecondFloorScene", spawnPoints.floor2F.elevator);
   };
-  buttonTo2F.ontouchstart = () => {
+  buttonTo2F.ontouchend = () => {
     if (floor !== "2F") {
       hideElevatorPanel();
       protocol.moveFloor(scene.socket, "2F");
@@ -90,7 +90,7 @@ export function showElevatorPanel(scene, floor) {
     protocol.moveFloor(scene.socket, "5F");
     startScene(scene, "FifthFloorScene", spawnPoints.floor5F.elevator);
   };
-  buttonTo5F.ontouchstart = () => {
+  buttonTo5F.ontouchend = () => {
     if (floor !== "5F") {
       hideElevatorPanel();
       protocol.moveFloor(scene.socket, "5F");
@@ -105,7 +105,7 @@ export function showElevatorPanel(scene, floor) {
     protocol.moveFloor(scene.socket, "6F");
     startScene(scene, "SixthFloorScene", spawnPoints.floor6F.elevator);
   };
-  buttonTo6F.ontouchstart = () => {
+  buttonTo6F.ontouchend = () => {
     if (floor !== "6F") {
       hideElevatorPanel();
       protocol.moveFloor(scene.socket, "6F");
@@ -120,7 +120,7 @@ export function showElevatorPanel(scene, floor) {
     protocol.moveFloor(scene.socket, "7F");
     startScene(scene, "SeventhFloorScene", spawnPoints.floor7F.elevator);
   };
-  buttonTo7F.ontouchstart = () => {
+  buttonTo7F.ontouchend = () => {
     if (floor !== "7F") {
       hideElevatorPanel();
       protocol.moveFloor(scene.socket, "7F");
@@ -135,7 +135,7 @@ export function showElevatorPanel(scene, floor) {
     protocol.moveFloor(scene.socket, "B1");
     startScene(scene, "FirstBasementScene", spawnPoints.floorB1.elevator);
   };
-  buttonToB1.ontouchstart = () => {
+  buttonToB1.ontouchend = () => {
     if (floor !== "B1") {
       hideElevatorPanel();
       protocol.moveFloor(scene.socket, "B1");
@@ -150,7 +150,7 @@ export function showElevatorPanel(scene, floor) {
     protocol.moveFloor(scene.socket, "B2");
     startScene(scene, "SecondBasementScene", spawnPoints.floorB2.elevator);
   };
-  buttonToB2.ontouchstart = () => {
+  buttonToB2.ontouchend = () => {
     if (floor !== "B2") {
       hideElevatorPanel();
       protocol.moveFloor(scene.socket, "B2");

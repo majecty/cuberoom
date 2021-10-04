@@ -198,9 +198,9 @@ export function playerFollowNetworkPos(player, dtMillis) {
 
   // FIXME: do not update nameLabel, chatBubble this way
   player.nameLabel.x = newX;
-  player.nameLabel.y = newY - 30;
+  player.nameLabel.y = newY - 45;
   player.chatBubble.x = newX;
-  player.chatBubble.y = newY - 50;
+  player.chatBubble.y = newY - 70;
   player.phaser.depth = getPlayerDepth(player);
   player.chatBubble.depth = depth.nameLabel;
   player.nameLabel.depth = depth.nameLabel;

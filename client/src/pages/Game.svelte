@@ -266,10 +266,10 @@
 
 <form
   id="chat"
-  on:mousedown={() => game.input.enabled = false}
-  on:mouseup={() => game.input.enabled = true}
-  on:touchstart={() => game.input.enabled = false}
-  on:touchend={() => game.input.enabled = true}
+  on:mousedown={() => window.game.input.enabled = false}
+  on:mouseup={() => window.game.input.enabled = true}
+  on:touchstart={() => window.game.input.enabled = false}
+  on:touchend={() => window.game.input.enabled = true}
   on:submit|preventDefault={addChat}
 >
   <input maxlength="30" placeholder="엔터 키를 누르면 대화할 수 있습니다." on:keydown={handleKeydown} bind:value={chat} />

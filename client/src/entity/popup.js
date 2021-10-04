@@ -117,7 +117,7 @@ export function popupCreate(scene, { x, y }, workNum) {
         showmore.innerHTML = "접기";
       }
     };
-    showmore.ontouchstart = () => {
+    showmore.ontouchend = () => {
       if (showmore.classList.contains("showmore")) {
         document.getElementsByClassName("description")[0].style.display =
           "none";
@@ -150,7 +150,7 @@ export function popupCreate(scene, { x, y }, workNum) {
     closeButton.style.right = "-30px";
     closeButton.style.position = "absolute";
     closeButton.onclick = () => document.body.removeChild(descriptionContainer);
-    closeButton.ontouchstart = () => {
+    closeButton.ontouchend = () => {
       document.body.removeChild(descriptionContainer);
     };
 
@@ -161,7 +161,7 @@ export function popupCreate(scene, { x, y }, workNum) {
     link.style.position = "absolute";
     link.style.right = "0px";
     link.style.bottom = "-20px";
-    link.ontouchstart = () => {
+    link.ontouchend = () => {
       window.open(work.url);
     };
     link.appendChild(document.createTextNode("새 창으로 링크 열기"));
@@ -180,8 +180,7 @@ export function popupCreate(scene, { x, y }, workNum) {
       link2.style.right = "0px";
       link2.style.bottom = "-50px";
       link2.appendChild(document.createTextNode("작품2 새 창으로 링크 열기"));
-      link2.ontouchstart = () => {
-        const el = this;
+      link2.ontouchend = () => {
         window.open(work.url2);
       };
       isLink2 = true;

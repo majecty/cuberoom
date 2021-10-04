@@ -21,7 +21,13 @@ export function playerCreate(scene, x, y, name, chat, id) {
     idStr = id;
   }
   log("playerCreate", scene.sceneName, name, idStr.substring(0, 5));
-  const phaser = scene.physics.add.sprite(x, y, `player-${id}-down-2`, 1);
+  let frameName = "";
+  if (scene.textures.exists(`player-${id}-down-2`)) {
+    frameName = `player-${id}-down-2`;
+  } else {
+    frameName = `player-fallback-down-2`;
+  }
+  const phaser = scene.physics.add.sprite(x, y, frameName, 1);
   phaser.setSize(20, 20, false).setOffset(0, 20);
   phaser.depth = depth.player;
   phaser.scale = 2 / zoom;

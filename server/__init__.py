@@ -20,16 +20,25 @@ config_values["local"] = {
   "port": 3000
 }
 
-config_values["production"] = {
+config_values["staging"] = {
   "static_url_path": "/static",
   "static_folder": "../client/public/static",
   "cors_origin": "http://test.cuberoom.net",
   "public_path": "../client/public", # please check this in the deployed environment
   "user_image_prefix": "character-resource",
+  "port": 5001 # default port in flask
+}
+
+config_values["production"] = {
+  "static_url_path": "/static",
+  "static_folder": "../client/public/static",
+  "cors_origin": "http://cuberoom.net",
+  "public_path": "../client/public", # please check this in the deployed environment
+  "user_image_prefix": "character-resource",
   "port": 5000 # default port in flask
 }
 
-if cuberoom_env not in ["local", "production"]:
+if cuberoom_env not in ["local", "production", "staging"]:
     sys.exit("please set CUBEROOM_ENV environment variable to `local` or `production`")
 
 config_value = config_values[cuberoom_env]
@@ -40,11 +49,16 @@ CORS(app, resources={r'*': {'origins': config_value["cors_origin"]}})
 
 app.secret_key = "cuberoom"
 socketio = SocketIO(app, cors_allowed_origins="*")
-@app.route("/*")
+
+@app.route("/<string:text>")
+def base_all(text):
+    return send_from_directory(config_value['public_path'],'index.html')
+
+@app.route("/")
 def base():
     return send_from_directory(config_value['public_path'],'index.html')
 
-@app.route("/character-selection",methods=['GET', 'POST'])
+@app.route("/character-selection",methods=['POST'])
 def user_information():
     name = request.get_json()["name"]
     faceS = request.get_json()["faceS"]

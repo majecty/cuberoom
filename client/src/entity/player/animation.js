@@ -142,7 +142,7 @@ export function updateFollowClickAnimation(
     );
     const newAnim = newPlayer.prevAnim;
     if (prev !== newAnim) {
-      logDebug("anim changed", { prev, newAnim });
+      // logDebug("anim changed", { prev, newAnim });
     }
     return newPlayer;
   } catch (err) {

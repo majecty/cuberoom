@@ -1,12 +1,15 @@
+import { zoom } from "../constant";
 import works from "./works";
 
 let popupSprite;
 let descriptionContainer;
 
 export function popupCreate(scene, { x, y }, workNum) {
+  console.log("popupCreate");
   const work = works[workNum];
   popupSprite = scene.add.sprite(x, y, "popup");
   popupSprite.setInteractive();
+  popupSprite.scale = 2 / zoom;
 
   // FIXME: event 등록 해제해야 하는지 확인 필요
   popupSprite.on("pointerover", () => {

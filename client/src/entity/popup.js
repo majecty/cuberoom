@@ -5,7 +5,6 @@ let popupSprite;
 let descriptionContainer;
 
 export function popupCreate(scene, { x, y }, workNum) {
-  console.log("popupCreate");
   const work = works[workNum];
   popupSprite = scene.add.sprite(x, y, "popup");
   popupSprite.setInteractive();

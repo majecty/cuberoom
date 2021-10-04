@@ -28,7 +28,7 @@ function parseGitCommit() {
     .toString()
     .substring(0,6)
     .trim();
-  return `${revision}-${branch}`;
+  return `${revision}-${branch.replace(/\//g, ".")}`;
 }
 
 const production = !process.env.ROLLUP_WATCH;
@@ -75,7 +75,7 @@ export default {
     }),
     replace({
       "process.env.BUILD_ENV": production ? '"production"' : '"dev"',
-      "process.env.VERSION": `"${version}-${parseGitCommit()}"`,
+      "process.env.VERSION": `"cuberoom@${version}+${parseGitCommit()}"`,
     }),
     // we'll extract any component CSS out into
     // a separate file - better for performance

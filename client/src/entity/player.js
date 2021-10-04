@@ -256,7 +256,7 @@ export function loadPlayerImages(phaserScene, playerFromServer, id) {
         loadKeys.push(key);
         phaserScene.load.image(
           key,
-          `${ENV.URL_STATIC}${playerFromServer.imgUrl}${direction}-${i}.png`
+          `${playerFromServer.imgUrl}${direction}-${i}.png`
         );
       }
     }

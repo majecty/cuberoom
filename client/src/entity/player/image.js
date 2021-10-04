@@ -18,7 +18,7 @@ export function* allCharacterImageNames(id, playerImgUrl) {
     for (let i = 1; i < 5; i += 1) {
       yield [
         `player-${id}-${direction}-${i}`,
-        `${ENV.URL_STATIC}${playerImgUrl}${direction}-${i}.png`,
+        `${playerImgUrl}${direction}-${i}.png`,
       ];
       yield [
         `player-fallback-${direction}-${i}`,

@@ -12,7 +12,7 @@ cuberoom_env = os.getenv('CUBEROOM_ENV')
 
 config_values = {}
 config_values["local"] = {
-  "static_url_path": "",
+  "static_url_path": "/static",
   "static_folder": "../client/public/static",
   "cors_origin": "*",
   "public_path": "../client/public",

@@ -8,7 +8,7 @@ import {
 } from "../../entity/player";
 import { playerCreateAnimations } from "../../entity/player/animation";
 import { log } from "../../log";
-import { getPlayerId } from "../../network/protocol";
+import { loadIdAndPassword } from "../../pages/storage";
 
 /* eslint no-param-reassign: ["error", { "props": false }] */
 export function playersContainerListenRemovePlayer(container, socket) {
@@ -17,6 +17,37 @@ export function playersContainerListenRemovePlayer(container, socket) {
       container.players,
       dataFromServer
     );
+  });
+}
+
+function createOtherPlayer(
+  container,
+  phaserScene,
+  playerFromServer,
+  id,
+  debug
+) {
+  loadPlayerImages(phaserScene, playerFromServer, id, debug);
+  phaserScene.load.start();
+  phaserScene.load.once("complete", () => {
+    const { players } = container;
+    if (debug) {
+      log("listenPlayerList complete", id.substring(0, 5));
+    }
+    if (players.entries[id] == null) {
+      if (debug) {
+        log("listenPlayerList playerCreate", id.substring(0, 5));
+      }
+      playerCreateAnimations(id, phaserScene);
+      players.entries[id] = playerCreate(
+        phaserScene,
+        playerFromServer.x,
+        playerFromServer.y,
+        playerFromServer.name,
+        playerFromServer.chat,
+        playerFromServer.id
+      );
+    }
   });
 }
 
@@ -30,59 +61,26 @@ export function playersContainerListenPlayerList({
     if (debug) {
       log("listenPlayerList", sceneName);
     }
-    for (const [id, player] of Object.entries(data)) {
-      if (player.floor !== sceneName) {
+    for (const [id, playerFromServer] of Object.entries(data)) {
+      if (id === loadIdAndPassword().id) {
+        // do nothing
+      } else if (playerFromServer.floor !== sceneName) {
         if (debug) {
           log(
             "listenPlayerList skip",
             id.substring(0, 5),
-            player.floor,
+            playerFromServer.floor,
             sceneName
           );
         }
-        continue;
+      } else if (container.players.entries[id] == null) {
+        createOtherPlayer(container, phaserScene, playerFromServer, id, debug);
+      } else {
+        container.players.entries[id] = playerUpdateFromServer(
+          container.players.entries[id],
+          playerFromServer
+        );
       }
-
-      loadPlayerImages(phaserScene, player, id, debug);
-
-      // FIXME: complete event가 load랑 atomic하게 어울리는지 불안함.
-      // load가 로딩 시작한 이미지를 return하고 해당 이미지들이 전부 load되었을 때 호출하자.
-      phaserScene.load.once("complete", () => {
-        const { players } = container;
-        if (debug) {
-          log("listenPlayerList complete", id.substring(0, 5));
-        }
-        // FIXME: players[id].phaser.scene == null인 경우를 여기서 체크하는 게 이상함
-        if (
-          players.entries[id] == null ||
-          players.entries[id].phaser.scene == null
-        ) {
-          if (debug) {
-            log("listenPlayerList playerCreate", id.substring(0, 5));
-          }
-          playerCreateAnimations(id, phaserScene);
-          players.entries[id] = playerCreate(
-            phaserScene,
-            player.x,
-            player.y,
-            player.name,
-            player.chat,
-            player.id
-          );
-        } else if (getPlayerId() !== id) {
-          if (debug) {
-            log("listenPlayerList socket.id!==id", id.substring(0, 5));
-          }
-
-          players.entries[id] = playerUpdateFromServer(
-            players.entries[id],
-            player
-          );
-        } else if (debug) {
-          log("listenPlayerList socket.id===id", id.substring(0, 5));
-        }
-      });
-      phaserScene.load.start();
     }
   }
 

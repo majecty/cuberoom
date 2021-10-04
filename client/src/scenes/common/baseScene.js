@@ -130,6 +130,7 @@ export function baseSceneInit(selfScene, data) {
 
 export function baseScenePreload(selfScene) {
   log(selfScene.sceneName, "preload");
+
   const { playerImgUrl } = loadPlayerNameAndImgUrl();
   // FIXME: move this to player code
   for (const [key, file] of allCharacterImageNames(

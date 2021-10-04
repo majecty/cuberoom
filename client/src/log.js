@@ -1,3 +1,5 @@
+import { ifDebug } from "./common/debug";
+
 /* eslint-disable import/prefer-default-export */
 
 export function log(...args) {
@@ -7,4 +9,10 @@ export function log(...args) {
 
 export function logErr(...args) {
   console.error(...args);
+}
+
+export function logDebug(...args) {
+  ifDebug(() => {
+    console.log(...args);
+  });
 }

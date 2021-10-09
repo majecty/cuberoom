@@ -1,16 +1,13 @@
 /* eslint no-param-reassign: ["error", { "props": false }] */
-import {
-  updatePlayerMoveAnimation,
-  updateInitAnimation,
-  updatePeerPlayerAnimation,
-} from "./player/animation";
+import { updatePeerPlayerAnimation } from "./player/animation";
 import { log } from "../log";
-import { playerSpeed, depth, zoom } from "../constant";
+import { depth, zoom } from "../constant";
 import {
   playerNetworkCreate,
   playerNetworkGetThisFramePosition,
   playerNetworkUpdate,
 } from "./player/network";
+import { getPlayerDepth } from "./player/common";
 
 export function playerCreate(scene, x, y, name, chat, id) {
   let idStr = "";
@@ -70,85 +67,6 @@ export function playerCreate(scene, x, y, name, chat, id) {
     chatBubble,
     id,
   };
-}
-
-function initmove(player) {
-  const velocity = 1;
-  let newPrevMove = player.prevMove;
-
-  player.phaser.body.setVelocityX(velocity);
-  newPrevMove = "right";
-
-  return {
-    ...player,
-    prevMove: newPrevMove,
-  };
-}
-
-function getPlayerDepth(player) {
-  return depth.player + player.phaser.y / 10000;
-}
-
-function followClick(player, destinationX, destinationY) {
-  const tempX = player.phaser.x;
-  const tempY = player.phaser.y;
-
-  const velocity = playerSpeed;
-
-  let newPrevMove = "stop";
-
-  if (destinationX + 5 < player.phaser.x) {
-    player.phaser.body.setVelocityX(-velocity);
-    newPrevMove = "left";
-  } else if (destinationX > 5 + player.phaser.x) {
-    player.phaser.body.setVelocityX(velocity);
-    newPrevMove = "right";
-  } else {
-    player.phaser.body.setVelocityX(0);
-  }
-
-  if (destinationY + 5 < player.phaser.y) {
-    player.phaser.body.setVelocityY(-velocity);
-    newPrevMove = "up";
-  } else if (player.phaser.y + 5 < destinationY) {
-    player.phaser.body.setVelocityY(velocity);
-    newPrevMove = "down";
-  } else {
-    player.phaser.body.setVelocityY(0);
-  }
-
-  if (
-    Math.abs(tempX - destinationX) < 11 &&
-    Math.abs(tempY - destinationY) < 11
-  ) {
-    player.phaser.body.setVelocityY(0);
-    newPrevMove = "stop";
-  }
-
-  return {
-    ...player,
-    prevMove: newPrevMove,
-  };
-}
-
-export function playerFollowClickUpdate(
-  player,
-  destinationX,
-  destinationY,
-  scene
-) {
-  let newPlayer = updatePlayerMoveAnimation(scene, player);
-  newPlayer = followClick(newPlayer, destinationX, destinationY, scene);
-  newPlayer.phaser.depth = getPlayerDepth(newPlayer);
-  newPlayer.chatBubble.depth = depth.nameLabel;
-  newPlayer.nameLabel.depth = depth.nameLabel;
-  return newPlayer;
-}
-
-export function playerinitmove(player) {
-  let newPlayer = updateInitAnimation(player);
-  newPlayer = initmove(newPlayer);
-  return newPlayer;
 }
 
 /**

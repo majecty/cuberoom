@@ -1,14 +1,14 @@
 import { zoom } from "../constant";
 
 export const popupPos = {
-  1: { x: 32 / zoom * 6, y: 32 / zoom * 60 },
-  2: { x: 32 / zoom * 24.5, y: 32 / zoom * 42 },
-  3: { x: 32 / zoom * 34.5, y: 32 / zoom * 38 },
-  4: { x: 32 / zoom * 43, y: 32 / zoom * 37 },
-  5: { x: 32 / zoom * 7, y: 32 / zoom * 24 },
-  6: { x: 32 / zoom * 22, y: 32 / zoom * 20 },
-  7: { x: 32 / zoom * 41, y: 32 / zoom * 28 },
-  8: { x: 32 / zoom * 18, y: 32 / zoom * 12 },
+  1: { x: (32 / zoom) * 6, y: (32 / zoom) * 60 },
+  2: { x: (32 / zoom) * 24.5, y: (32 / zoom) * 42 },
+  3: { x: (32 / zoom) * 34.5, y: (32 / zoom) * 38 },
+  4: { x: (32 / zoom) * 43, y: (32 / zoom) * 37 },
+  5: { x: (32 / zoom) * 7, y: (32 / zoom) * 24 },
+  6: { x: (32 / zoom) * 22, y: (32 / zoom) * 20 },
+  7: { x: (32 / zoom) * 41, y: (32 / zoom) * 28 },
+  8: { x: (32 / zoom) * 18, y: (32 / zoom) * 12 },
 };
 
 const works = {

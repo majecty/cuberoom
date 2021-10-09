@@ -26,7 +26,7 @@ config_values["staging"] = {
   "cors_origin": "http://test.cuberoom.net",
   "public_path": "../client/public", # please check this in the deployed environment
   "user_image_prefix": "character-resource",
-  "port": 5001 # default port in flask
+  "port": 5003 # default port in flask
 }
 
 config_values["production"] = {
@@ -35,11 +35,20 @@ config_values["production"] = {
   "cors_origin": "http://cuberoom.net",
   "public_path": "../client/public", # please check this in the deployed environment
   "user_image_prefix": "character-resource",
-  "port": 5000 # default port in flask
+  "port": 5002 # default port in flask
 }
 
-if cuberoom_env not in ["local", "production", "staging"]:
-    sys.exit("please set CUBEROOM_ENV environment variable to `local` or `production`")
+config_values["prev"] = {
+  "static_url_path": "/static",
+  "static_folder": "../client/public/static",
+  "cors_origin": "http://prev.cuberoom.net",
+  "public_path": "../client/public", # please check this in the deployed environment
+  "user_image_prefix": "character-resource",
+  "port": 5001 # default port in flask
+}
+
+if cuberoom_env not in ["local", "production", "staging", "prev"]:
+    sys.exit("please set CUBEROOM_ENV environment variable to `local` or `production`, `staging`, `prev`")
 
 config_value = config_values[cuberoom_env]
 

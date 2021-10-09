@@ -32,9 +32,11 @@ const devEnv = {
 function getProdURL() {
   if (location.host.indexOf("test") !== -1) {
     // test server
-    return "http://test.cuberoom.net/";
+    return "https://test.cuberoom.net/";
+  } else if (location.host.indexOf() !== -1) {
+    return "https://prev.cuberoom.net/";
   } else {
-    return "http://cuberoom.net";
+    return "https://cuberoom.net";
   }
 }
 

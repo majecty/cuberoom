@@ -5,7 +5,6 @@ import {
   updatePeerPlayerAnimation,
 } from "./player/animation";
 import { log } from "../log";
-import ENV from "../../ENV";
 import { playerSpeed, depth, zoom } from "../constant";
 import {
   playerNetworkCreate,

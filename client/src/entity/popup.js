@@ -1,6 +1,5 @@
-import { zoom } from "../constant";
+import { zoom, depth } from "../constant";
 import works from "./works";
-import { depth } from "../constant";
 
 let popupSprite;
 let descriptionContainer;

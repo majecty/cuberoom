@@ -1,6 +1,6 @@
 /* eslint no-param-reassign: ["error", { "props": false }] */
 import {
-  updateFollowClickAnimation,
+  updatePlayerMoveAnimation,
   updateInitAnimation,
   updatePeerPlayerAnimation,
 } from "./player/animation";
@@ -137,12 +137,7 @@ export function playerFollowClickUpdate(
   destinationY,
   scene
 ) {
-  let newPlayer = updateFollowClickAnimation(
-    scene,
-    player,
-    destinationX,
-    destinationY
-  );
+  let newPlayer = updatePlayerMoveAnimation(scene, player);
   newPlayer = followClick(newPlayer, destinationX, destinationY, scene);
   newPlayer.phaser.depth = getPlayerDepth(newPlayer);
   newPlayer.chatBubble.depth = depth.nameLabel;

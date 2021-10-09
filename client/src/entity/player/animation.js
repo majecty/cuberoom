@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 
 import { animationFrames } from "./image";
-import { logErr, logDebug } from "../../log";
+import { logErr } from "../../log";
 
 const directions = ["down", "up", "left", "right"];
 

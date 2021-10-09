@@ -20,7 +20,10 @@ function elButton(x, y, floor) {
 }
 
 export function hideElevatorPanel() {
-  if (panelContainer) document.body.removeChild(panelContainer);
+  if (panelContainer) {
+    document.body.removeChild(panelContainer);
+    panelContainer = null;
+  }
 }
 
 export function showElevatorPanel(scene, floor) {

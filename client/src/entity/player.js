@@ -21,7 +21,13 @@ export function playerCreate(scene, x, y, name, chat, id) {
     idStr = id;
   }
   log("playerCreate", scene.sceneName, name, idStr.substring(0, 5));
-  const phaser = scene.physics.add.sprite(x, y, `player-${id}-down-2`, 1);
+  let frameName = "";
+  if (scene.textures.exists(`player-${id}-down-2`)) {
+    frameName = `player-${id}-down-2`;
+  } else {
+    frameName = `player-fallback-down-2`;
+  }
+  const phaser = scene.physics.add.sprite(x, y, frameName, 1);
   phaser.setSize(20, 20, false).setOffset(0, 20);
   phaser.depth = depth.player;
   phaser.scale = 2 / zoom;
@@ -198,9 +204,9 @@ export function playerFollowNetworkPos(player, dtMillis) {
 
   // FIXME: do not update nameLabel, chatBubble this way
   player.nameLabel.x = newX;
-  player.nameLabel.y = newY - 30;
+  player.nameLabel.y = newY - 45;
   player.chatBubble.x = newX;
-  player.chatBubble.y = newY - 50;
+  player.chatBubble.y = newY - 70;
   player.phaser.depth = getPlayerDepth(player);
   player.chatBubble.depth = depth.nameLabel;
   player.nameLabel.depth = depth.nameLabel;
@@ -214,7 +220,11 @@ export function playerFollowNetworkPos(player, dtMillis) {
 }
 
 export function playerAddChat(player, chat) {
-  const formattedChat = chat.match(/.{1,12}/g).join("\n");
+  let lines = chat.match(/.{1,12}/g);
+  if (lines == null) {
+    lines = [];
+  }
+  const formattedChat = lines.join("\n");
   player.chatBubble.setText(formattedChat);
   player.chatBubble.setPadding(4);
   return player;
@@ -246,7 +256,7 @@ export function loadPlayerImages(phaserScene, playerFromServer, id) {
         loadKeys.push(key);
         phaserScene.load.image(
           key,
-          `${ENV.URL_STATIC}${playerFromServer.imgUrl}${direction}-${i}.png`
+          `${playerFromServer.imgUrl}${direction}-${i}.png`
         );
       }
     }

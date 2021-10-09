@@ -54,4 +54,8 @@ if (process.env.BUILD_ENV === "production") {
   ENV = devEnv;
 }
 
+if (window != null) {
+  window.ENV = ENV;
+}
+
 export default ENV;

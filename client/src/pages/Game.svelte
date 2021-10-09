@@ -34,7 +34,7 @@
       let hairC = getRandomInt(1, 5);
       let hairS = getRandomInt(1, 13);
       let cloth = getRandomInt(1, 13);
-      const imgUrl = `/character-resource/skin${skin}_hairC${hairC}_cloth${cloth}_hairS${hairS}_faceS${faceS}/`;
+      const imgUrl = `/static/character-resource/skin${skin}_hairC${hairC}_cloth${cloth}_hairS${hairS}_faceS${faceS}/`;
       const name = names[Math.floor(Math.random() * names.length)];
       saveCharacterSelection(imgUrl, name);
     }

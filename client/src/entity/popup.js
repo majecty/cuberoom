@@ -1,5 +1,6 @@
 import { zoom } from "../constant";
 import works from "./works";
+import { depth } from "../constant";
 
 let popupSprite;
 let descriptionContainer;
@@ -9,6 +10,7 @@ export function popupCreate(scene, { x, y }, workNum) {
   popupSprite = scene.add.sprite(x, y, "popup");
   popupSprite.setInteractive();
   popupSprite.scale = 2 / zoom;
+  popupSprite.depth = depth.popup;
 
   // FIXME: event 등록 해제해야 하는지 확인 필요
   popupSprite.on("pointerover", () => {

@@ -272,7 +272,7 @@
   on:touchend={() => window.game.input.enabled = true}
   on:submit|preventDefault={addChat}
 >
-  <input maxlength="30" placeholder="엔터 키를 누르면 대화할 수 있습니다." on:keydown={handleKeydown} bind:value={chat} />
+  <input maxlength="60" placeholder="엔터 키를 누르면 대화할 수 있습니다." on:keydown={handleKeydown} bind:value={chat} />
   <button on:click|preventDefault={addChat}>↵</button>
 </form>
 

@@ -40,6 +40,8 @@ export function moveWithKeyboard(player, scene) {
   } else if (scene.cursors.right.isDown || player.keyboard.d.isDown) {
     player.phaser.body.setVelocityX(speed);
     newPrevMove = "right";
+  } else {
+    player.phaser.body.setVelocityX(0);
   }
 
   if (scene.cursors.up.isDown || player.keyboard.w.isDown) {
@@ -48,11 +50,8 @@ export function moveWithKeyboard(player, scene) {
   } else if (scene.cursors.down.isDown || player.keyboard.s.isDown) {
     player.phaser.body.setVelocityY(speed);
     newPrevMove = "down";
-  }
-
-  if (newPrevMove === "stop") {
+  } else {
     player.phaser.body.setVelocityY(0);
-    player.phaser.body.setVelocityX(0);
   }
 
   return {

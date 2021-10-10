@@ -272,7 +272,7 @@
   on:touchend={() => window.game.input.enabled = true}
   on:submit|preventDefault={addChat}
 >
-  <input maxlength="30" placeholder="엔터 키를 누르면 대화할 수 있습니다." on:keydown={handleKeydown} bind:value={chat} />
+  <input maxlength="60" placeholder="엔터 키를 누르면 대화할 수 있습니다." on:keydown={handleKeydown} bind:value={chat} />
   <button on:click|preventDefault={addChat}>↵</button>
 </form>
 
@@ -290,6 +290,7 @@
 
   #chat input {
     flex: 1;
+    min-width: 50%;
     margin-right: 10px;
     font-family: NeoDunggeunmo;
     padding: 14px;
@@ -302,11 +303,12 @@
   }
 
   #chat button {
+    flex: 0;
     background-color: lightgrey;
     font-family: NeoDunggeunmo;
     border: none;
     font-size: 30px;
-    width: 60px;
+    width: 30px;
   }
 
   @media (orientation: portrait) {
@@ -324,7 +326,7 @@
     }
 
     #chat button {
-      width: 50px;
+      width: 30px;
       font-size: 24px;
     }
   }

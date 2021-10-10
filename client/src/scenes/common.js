@@ -13,6 +13,18 @@ export const FLOOR_NAMES = {
   SecondBasementScene: "B2",
 };
 
+export const FLOOR_TO_SCENE = {
+  entrance: "EntranceScene",
+  "1F": "FirstFloorScene",
+  "2F": "SecondFloorScene",
+  "5F": "FifthFloorScene",
+  "6F": "SixthFloorScene",
+  "7F": "SeventhFloorScene",
+  "8F": "EighthFloorScene",
+  B1: "FirstBasementScene",
+  B2: "SecondBasementScene",
+};
+
 /**
  * removePlayer: functions that remove player from scene
  */

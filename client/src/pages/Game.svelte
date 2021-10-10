@@ -290,6 +290,7 @@
 
   #chat input {
     flex: 1;
+    min-width: 50%;
     margin-right: 10px;
     font-family: NeoDunggeunmo;
     padding: 14px;
@@ -302,6 +303,7 @@
   }
 
   #chat button {
+    flex: 0;
     background-color: lightgrey;
     font-family: NeoDunggeunmo;
     border: none;

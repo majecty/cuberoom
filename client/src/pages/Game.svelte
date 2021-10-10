@@ -224,11 +224,11 @@
   }
 
   document.addEventListener('keydown', (e) => {
-    if (e.key === "a") {
+    if (e.key === "z") {
       printAllPlayers();
     }
 
-    if (e.key === "s") {
+    if (e.key === "x") {
       getPlayersFromServer();
     }
   });

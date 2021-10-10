@@ -99,7 +99,7 @@ function animFromPrevMove(player, move) {
   return `player-${player.id}-${move}`;
 }
 
-function updateFollowClickAnimationInner(scene, player) {
+function updatePlayerMoveAnimationInner(scene, player) {
   if (player.prevMove === "stop") {
     return stopAnimation(player);
   }
@@ -126,20 +126,10 @@ function updateFollowClickAnimationInner(scene, player) {
   };
 }
 
-export function updateFollowClickAnimation(
-  scene,
-  player,
-  destinationX,
-  destinationY
-) {
+export function updatePlayerMoveAnimation(scene, player) {
   try {
     const prev = player.prevAnim;
-    const newPlayer = updateFollowClickAnimationInner(
-      scene,
-      player,
-      destinationX,
-      destinationY
-    );
+    const newPlayer = updatePlayerMoveAnimationInner(scene, player);
     const newAnim = newPlayer.prevAnim;
     if (prev !== newAnim) {
       // logDebug("anim changed", { prev, newAnim });

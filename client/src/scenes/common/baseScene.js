@@ -2,11 +2,11 @@
 import { log, logErr } from "../../log";
 import {
   playerCreate,
-  playerinitmove,
-  playerFollowClickUpdate,
   playerMoveNameLabelAndChatBubble,
   playerFollowNetworkPos,
 } from "../../entity/player";
+import { playerMove } from "../../entity/player/move";
+import { playerAddKey } from "../../entity/player/move/keyboard";
 import {
   mapUpdateMousePoint,
   mapOnPointerDown,
@@ -166,12 +166,13 @@ export function baseSceneCreate({
     getPlayerId(),
     playerImgUrl
   ); // 소켓 연결 되면 이 부분을 지워야 함
+  selfScene.player = playerAddKey(selfScene.player, selfScene);
+
   selfScene.players = playersAddPlayer(
     selfScene.players,
     getPlayerId(),
     selfScene.player
   );
-  selfScene.player = playerinitmove(selfScene.player);
 
   protocol.addPlayer(selfScene.socket, {
     name: playerName,
@@ -216,18 +217,17 @@ export function baseSceneCreate({
 }
 
 export function baseSceneUpdate(selfScene, dtMillis) {
-  const pointer = selfScene.input.activePointer;
-
   // player can be removed since removePlayer is called
   if (selfScene.player == null) {
     return;
   }
 
-  selfScene.player = playerFollowClickUpdate(
+  selfScene.player = playerMove(
     selfScene.player,
     selfScene.destinationX,
     selfScene.destinationY,
-    selfScene
+    selfScene,
+    dtMillis
   );
   for (const [id, otherPlayer] of playersEntries(selfScene.players)) {
     if (id !== selfScene.player.id) {
@@ -249,19 +249,10 @@ export function baseSceneUpdate(selfScene, dtMillis) {
     selfScene.map
   );
 
-  if (pointer.isDown) {
-    selfScene.destinationX = selfScene.input.activePointer.worldX;
-    selfScene.destinationY = selfScene.input.activePointer.worldY;
-  }
-
   selfScene.player = playerMoveNameLabelAndChatBubble(selfScene.player);
 
-  if (
-    selfScene.destinationX &&
-    selfScene.destinationY &&
-    (Math.abs(selfScene.destinationX - selfScene.player.phaser.x) > 20 ||
-      Math.abs(selfScene.destinationY - selfScene.player.phaser.y) > 20)
-  ) {
+  // TODO: stop이더라도 실제 이동하는 위치는 없을 수 있다.
+  if (selfScene.player.prevMove !== "stop") {
     rateLimiterTrigger(selfScene.rateLimiter, () => {
       // 씬을 이동할 경우 씬이 끝난 뒤에 이 코드가 호출될 수 있음.
       // rateLimiter의 경우 마지막 요청이 timeout 뒤에 호출함.

@@ -9,4 +9,5 @@ export const depth = {
   player: 1,
   overPlayer: 2,
   nameLabel: 3,
+  popup: 4,
 };

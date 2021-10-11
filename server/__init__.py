@@ -271,6 +271,7 @@ def debugMessage(data):
 def disconnect():
     global players, players_changed, players_lock
 
+    id = None
     players_lock.acquire()
     try:
         players_changed = True
@@ -280,7 +281,8 @@ def disconnect():
         players_id_to_password.pop(id)
     finally:
         players_lock.release()
-    emit('removePlayer', { 'id': request.sid })
+    if id != None:
+        emit('removePlayer', { 'id': id }, broadcast=True)
 
 def broadcastPlayserListLoop():
     while True:

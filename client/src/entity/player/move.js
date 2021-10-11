@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 
-import { followClick } from "./move/mouse";
+import { followClick, isMouseInputEnabled } from "./move/mouse";
 import { updatePlayerMoveAnimation } from "./animation";
 import { moveWithKeyboard, keyPressed } from "./move/keyboard";
 import { getPlayerDepth } from "./common";
@@ -24,7 +24,7 @@ export function playerMove(
   const pointer = scene.input.activePointer;
   let newPlayer = { ...player };
   // FIXME: move detination to player
-  if (pointer.isDown) {
+  if (pointer.isDown && isMouseInputEnabled()) {
     scene.destinationX = scene.input.activePointer.worldX;
     scene.destinationY = scene.input.activePointer.worldY;
     newPlayer.lastMoveInput = "mouse";

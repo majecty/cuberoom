@@ -2,11 +2,13 @@
   import ElevatorPanelFloorButton from "./ElevatorPanelFloorButton.svelte";
   import ElevatorPanelUtilButton from "./ElevatorPanelUtilButton.svelte";
   import { onDestroy } from "svelte";
+  import { panelWidth } from "./elevatorConstant";
 
   let nodeRef;
 
   export let floor;
   export let scene;
+  export let leftX = null;
 
   const globalOnMouseDown = () => {
     game.input.enabled = false;
@@ -21,6 +23,8 @@
 
   const styles = {
     "background-image": `url("/static/img/ui-map/el_panel_${floor}.png")`,
+    "left-x": `${leftX}px`,
+    "panel-width": `${panelWidth}px`,
   };
 
   $: cssVarStyles = Object.entries(styles)
@@ -78,6 +82,7 @@
     on:mouseup="{globalOnMouseUp}"
     on:touchstart="{globalOnMouseDown}"
     on:touchend="{globalOnMouseUp}"
+    class:leftX="{leftX != null}"
   >
     {#each elevatorButtonData as buttonData}
     <ElevatorPanelFloorButton
@@ -106,9 +111,13 @@
   }
 
   .panel {
-    width: 224px;
+    width: var(--panel-width);
     height: 472px;
-    position: relative;
+    position: absolute;
     background-image: var(--background-image);
+  }
+
+  .panel.leftX {
+    left: var(--left-x);
   }
 </style>

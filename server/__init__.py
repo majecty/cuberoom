@@ -57,7 +57,7 @@ app = Flask(__name__, static_url_path=config_value["static_url_path"],
 CORS(app, resources={r'*': {'origins': config_value["cors_origin"]}})
 
 app.secret_key = "cuberoom"
-socketio = SocketIO(app, cors_allowed_origins="*")
+socketio = SocketIO(app, cors_allowed_origins="*", async_mode="eventlet")
 
 @app.route("/<string:text>")
 def base_all(text):
@@ -271,6 +271,7 @@ def debugMessage(data):
 def disconnect():
     global players, players_changed, players_lock
 
+    id = None
     players_lock.acquire()
     try:
         players_changed = True
@@ -280,7 +281,8 @@ def disconnect():
         players_id_to_password.pop(id)
     finally:
         players_lock.release()
-    emit('removePlayer', { 'id': request.sid })
+    if id != None:
+        emit('removePlayer', { 'id': id }, broadcast=True)
 
 def broadcastPlayserListLoop():
     while True:

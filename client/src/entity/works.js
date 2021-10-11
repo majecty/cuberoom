@@ -1,13 +1,22 @@
 import { zoom } from "../constant";
 
 export const popupPos = {
+  // B1
   1: { x: (32 / zoom) * 6, y: (32 / zoom) * 60 },
+  // B1
   2: { x: (32 / zoom) * 24.5, y: (32 / zoom) * 42 },
+  // B1
   3: { x: (32 / zoom) * 34.5, y: (32 / zoom) * 38 },
+  // B1
   4: { x: (32 / zoom) * 43, y: (32 / zoom) * 37 },
+
+  // B2
   5: { x: (32 / zoom) * 7, y: (32 / zoom) * 24 },
+  // B2
   6: { x: (32 / zoom) * 22, y: (32 / zoom) * 20 },
+  // B2
   7: { x: (32 / zoom) * 41, y: (32 / zoom) * 28 },
+  // B2
   8: { x: (32 / zoom) * 18, y: (32 / zoom) * 12 },
 };
 

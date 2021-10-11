@@ -2,6 +2,19 @@
 /* eslint no-param-reassign: ["error", { "props": false }] */
 import { playerSpeed } from "../../../constant";
 
+window.enableMouseInput = true;
+export function disableMouseInput() {
+  window.enableMouseInput = false;
+}
+
+export function enableMouseInput() {
+  window.enableMouseInput = true;
+}
+
+export function isMouseInputEnabled() {
+  return window.enableMouseInput;
+}
+
 export function followClick(player, destinationX, destinationY, dtMillis) {
   const velocity = playerSpeed;
   const moveDiff = ((dtMillis * velocity) / 1000) * 1.5;

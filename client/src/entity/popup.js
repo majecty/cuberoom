@@ -1,6 +1,11 @@
 import { zoom, depth } from "../constant";
 import works from "./works";
 import ArtDescription from "./ArtDescription.svelte";
+import {
+  enableMouseInput,
+  disableMouseInput,
+  isMouseInputEnabled,
+} from "./player/move/mouse";
 
 let popupSprite;
 
@@ -19,6 +24,9 @@ export function popupCreate(scene, { x, y }, workNum) {
   // FIXME: event 등록 해제해야 하는지 확인 필요
   popupSprite.on("pointerout", () => {
     scene.input.setDefaultCursor("auto");
+    if (isMouseInputEnabled() != true) {
+      enableMouseInput();
+    }
   });
 
   // FIXME: event 등록 해제해야 하는지 확인 필요
@@ -40,6 +48,11 @@ export function popupCreate(scene, { x, y }, workNum) {
       },
     });
     window.artDescription = artDescription;
+    disableMouseInput();
+  });
+
+  popupSprite.on("pointerup", () => {
+    enableMouseInput();
   });
 
   return {

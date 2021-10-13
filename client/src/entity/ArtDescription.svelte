@@ -188,6 +188,10 @@
       width: calc(100% - 25px);
     }
 
+    .medium {
+      width: calc(100% - 25px);
+    }
+
     .link1 {
       margin-bottom: 20px;
     }

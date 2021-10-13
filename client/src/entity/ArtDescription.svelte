@@ -184,6 +184,10 @@
       height: 80px;
     }
 
+    .title {
+      width: calc(100% - 25px);
+    }
+
     .link1 {
       margin-bottom: 20px;
     }
@@ -203,5 +207,4 @@
       padding: 20%;
     }
   }
-
 </style>

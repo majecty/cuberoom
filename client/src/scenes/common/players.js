@@ -1,4 +1,5 @@
 import { log } from "../../log";
+import { chatDestroy } from "../../entity/player/chat";
 
 export function playersCreate(sceneName) {
   return { sceneName, entries: {} };
@@ -20,7 +21,7 @@ export function playersOnRemovePlayer(players, dataFromServer) {
     // 여기서 player.phaser.destroy를 하면 player도 영향을 받음.
     players.entries[id].phaser.destroy(true);
     players.entries[id].nameLabel.destroy(true);
-    players.entries[id].chatBubble.destroy(true);
+    chatDestroy(players.entries[id].chat);
 
     const newPlayers = { ...players };
     delete newPlayers.entries[id];

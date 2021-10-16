@@ -24,7 +24,7 @@ export function popupCreate(scene, { x, y }, workNum) {
   // FIXME: event 등록 해제해야 하는지 확인 필요
   popupSprite.on("pointerout", () => {
     scene.input.setDefaultCursor("auto");
-    if (isMouseInputEnabled() != true) {
+    if (isMouseInputEnabled() !== true) {
       enableMouseInput();
     }
   });

@@ -1,11 +1,10 @@
 import { playersOnRemovePlayer } from "./players";
 import {
   playerCreate,
-  playerAddChat,
-  playerRemoveChat,
   playerUpdateFromServer,
   loadPlayerImages,
 } from "../../entity/player";
+import { chatUpdateText } from "../../entity/player/chat";
 import { playerCreateAnimations } from "../../entity/player/animation";
 import { log } from "../../log";
 import { loadIdAndPassword } from "../../pages/storage";
@@ -88,7 +87,16 @@ export function playersContainerListenPlayerList({
   socket.on("debugPlayerList", (data) => listener(data, true));
 }
 
-export function playersContainerListenAddChat(container, socket, sceneName) {
+/**
+ * @param {Scene} scene is a phaser scene
+ * @param {{ players: Object }} container is an object that contains players
+ */
+export function playersContainerListenAddChat(
+  scene,
+  container,
+  socket,
+  sceneName
+) {
   /**
    * @param dataFromServer field id, chat, floor
    */
@@ -98,19 +106,27 @@ export function playersContainerListenAddChat(container, socket, sceneName) {
       dataFromServer.floor === sceneName &&
       players.entries[dataFromServer.id]
     ) {
-      players.entries[dataFromServer.id] = playerAddChat(
-        players.entries[dataFromServer.id],
-        dataFromServer.chat
-      );
+      const player = players.entries[dataFromServer.id];
+      player.chat = chatUpdateText(scene, player.chat, dataFromServer.chat);
     }
   });
 }
 
-export function playersContainerListenRemoveChat(container, socket, sceneName) {
+/**
+ * @param {Scene} scene is a phaser scene
+ * @param {{ players: Object }} container is an object that contains players
+ */
+export function playersContainerListenRemoveChat(
+  scene,
+  container,
+  socket,
+  sceneName
+) {
   socket.on("removeChat", (data) => {
     const { players } = container;
     if (data.floor === sceneName && players.entries[data.id]) {
-      players.entries[data.id] = playerRemoveChat(players.entries[data.id]);
+      const player = players.entries[data.id];
+      player.chat = chatUpdateText(scene, player.chat, "");
     }
   });
 }

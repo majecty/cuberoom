@@ -7,10 +7,6 @@ import {
 } from "../../entity/player";
 import { playerMove } from "../../entity/player/move";
 import { playerAddKey } from "../../entity/player/move/keyboard";
-import {
-  mapUpdateMousePoint,
-  mapOnPointerDown,
-} from "../../entity/map/interaction";
 import { allCharacterImageNames } from "../../entity/player/image";
 import { playerCreateAnimations } from "../../entity/player/animation";
 import { mapCreate, mapCreateOverCharacterLayer } from "../../entity/map";
@@ -210,10 +206,6 @@ export function baseSceneCreate({
   });
 
   selfScene.cursors = selfScene.input.keyboard.createCursorKeys();
-
-  selfScene.input.on("pointerdown", (pointer) =>
-    mapOnPointerDown(selfScene.map, pointer)
-  );
 }
 
 export function baseSceneUpdate(selfScene, dtMillis) {
@@ -242,7 +234,6 @@ export function baseSceneUpdate(selfScene, dtMillis) {
       }
     }
   }
-  mapUpdateMousePoint(selfScene.map, selfScene);
   selfScene.playerOnMap = playerOnMapUpdate(
     selfScene.playerOnMap,
     selfScene.player,

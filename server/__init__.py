@@ -310,9 +310,10 @@ def disconnect():
     try:
         players_changed = True
         id = players_sid_to_id.get(request.sid)
-        players.pop(id, None)
-        players_sid_to_id.pop(request.sid)
-        players_id_to_password.pop(id)
+        if id != None:
+            players.pop(id, None)
+            players_sid_to_id.pop(request.sid)
+            players_id_to_password.pop(id)
     finally:
         players_lock.release()
     if id != None:

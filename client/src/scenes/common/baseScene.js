@@ -2,9 +2,10 @@
 import { log, logErr } from "../../log";
 import {
   playerCreate,
-  playerMoveNameLabelAndChatBubble,
+  playerMoveNameLabelAndChat,
   playerFollowNetworkPos,
 } from "../../entity/player";
+import { loadChatBackgroundImage } from "../../entity/player/chat/background";
 import { playerMove } from "../../entity/player/move";
 import { playerAddKey } from "../../entity/player/move/keyboard";
 import { allCharacterImageNames } from "../../entity/player/image";
@@ -70,10 +71,12 @@ export function baseSceneConstructor(selfScene, sceneName) {
   });
   playersContainerListenAddChat(
     selfScene,
+    selfScene,
     selfScene.socket,
     selfScene.sceneName
   );
   playersContainerListenRemoveChat(
+    selfScene,
     selfScene,
     selfScene.socket,
     selfScene.sceneName
@@ -135,6 +138,8 @@ export function baseScenePreload(selfScene) {
   )) {
     selfScene.load.image(key, file);
   }
+
+  loadChatBackgroundImage(selfScene);
 }
 
 /**
@@ -240,7 +245,7 @@ export function baseSceneUpdate(selfScene, dtMillis) {
     selfScene.map
   );
 
-  selfScene.player = playerMoveNameLabelAndChatBubble(selfScene.player);
+  selfScene.player = playerMoveNameLabelAndChat(selfScene.player);
 
   // TODO: stop이더라도 실제 이동하는 위치는 없을 수 있다.
   if (selfScene.player.prevMove !== "stop") {

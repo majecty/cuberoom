@@ -1,5 +1,6 @@
 /* eslint no-param-reassign: ["error", { "props": false }] */
 import { updatePeerPlayerAnimation } from "./player/animation";
+import { createPlayerChat, chatUpdatePosition } from "./player/chat";
 import { log } from "../log";
 import { depth, zoom } from "../constant";
 import {
@@ -9,7 +10,7 @@ import {
 } from "./player/network";
 import { getPlayerDepth } from "./player/common";
 
-export function playerCreate(scene, x, y, name, chat, id) {
+export function playerCreate(scene, x, y, name, chatText, id) {
   let idStr = "";
   if (id == null) {
     idStr = "isnull";
@@ -37,20 +38,12 @@ export function playerCreate(scene, x, y, name, chat, id) {
     align: "center",
   });
 
-  const chatBubble = scene.add.text(x, y - 70, chat, {
-    fontFamily: "NeoDunggeunmo",
-    fontSize: "16px",
-    fill: "#ffffff",
-    align: "center",
-    backgroundColor: "rgba(0,0,0,0.5)",
-  });
-
   nameLabel.setOrigin(0.5, 0.5);
-  chatBubble.setOrigin(0.5, 0.5);
   nameLabel.depth = depth.nameLabel;
-  chatBubble.depth = depth.nameLabel;
 
-  scene.physics.world.enable([nameLabel, chatBubble]);
+  const chat = createPlayerChat(scene, chatText, x, y);
+
+  scene.physics.world.enable([nameLabel, chat]);
 
   return {
     phaser,
@@ -64,36 +57,21 @@ export function playerCreate(scene, x, y, name, chat, id) {
     prevAnim: "player-idle",
     prevMove: "stop",
     nameLabel,
-    chatBubble,
+    chat,
     id,
   };
 }
 
 function updateUpdateAtPosition(player, newX, newY) {
-  // FIXME: do not update nameLabel, chatBubble this way
+  // FIXME: do not update nameLabel, chat this way
   player.nameLabel.x = newX;
   player.nameLabel.y = newY - 55;
-}
-
-function updateChatBubblePosition(player, newX, newY) {
-  // FIXME: do not update nameLabel, chatBubble this way
-  player.chatBubble.x = newX;
-  player.chatBubble.y = newY - 80;
 }
 
 /**
  * @param playerFromServer x, y, id, direction
  */
 export function playerUpdateFromServer(player, playerFromServer) {
-  if (player.phaser.depth === 0) {
-    // FIXME
-    // 언제 depth가 0이 되는 거지
-    // 이 위치에서 depth를 수정하는 건 이상함.
-    log("playerUpdateFromServer depth 0");
-    player.phaser.setDepth(1);
-    player.nameLabel.setDepth(1);
-    player.chatBubble.setDepth(1);
-  }
   player.network = playerNetworkUpdate(
     player.network,
     {
@@ -127,10 +105,8 @@ export function playerFollowNetworkPos(player, dtMillis) {
   player.phaser.y = newY;
 
   updateUpdateAtPosition(player, newX, newY);
-  updateChatBubblePosition(player, newX, newY);
+  player.chat = chatUpdatePosition(player.chat, newX, newY);
   player.phaser.depth = getPlayerDepth(player);
-  player.chatBubble.depth = depth.nameLabel;
-  player.nameLabel.depth = depth.nameLabel;
 
   // TODO: update direction
   // player.phaser.setTexture(
@@ -138,23 +114,6 @@ export function playerFollowNetworkPos(player, dtMillis) {
   // );
 
   return updatePeerPlayerAnimation(player, newX - prevX, newY - prevY, stop);
-}
-
-export function playerAddChat(player, chat) {
-  let lines = chat.match(/.{1,12}/g);
-  if (lines == null) {
-    lines = [];
-  }
-  const formattedChat = lines.join("\n");
-  player.chatBubble.setText(formattedChat);
-  player.chatBubble.setPadding(4);
-  return player;
-}
-
-export function playerRemoveChat(player) {
-  player.chatBubble.setText("");
-  player.chatBubble.setPadding(0);
-  return player;
 }
 
 /**
@@ -185,8 +144,12 @@ export function loadPlayerImages(phaserScene, playerFromServer, id) {
   return loadKeys;
 }
 
-export function playerMoveNameLabelAndChatBubble(player) {
+export function playerMoveNameLabelAndChat(player) {
   updateUpdateAtPosition(player, player.phaser.x, player.phaser.y);
-  updateChatBubblePosition(player, player.phaser.x, player.phaser.y);
+  player.chat = chatUpdatePosition(
+    player.chat,
+    player.phaser.x,
+    player.phaser.y
+  );
   return player;
 }

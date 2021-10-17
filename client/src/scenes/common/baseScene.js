@@ -53,9 +53,11 @@ export function baseSceneConstructor(selfScene, sceneName) {
   selfScene.sceneName = sceneName;
   selfScene.players = playersCreate(sceneName);
   selfScene.rateLimiter = rateLimiterCreate();
+  selfScene.stop = false;
 
-  playersContainerListenRemovePlayer(selfScene, selfScene.socket);
+  playersContainerListenRemovePlayer(selfScene, selfScene, selfScene.socket);
   listenRemovePlayerOnPlayer(
+    selfScene,
     selfScene.socket,
     selfScene.sceneName,
     () => getPlayerId(),
@@ -64,6 +66,7 @@ export function baseSceneConstructor(selfScene, sceneName) {
     }
   );
   playersContainerListenPlayerList({
+    scene: selfScene,
     socket: selfScene.socket,
     sceneName: selfScene.sceneName,
     phaserScene: selfScene,
@@ -153,6 +156,7 @@ export function baseSceneCreate({
   onMoveToTile,
 }) {
   window.scene = selfScene;
+  selfScene.stop = false;
   log(selfScene.sceneName, "create");
   playerCreateAnimations(getPlayerId(), selfScene);
 
@@ -244,6 +248,9 @@ export function baseSceneUpdate(selfScene, dtMillis) {
     selfScene.player,
     selfScene.map
   );
+  if (selfScene.player == null) {
+    return;
+  }
 
   selfScene.player = playerMoveNameLabelAndChat(selfScene.player);
 

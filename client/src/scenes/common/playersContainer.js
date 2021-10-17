@@ -10,8 +10,11 @@ import { log } from "../../log";
 import { loadIdAndPassword } from "../../pages/storage";
 
 /* eslint no-param-reassign: ["error", { "props": false }] */
-export function playersContainerListenRemovePlayer(container, socket) {
+export function playersContainerListenRemovePlayer(scene, container, socket) {
   socket.on("removePlayer", (dataFromServer) => {
+    if (scene.stop) {
+      return;
+    }
     container.players = playersOnRemovePlayer(
       container.players,
       dataFromServer
@@ -51,12 +54,16 @@ function createOtherPlayer(
 }
 
 export function playersContainerListenPlayerList({
+  scene,
   socket,
   sceneName,
   phaserScene,
   container,
 }) {
   function listener(data, debug) {
+    if (scene.stop) {
+      return;
+    }
     if (debug) {
       log("listenPlayerList", sceneName);
     }
@@ -101,6 +108,9 @@ export function playersContainerListenAddChat(
    * @param dataFromServer field id, chat, floor
    */
   socket.on("addChat", (dataFromServer) => {
+    if (scene.stop) {
+      return;
+    }
     const { players } = container;
     if (
       dataFromServer.floor === sceneName &&
@@ -123,6 +133,9 @@ export function playersContainerListenRemoveChat(
   sceneName
 ) {
   socket.on("removeChat", (data) => {
+    if (scene.stop) {
+      return;
+    }
     const { players } = container;
     if (data.floor === sceneName && players.entries[data.id]) {
       const player = players.entries[data.id];

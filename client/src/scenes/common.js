@@ -29,12 +29,16 @@ export const FLOOR_TO_SCENE = {
  * removePlayer: functions that remove player from scene
  */
 export function listenRemovePlayerOnPlayer(
+  scene,
   socket,
   sceneName,
   getId,
   removePlayer
 ) {
   socket.on("removePlayer", (data) => {
+    if (scene.stop) {
+      return;
+    }
     if (data.id === getId()) {
       log("removePlayer", sceneName, data.id, data);
       removePlayer();

@@ -30,6 +30,19 @@ export function playersOnRemovePlayer(players, dataFromServer) {
   return players;
 }
 
+export function playersReset(players) {
+  for (const [_, player] of Object.entries(players.entries)) {
+    // need to introduce a new method
+    player.phaser.destroy(true);
+    player.nameLabel.destroy(true);
+    chatDestroy(player.chat);
+  }
+  return {
+    ...players,
+    entries: {},
+  };
+}
+
 export function playersAddPlayer(players, id, player) {
   const newPlayers = {
     ...players,

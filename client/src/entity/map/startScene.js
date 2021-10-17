@@ -1,4 +1,6 @@
 import { log } from "../../log";
+// seems layer collision. entity is using scenes
+import { playersReset } from "../../scenes/common/players";
 
 export function getFloorName(sceneName) {
   switch (sceneName) {
@@ -28,6 +30,9 @@ export function getFloorName(sceneName) {
 export default function startScene(currentScene, targetSceneName, spawnPos) {
   log("call startScene");
   currentScene.cameras.main.fadeOut(500);
+  currentScene.players = playersReset(currentScene.players);
+  currentScene.player = null;
+  currentScene.stop = true;
   currentScene.cameras.main.on("camerafadeoutcomplete", () => {
     log("start next scene");
     currentScene.scene.pause(currentScene.scene.key);

@@ -24,9 +24,9 @@ const devEnv = {
   GET_SOCKETIO_URL: getDevSocketioURL,
   GET_SERVER_URL: getDevRESTURL,
   URL_STATIC: "/static",
-  ENVIRONMENT: "development",
+  GET_ENVIRONMENT: () => "development",
   tracesSampleRate: 1.0,
-  version: `${process.env.VERSION}-dev`,
+  version: `${process.env.VERSION}`,
 };
 
 function getProdURL() {
@@ -40,13 +40,23 @@ function getProdURL() {
   }
 }
 
+function getEnv() {
+  if (location.host.indexOf("test") !== -1) {
+    return "staging";
+  } else if (location.host.indexOf() !== -1) {
+    return "prev";
+  } else {
+    return "production";
+  }
+}
+
 const productionEnv = {
   GET_SOCKETIO_URL: getProdURL,
   GET_SERVER_URL: getProdURL,
   URL_STATIC: "/static",
-  ENVIRONMENT: "production",
+  GET_ENVIRONMENT: getEnv,
   tracesSampleRate: 0.1,
-  version: `${process.env.VERSION}-prod`,
+  version: `${process.env.VERSION}`,
 };
 
 let ENV = devEnv;

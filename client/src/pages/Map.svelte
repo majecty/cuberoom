@@ -59,11 +59,12 @@
     top: 50%;
     left: calc(50% + 55px);
     z-index: 3;
+    pointer-events: none;
   }
 
   :global(a.start-game) {
-    width : 120%;
-    height: 120%;
+    width : 173px;
+    height: 152px;
     z-index : 2;
     opacity: 0;
     position: absolute;

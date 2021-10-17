@@ -69,6 +69,18 @@ export function playerCreate(scene, x, y, name, chat, id) {
   };
 }
 
+function updateUpdateAtPosition(player, newX, newY) {
+  // FIXME: do not update nameLabel, chatBubble this way
+  player.nameLabel.x = newX;
+  player.nameLabel.y = newY - 55;
+}
+
+function updateChatBubblePosition(player, newX, newY) {
+  // FIXME: do not update nameLabel, chatBubble this way
+  player.chatBubble.x = newX;
+  player.chatBubble.y = newY - 80;
+}
+
 /**
  * @param playerFromServer x, y, id, direction
  */
@@ -114,11 +126,8 @@ export function playerFollowNetworkPos(player, dtMillis) {
   player.phaser.x = newX;
   player.phaser.y = newY;
 
-  // FIXME: do not update nameLabel, chatBubble this way
-  player.nameLabel.x = newX;
-  player.nameLabel.y = newY - 45;
-  player.chatBubble.x = newX;
-  player.chatBubble.y = newY - 70;
+  updateUpdateAtPosition(player, newX, newY);
+  updateChatBubblePosition(player, newX, newY);
   player.phaser.depth = getPlayerDepth(player);
   player.chatBubble.depth = depth.nameLabel;
   player.nameLabel.depth = depth.nameLabel;
@@ -177,9 +186,7 @@ export function loadPlayerImages(phaserScene, playerFromServer, id) {
 }
 
 export function playerMoveNameLabelAndChatBubble(player) {
-  player.nameLabel.x = player.phaser.x;
-  player.chatBubble.x = player.phaser.x;
-  player.nameLabel.y = player.phaser.y - 45;
-  player.chatBubble.y = player.phaser.y - 70;
+  updateUpdateAtPosition(player, player.phaser.x, player.phaser.y);
+  updateChatBubblePosition(player, player.phaser.x, player.phaser.y);
   return player;
 }

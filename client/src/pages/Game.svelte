@@ -21,7 +21,6 @@
   import { onMount } from 'svelte';
   import { zoom } from "../constant";
 
-  const requiredKeys = ["id", "password", "playerImgUrl", "playerName"];
   const savePrepared = isSavePrepared();
 
   if (!savePrepared) {

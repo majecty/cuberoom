@@ -31,7 +31,7 @@ export function playersOnRemovePlayer(players, dataFromServer) {
 }
 
 export function playersReset(players) {
-  for (const [_, player] of Object.entries(players.entries)) {
+  for (const [, player] of Object.entries(players.entries)) {
     // need to introduce a new method
     player.phaser.destroy(true);
     player.nameLabel.destroy(true);

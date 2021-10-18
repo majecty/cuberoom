@@ -27,6 +27,7 @@ export function getFloorName(sceneName) {
   }
 }
 
+/* eslint no-param-reassign: ["error", { "props": false }] */
 export default function startScene(currentScene, targetSceneName, spawnPos) {
   log("call startScene");
   currentScene.cameras.main.fadeOut(500);

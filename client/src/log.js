@@ -11,7 +11,7 @@ export function log(...args) {
 const errorRateLimiter = rateLimiterCreate();
 const first5Errors = [];
 const last5Errors = [];
-const ignoredErrorCount = 0;
+let ignoredErrorCount = 0;
 
 window.errors = {
   first5Errors,
@@ -27,10 +27,10 @@ export function logErr(...args) {
   if (last5Errors.length > 5) {
     last5Errors.shift();
   }
-  ignoredErrorCount += 0;
+  ignoredErrorCount += 1;
   rateLimiterTrigger(errorRateLimiter, () => {
     console.error(...args);
-    ignoredErrorCount -= 0;
+    ignoredErrorCount -= 1;
   });
 }
 

@@ -15,6 +15,16 @@ export function isMouseInputEnabled() {
   return window.enableMouseInput;
 }
 
+export function mouseInputUpdateEvent(player, x, y) {
+  player.lastMouseInput = {
+    x, y
+  };
+}
+
+export function mouseInputReset(player) {
+  player.lastMouseInput = null;
+}
+
 export function followClick(player, destinationX, destinationY, dtMillis) {
   const velocity = playerSpeed;
   const moveDiff = ((dtMillis * velocity) / 1000) * 1.5;

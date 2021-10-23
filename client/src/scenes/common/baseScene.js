@@ -7,6 +7,7 @@ import {
 } from "../../entity/player";
 import { loadChatBackgroundImage } from "../../entity/player/chat/background";
 import { playerMove } from "../../entity/player/move";
+import { mouseInputUpdateEvent } from "../../entity/player/move/mouse";
 import { playerAddKey } from "../../entity/player/move/keyboard";
 import { allCharacterImageNames } from "../../entity/player/image";
 import { playerCreateAnimations } from "../../entity/player/animation";
@@ -215,6 +216,13 @@ export function baseSceneCreate({
   });
 
   selfScene.cursors = selfScene.input.keyboard.createCursorKeys();
+  selfScene.input.on("pointerdown", () => {
+    mouseInputUpdateEvent(
+      selfScene.player,
+      selfScene.input.activePointer.worldX,
+      selfScene.input.activePointer.worldY
+    );
+  });
 }
 
 export function baseSceneUpdate(selfScene, dtMillis) {

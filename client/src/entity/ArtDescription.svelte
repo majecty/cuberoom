@@ -50,6 +50,7 @@
     on:touchstart="{globalOnMouseDown}"
     on:touchend="{globalOnMouseUp}"
   >
+    <button class="closebutton" on:click="{onCloseButtonClick}"></button>
     <img class="popup-left" src="{popupLeftUrl}" />
     <div class="popup-right">
       <div class="title">{title}</div>
@@ -66,7 +67,6 @@
       <div class="description" class:folded="{moreStatus === 'folded'}">
         {description}
       </div>
-      <button class="closebutton" on:click="{onCloseButtonClick}"></button>
       {#if url2 == null}
       <a class="link1" href="{url}" target="_blank">새 창으로 링크 열기</a>
       {:else}
@@ -159,8 +159,8 @@
     background-image: url("/static/img/ui/close.png");
     width: 30px;
     height: 30px;
-    top: 20px;
-    right: -10px;
+    top: 4px;
+    right: 4px;
     position: absolute;
   }
 
@@ -203,13 +203,6 @@
 
     .link2 {
       margin-bottom: 35px;
-    }
-
-    .closebutton {
-      margin-right: -5px;
-      margin-top: -30px;
-      top: 23px;
-      right: -3px;
     }
 
     .right > div:first-child {

@@ -17,7 +17,8 @@ export function isMouseInputEnabled() {
 
 export function mouseInputUpdateEvent(player, x, y) {
   player.lastMouseInput = {
-    x, y
+    x,
+    y,
   };
 }
 

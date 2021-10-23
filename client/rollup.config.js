@@ -5,31 +5,7 @@ import livereload from "rollup-plugin-livereload";
 import { terser } from "rollup-plugin-terser";
 import css from "rollup-plugin-css-only";
 import replace from "@rollup/plugin-replace";
-import fs from "fs";
 const { version } = require("./package.json");
-//import { version } from "./package.json";
-
-// .git 디렉토리가 client root 밑이라서 라이버르리를 그대로 쓰지 못함.
-// 그래서 코드 복붇
-// copied from
-// https://gitlab.com/IvanSanchez/rollup-plugin-git-version/-/blob/master/src/version.mjs
-//
-// "THE BEER-WARE LICENSE":
-// ivan@sanchezortega.es wrote this file. As long as you retain this notice you
-// can do whatever you want with this stuff. If we meet some day, and you think
-// this stuff is worth it, you can buy me a beer in return.  const branchRegexp = /ref: .*\/(\w*)/;
-function parseGitCommit() {
-  const branchRegexp = /ref: (.*)/;
-  const data1 = fs.readFileSync("../.git/HEAD");
-  const branch = branchRegexp.exec(data1)[1];
-
-  const revision = require("child_process")
-    .execSync("git rev-parse HEAD")
-    .toString()
-    .substring(0,6)
-    .trim();
-  return `${revision}-${branch.replace(/\//g, ".")}`;
-}
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -75,7 +51,7 @@ export default {
     }),
     replace({
       "process.env.BUILD_ENV": production ? '"production"' : '"dev"',
-      "process.env.VERSION": `"cuberoom@${version}+${parseGitCommit()}"`,
+      "process.env.VERSION": `"cuberoom@${version}"`,
     }),
     // we'll extract any component CSS out into
     // a separate file - better for performance

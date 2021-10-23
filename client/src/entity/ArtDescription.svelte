@@ -59,10 +59,10 @@
       <div class="medium2"></div>
       {/if}
       <div class="alt">{alt}</div>
-      <div clas="more" on:click="{handleMoreClick}">
+      <button class="more" on:click="{handleMoreClick}">
         {#if moreStatus === "folded"} 더보기 {/if} {#if moreStatus ===
         "unfolded"} 접기 {/if}
-      </div>
+      </button>
       <div class="description" class:folded="{moreStatus === 'folded'}">
         {description}
       </div>
@@ -134,6 +134,10 @@
   }
 
   .more {
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-size: 1em;
     word-break: keep-all;
     margin-bottom: 32px;
     text-decoration: underline;
@@ -150,6 +154,7 @@
   }
 
   .closebutton {
+    cursor: pointer;
     border: none;
     background-image: url("/static/img/ui/close.png");
     width: 30px;

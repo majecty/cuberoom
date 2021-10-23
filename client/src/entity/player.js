@@ -65,7 +65,7 @@ export function playerCreate(scene, x, y, name, chatText, id) {
 function updateUpdateAtPosition(player, newX, newY) {
   // FIXME: do not update nameLabel, chat this way
   player.nameLabel.x = newX;
-  player.nameLabel.y = newY - 55;
+  player.nameLabel.y = newY - 45;
 }
 
 /**

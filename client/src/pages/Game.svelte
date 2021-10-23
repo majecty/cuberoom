@@ -21,7 +21,6 @@
   import { onMount } from 'svelte';
   import { zoom } from "../constant";
 
-  const requiredKeys = ["id", "password", "playerImgUrl", "playerName"];
   const savePrepared = isSavePrepared();
 
   if (!savePrepared) {
@@ -58,6 +57,11 @@
         return;
       }
       if (window.scene == null) {
+        return;
+      }
+      // See https://sentry.io/organizations/cuberoom/issues/2720636667/events/0132dcc92ba24be68f6687f24bc2945e/?project=5979255
+      // It seems that main camera is null while initializing the scene
+      if (window.scene.cameras.main == null) {
         return;
       }
       window.scene.cameras.main.fadeOut(0);

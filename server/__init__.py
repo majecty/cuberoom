@@ -176,7 +176,7 @@ def beforeRequest(sid, data):
 
 @socketio.on('addPlayer')
 def addPlayer(data):
-    global players, players_changed, players_lock
+    global players, players_changed, players_lock, players_sid_to_id, players_id_to_password
 
     player = Player(data['id'], data['name'], data['imgUrl'], data['floor'], data['x'], data['y'])
     players_lock.acquire()

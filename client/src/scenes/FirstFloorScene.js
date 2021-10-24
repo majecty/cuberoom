@@ -12,6 +12,10 @@ import { showElevatorPanel } from "../entity/map/elevator";
 import { spawnPoints } from "./common/constants";
 import { protocol } from "../network/protocol";
 import { zoom } from "../constant";
+import {
+  loadExclamationMarkImage,
+  createExclamationMark,
+} from "./firtstFloor/exclamationMark";
 
 function backgroundStatic(scene) {
   const sprite = scene.add.sprite(
@@ -69,6 +73,7 @@ class FirstFloorScene extends Phaser.Scene {
       key: "firstFloor-map",
       url: "/static/tilemap/first-floor.json",
     });
+    loadExclamationMarkImage(this);
     baseScenePreload(this);
   }
 
@@ -82,6 +87,7 @@ class FirstFloorScene extends Phaser.Scene {
         tileInteraction(this, tileName);
       },
     });
+    this.exclamationMark = createExclamationMark(this);
   }
 
   update(_time, delta) {

@@ -12,6 +12,7 @@ function extractObjects(phaserObjectLayer) {
       x: tiledObject.x,
       y: tiledObject.y,
     };
+    // console.log("object", tiledObject.name, tiledObject.x, tiledObject.y);
   }
   return results;
 }

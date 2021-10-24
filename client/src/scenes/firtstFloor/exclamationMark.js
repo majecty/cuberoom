@@ -5,6 +5,7 @@ import {
   isMouseInputEnabled,
   disableMouseInput,
 } from "../../entity/player/move/mouse";
+import WelcomeMessage from "./WelcomeMessage.svelte";
 
 export function loadExclamationMarkImage(scene) {
   const url = `${ENV.URL_STATIC}/img/ui/exclamation-mark.png`;
@@ -24,7 +25,10 @@ export function createExclamationMark(scene) {
   phaser.setInteractive();
   phaser.on("pointerdown", () => {
     disableMouseInput();
-    console.log("show message");
+    const welcomeMessage = new WelcomeMessage({
+      target: document.body,
+    });
+    scene.welcomeMessage = welcomeMessage;
   });
   phaser.on("pointerover", () => {
     scene.input.setDefaultCursor("pointer");

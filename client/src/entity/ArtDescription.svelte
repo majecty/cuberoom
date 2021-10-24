@@ -1,5 +1,4 @@
 <script>
-  import { onDestroy } from "svelte";
   import HTMLPopup from "./HTMLPopup.svelte";
 
   export let id;

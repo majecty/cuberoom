@@ -1,7 +1,3 @@
-from flask import Flask, request, url_for
-from flask.helpers import send_from_directory
-from flask_socketio import SocketIO, emit, join_room, leave_room
-from flask_cors import CORS
 from threading import Lock
 import threading
 import time
@@ -9,10 +5,19 @@ import sys
 import os
 import sentry_sdk
 import json
+from flask import Flask, request, url_for
+from flask.helpers import send_from_directory
+from flask_socketio import SocketIO, emit, join_room, leave_room
+from flask_cors import CORS
 
-with open('../client/package.json', 'r') as package_json:
-    data = package_json.read()
-    version = json.loads(data)['version']
+
+def load_version():
+    with open('../client/package.json', 'r', encoding='utf-8') as package_json:
+        data = package_json.read()
+        return json.loads(data)['version']
+
+
+version = load_version()
 
 cuberoom_env = os.getenv('CUBEROOM_ENV')
 
@@ -73,7 +78,8 @@ config_values["prev"] = {
 }
 
 if cuberoom_env not in ["local", "production", "staging", "prev"]:
-    sys.exit("please set CUBEROOM_ENV environment variable to `local` or `production`, `staging`, `prev`")
+    sys.exit("please set CUBEROOM_ENV environment variable to " +
+             "`local` or `production`, `staging`, `prev`")
 
 config_value = config_values[cuberoom_env]
 
@@ -98,7 +104,7 @@ socketio = SocketIO(app, cors_allowed_origins="*", async_mode="eventlet")
 
 
 @app.route("/<string:text>")
-def base_all(text):
+def base_all(_text):
     return send_from_directory(config_value['public_path'], 'index.html')
 
 
@@ -109,15 +115,15 @@ def base():
 
 @app.route("/character-selection", methods=['POST'])
 def user_information():
-    faceS = request.get_json()["faceS"]
-    hairS = request.get_json()["hairS"]
-    hairC = request.get_json()["hairC"]
+    face_s = request.get_json()["faceS"]
+    hair_s = request.get_json()["hairS"]
+    hair_c = request.get_json()["hairC"]
     skin = request.get_json()["skin"]
     cloth = request.get_json()["cloth"]
     prefix = config_value["user_image_prefix"]
 
-    filePath = f"{prefix}/skin{skin}_hairC{hairC}_cloth{cloth}_hairS{hairS}_faceS{faceS}/"
-    return url_for('static', filename=filePath)
+    file_path = f"{prefix}/skin{skin}_hairC{hair_c}_cloth{cloth}_hairS{hair_s}_faceS{face_s}/"
+    return url_for('static', filename=file_path)
 
 
 # map by id
@@ -129,10 +135,10 @@ players_lock = Lock()
 
 
 class Player():
-    def __init__(self, id, name, imgUrl, floor, x, y):
-        self.id = id
+    def __init__(self, player_id, name, img_url, floor, x, y):
+        self.id = player_id
         self.name = name
-        self.imgUrl = imgUrl
+        self.img_url = img_url
         self.floor = floor
         self.x = x
         self.y = y
@@ -143,7 +149,7 @@ class Player():
         return {
             'id': self.id,
             'name': self.name,
-            'imgUrl': self.imgUrl,
+            'imgUrl': self.img_url,
             'floor': self.floor,
             'x': self.x,
             'y': self.y,
@@ -152,13 +158,13 @@ class Player():
         }
 
 
-def validatePassword(sid, data):
+def validate_password(sid, data):
     "do not use in the players_lock"
-    id = data["id"]
+    player_id = data["id"]
     password = data["password"]
 
-    match_password = players_id_to_password.get(id) == password
-    match_sid = players_sid_to_id.get(sid) == id
+    match_password = players_id_to_password.get(player_id) == password
+    match_sid = players_sid_to_id.get(sid) == player_id
 
     if not match_password:
         return "fail"
@@ -169,8 +175,8 @@ def validatePassword(sid, data):
     return "relogin"
 
 
-def beforeRequest(sid, data):
-    validation_result = validatePassword(sid, data)
+def before_request(sid, data):
+    validation_result = validate_password(sid, data)
     if validation_result == "fail":
         emit('debugMessage', "invalid password")
         emit('needLogin')
@@ -183,7 +189,7 @@ def beforeRequest(sid, data):
 
 
 @socketio.on('addPlayer')
-def addPlayer(data):
+def add_player(data):
     global players_changed
 
     player = Player(
@@ -208,19 +214,19 @@ def addPlayer(data):
 
 
 @socketio.on('moveFloor')
-def moveFloor(data):
+def move_floor(data):
     global players_changed
 
-    validation_result = beforeRequest(request.sid, data)
+    validation_result = before_request(request.sid, data)
     if validation_result == "fail":
         return
 
     players_lock.acquire()
     try:
         players_changed = True
-        prevRoom = players[data['id']]['floor']
-        nextRoom = data['floor']
-        players[data['id']]['floor'] = nextRoom
+        prev_room = players[data['id']]['floor']
+        next_room = data['floor']
+        players[data['id']]['floor'] = next_room
         # move player away until the player move to the right position at the
         # next floor
         players[data['id']]['x'] = 999
@@ -228,18 +234,18 @@ def moveFloor(data):
     finally:
         players_lock.release()
 
-    leave_room(prevRoom)
-    join_room(nextRoom)
+    leave_room(prev_room)
+    join_room(next_room)
 
     emit('removePlayer', {'id': data['id']}, broadcast=True)
-    emit('playerList', players, broadcast=True, to=nextRoom)
+    emit('playerList', players, broadcast=True, to=next_room)
 
 
 @socketio.on('addChat')
-def addChat(data):
+def add_chat(data):
     global players_changed
 
-    validation_result = beforeRequest(request.sid, data)
+    validation_result = before_request(request.sid, data)
     if validation_result == "fail":
         return
 
@@ -264,10 +270,10 @@ def addChat(data):
 
 
 @socketio.on('removeChat')
-def removeChat(data):
+def remove_chat(data):
     global players_changed
 
-    validation_result = beforeRequest(request.sid, data)
+    validation_result = before_request(request.sid, data)
     if validation_result == "fail":
         return
 
@@ -292,17 +298,18 @@ def removeChat(data):
 
 
 @socketio.on('movePlayer')
-def movePlayer(data):
+def move_player(data):
     global players_changed
 
-    validation_result = beforeRequest(request.sid, data)
+    validation_result = before_request(request.sid, data)
     if validation_result == "fail":
         return
 
     players_lock.acquire()
     try:
         players_changed = True
-        if data['id'] in players.keys():
+
+        if data['id'] in players:
             players[data['id']]['x'] = data['x']
             players[data['id']]['y'] = data['y']
             players[data['id']]['direction'] = data['direction']
@@ -311,13 +318,13 @@ def movePlayer(data):
 
 
 @socketio.on('getPlayers')
-def getPlayers():
+def get_players():
     emit('debugPlayerList', players)
     emit('debugMessage', players)
 
 
 @socketio.on("debugMessage")
-def debugMessage(data):
+def debug_message(data):
     print(data)
 
 
@@ -325,22 +332,22 @@ def debugMessage(data):
 def disconnect():
     global players_changed
 
-    id = None
+    player_id = None
     players_lock.acquire()
     try:
         players_changed = True
-        id = players_sid_to_id.get(request.sid)
-        if id is not None:
-            players.pop(id, None)
+        player_id = players_sid_to_id.get(request.sid)
+        if player_id is not None:
+            players.pop(player_id, None)
             players_sid_to_id.pop(request.sid)
-            players_id_to_password.pop(id)
+            players_id_to_password.pop(player_id)
     finally:
         players_lock.release()
-    if id is not None:
-        emit('removePlayer', {'id': id}, broadcast=True)
+    if player_id is not None:
+        emit('removePlayer', {'id': player_id}, broadcast=True)
 
 
-def broadcastPlayserListLoop():
+def broadcast_player_list_loop():
     while True:
         global players_changed
         socketio.sleep(0.3)
@@ -366,8 +373,9 @@ def connect_for_main():
     global thread
     if thread is None:
         thread = socketio.start_background_task(
-            target=broadcastPlayserListLoop)
+            target=broadcast_player_list_loop)
 
 
 if __name__ == "__main__":
     socketio.run(app, debug=True, port=config_value["port"], host="0.0.0.0")
+#pylint: disable=missing-function-docstring

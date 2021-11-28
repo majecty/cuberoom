@@ -12,7 +12,7 @@ import json
 
 with open('../client/package.json', 'r') as package_json:
     data = package_json.read()
-    version = json.loads(data)['version'] 
+    version = json.loads(data)['version']
 
 cuberoom_env = os.getenv('CUBEROOM_ENV')
 
@@ -103,7 +103,6 @@ def base():
 
 @app.route("/character-selection",methods=['POST'])
 def user_information():
-    name = request.get_json()["name"]
     faceS = request.get_json()["faceS"]
     hairS = request.get_json()["hairS"]
     hairC = request.get_json()["hairC"]
@@ -146,7 +145,6 @@ class Player():
 
 def validatePassword(sid, data):
     "do not use in the players_lock"
-    global players, players_sid_to_id, players_id_to_password
     id = data["id"]
     password = data["password"]
 
@@ -162,7 +160,6 @@ def validatePassword(sid, data):
     return "relogin"
 
 def beforeRequest(sid, data):
-    global players_lock, players_sid_to_id
     validation_result = validatePassword(sid, data)
     if validation_result == "fail":
         emit('debugMessage', "invalid password")
@@ -176,7 +173,7 @@ def beforeRequest(sid, data):
 
 @socketio.on('addPlayer')
 def addPlayer(data):
-    global players, players_changed, players_lock, players_sid_to_id, players_id_to_password
+    global players_changed 
 
     player = Player(data['id'], data['name'], data['imgUrl'], data['floor'], data['x'], data['y'])
     players_lock.acquire()
@@ -190,12 +187,11 @@ def addPlayer(data):
 
     join_room(player.floor)
 
-    # FIXME: players can be changed after emit
     emit('playerList', players, broadcast=True, to=player.floor)
 
 @socketio.on('moveFloor')
 def moveFloor(data):
-    global players, players_changed, players_lock
+    global players_changed 
 
     validation_result = beforeRequest(request.sid, data)
     if validation_result == "fail":
@@ -221,7 +217,7 @@ def moveFloor(data):
 
 @socketio.on('addChat')
 def addChat(data):
-    global players, players_changed, players_lock
+    global players_changed 
 
     validation_result = beforeRequest(request.sid, data)
     if validation_result == "fail":
@@ -248,7 +244,7 @@ def addChat(data):
 
 @socketio.on('removeChat')
 def removeChat(data):
-    global players, players_changed, players_lock
+    global players_changed
 
     validation_result = beforeRequest(request.sid, data)
     if validation_result == "fail":
@@ -275,7 +271,7 @@ def removeChat(data):
 
 @socketio.on('movePlayer')
 def movePlayer(data):
-    global players, players_changed, players_lock
+    global players_changed
 
     validation_result = beforeRequest(request.sid, data)
     if validation_result == "fail":
@@ -293,7 +289,6 @@ def movePlayer(data):
 
 @socketio.on('getPlayers')
 def getPlayers():
-    global players
     emit('debugPlayerList', players)
     emit('debugMessage', players)
 
@@ -303,7 +298,7 @@ def debugMessage(data):
 
 @socketio.on('disconnect')
 def disconnect():
-    global players, players_changed, players_lock
+    global players_changed
 
     id = None
     players_lock.acquire()

@@ -1,99 +1,15 @@
 from threading import Lock
 import threading
 import time
-import sys
-import os
-import sentry_sdk
-import json
 from flask import Flask, request, url_for
 from flask.helpers import send_from_directory
 from flask_socketio import SocketIO, emit, join_room, leave_room
 from flask_cors import CORS
 
+from player import Player
+from config import load_config
 
-def load_version():
-    with open('../client/package.json', 'r', encoding='utf-8') as package_json:
-        data = package_json.read()
-        return json.loads(data)['version']
-
-
-version = load_version()
-
-cuberoom_env = os.getenv('CUBEROOM_ENV')
-
-config_values = {}
-config_values["local"] = {
-    "static_url_path": "/static",
-    "static_folder": "../client/public/static",
-    "cors_origin": "*",
-    "public_path": "../client/public",
-    "user_image_prefix": "character-resource",  # empty
-    "sentry": {
-        "debug": True,
-        "environment": "development"
-    },
-    "port": 3000
-}
-
-config_values["staging"] = {
-    "static_url_path": "/static",
-    "static_folder": "../client/public/static",
-    "cors_origin": "http://test.cuberoom.net",
-    # please check this in the deployed environment
-    "public_path": "../client/public",
-    "user_image_prefix": "character-resource",
-    "sentry": {
-        "debug": False,
-        "environment": "staging"
-    },
-    "port": 5003  # default port in flask
-}
-
-config_values["production"] = {
-    "static_url_path": "/static",
-    "static_folder": "../client/public/static",
-    "cors_origin": "http://cuberoom.net",
-    # please check this in the deployed environment
-    "public_path": "../client/public",
-    "user_image_prefix": "character-resource",
-    "sentry": {
-        "debug": True,
-        "environment": "production"
-    },
-    "port": 5002  # default port in flask
-}
-
-config_values["prev"] = {
-    "static_url_path": "/static",
-    "static_folder": "../client/public/static",
-    "cors_origin": "http://prev.cuberoom.net",
-    # please check this in the deployed environment
-    "public_path": "../client/public",
-    "user_image_prefix": "character-resource",
-    "sentry": {
-        "debug": True,
-        "environment": "prev"
-    },
-    "port": 5001  # default port in flask
-}
-
-if cuberoom_env not in ["local", "production", "staging", "prev"]:
-    sys.exit("please set CUBEROOM_ENV environment variable to " +
-             "`local` or `production`, `staging`, `prev`")
-
-config_value = config_values[cuberoom_env]
-
-sentry_sdk.init(
-    "https://21f1b2ad5efb452684d66b18467ae893@o1013913.ingest.sentry.io/5979255",
-
-    # Set traces_sample_rate to 1.0 to capture 100%
-    # of transactions for performance monitoring.
-    # We recommend adjusting this value in production.
-    traces_sample_rate=0.1,
-    debug=config_value['sentry']['debug'],
-    environment=config_value['sentry']['environment'],
-    release=f'cuberoom@{version}'
-)
+config_value = load_config()
 
 app = Flask(__name__, static_url_path=config_value["static_url_path"],
             static_folder=config_value["static_folder"])
@@ -132,30 +48,6 @@ players_sid_to_id = {}
 players_id_to_password = {}
 players_changed = False
 players_lock = Lock()
-
-
-class Player():
-    def __init__(self, player_id, name, img_url, floor, x, y):
-        self.id = player_id
-        self.name = name
-        self.img_url = img_url
-        self.floor = floor
-        self.x = x
-        self.y = y
-        self.chat = ''
-        self.direction = 'down'
-
-    def serialize(self):
-        return {
-            'id': self.id,
-            'name': self.name,
-            'imgUrl': self.img_url,
-            'floor': self.floor,
-            'x': self.x,
-            'y': self.y,
-            'chat': self.chat,
-            'direction': self.direction,
-        }
 
 
 def validate_password(sid, data):

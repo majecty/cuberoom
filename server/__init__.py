@@ -18,55 +18,58 @@ cuberoom_env = os.getenv('CUBEROOM_ENV')
 
 config_values = {}
 config_values["local"] = {
-  "static_url_path": "/static",
-  "static_folder": "../client/public/static",
-  "cors_origin": "*",
-  "public_path": "../client/public",
-  "user_image_prefix": "character-resource", # empty
-  "sentry": {
-    "debug": True,
-    "environment": "development"
-  },
-  "port": 3000
+    "static_url_path": "/static",
+    "static_folder": "../client/public/static",
+    "cors_origin": "*",
+    "public_path": "../client/public",
+    "user_image_prefix": "character-resource",  # empty
+    "sentry": {
+        "debug": True,
+        "environment": "development"
+    },
+    "port": 3000
 }
 
 config_values["staging"] = {
-  "static_url_path": "/static",
-  "static_folder": "../client/public/static",
-  "cors_origin": "http://test.cuberoom.net",
-  "public_path": "../client/public", # please check this in the deployed environment
-  "user_image_prefix": "character-resource",
-  "sentry": {
-    "debug": False,
-    "environment": "staging"
-  },
-  "port": 5003 # default port in flask
+    "static_url_path": "/static",
+    "static_folder": "../client/public/static",
+    "cors_origin": "http://test.cuberoom.net",
+    # please check this in the deployed environment
+    "public_path": "../client/public",
+    "user_image_prefix": "character-resource",
+    "sentry": {
+        "debug": False,
+        "environment": "staging"
+    },
+    "port": 5003  # default port in flask
 }
 
 config_values["production"] = {
-  "static_url_path": "/static",
-  "static_folder": "../client/public/static",
-  "cors_origin": "http://cuberoom.net",
-  "public_path": "../client/public", # please check this in the deployed environment
-  "user_image_prefix": "character-resource",
-  "sentry": {
-    "debug": True,
-    "environment": "production"
-  },
-  "port": 5002 # default port in flask
+    "static_url_path": "/static",
+    "static_folder": "../client/public/static",
+    "cors_origin": "http://cuberoom.net",
+    # please check this in the deployed environment
+    "public_path": "../client/public",
+    "user_image_prefix": "character-resource",
+    "sentry": {
+        "debug": True,
+        "environment": "production"
+    },
+    "port": 5002  # default port in flask
 }
 
 config_values["prev"] = {
-  "static_url_path": "/static",
-  "static_folder": "../client/public/static",
-  "cors_origin": "http://prev.cuberoom.net",
-  "public_path": "../client/public", # please check this in the deployed environment
-  "user_image_prefix": "character-resource",
-  "sentry": {
-    "debug": True,
-    "environment": "prev"
-  },
-  "port": 5001 # default port in flask
+    "static_url_path": "/static",
+    "static_folder": "../client/public/static",
+    "cors_origin": "http://prev.cuberoom.net",
+    # please check this in the deployed environment
+    "public_path": "../client/public",
+    "user_image_prefix": "character-resource",
+    "sentry": {
+        "debug": True,
+        "environment": "prev"
+    },
+    "port": 5001  # default port in flask
 }
 
 if cuberoom_env not in ["local", "production", "staging", "prev"]:
@@ -87,31 +90,35 @@ sentry_sdk.init(
 )
 
 app = Flask(__name__, static_url_path=config_value["static_url_path"],
-  static_folder=config_value["static_folder"])
+            static_folder=config_value["static_folder"])
 CORS(app, resources={r'*': {'origins': config_value["cors_origin"]}})
 
 app.secret_key = "cuberoom"
 socketio = SocketIO(app, cors_allowed_origins="*", async_mode="eventlet")
 
+
 @app.route("/<string:text>")
 def base_all(text):
-    return send_from_directory(config_value['public_path'],'index.html')
+    return send_from_directory(config_value['public_path'], 'index.html')
+
 
 @app.route("/")
 def base():
-    return send_from_directory(config_value['public_path'],'index.html')
+    return send_from_directory(config_value['public_path'], 'index.html')
 
-@app.route("/character-selection",methods=['POST'])
+
+@app.route("/character-selection", methods=['POST'])
 def user_information():
     faceS = request.get_json()["faceS"]
     hairS = request.get_json()["hairS"]
     hairC = request.get_json()["hairC"]
-    skin =  request.get_json()["skin"]
+    skin = request.get_json()["skin"]
     cloth = request.get_json()["cloth"]
     prefix = config_value["user_image_prefix"]
 
     filePath = f"{prefix}/skin{skin}_hairC{hairC}_cloth{cloth}_hairS{hairS}_faceS{faceS}/"
-    return url_for('static', filename = filePath)
+    return url_for('static', filename=filePath)
+
 
 # map by id
 players = {}
@@ -120,8 +127,9 @@ players_id_to_password = {}
 players_changed = False
 players_lock = Lock()
 
+
 class Player():
-    def __init__ (self, id, name, imgUrl, floor, x, y):
+    def __init__(self, id, name, imgUrl, floor, x, y):
         self.id = id
         self.name = name
         self.imgUrl = imgUrl
@@ -143,6 +151,7 @@ class Player():
             'direction': self.direction,
         }
 
+
 def validatePassword(sid, data):
     "do not use in the players_lock"
     id = data["id"]
@@ -151,13 +160,14 @@ def validatePassword(sid, data):
     match_password = players_id_to_password.get(id) == password
     match_sid = players_sid_to_id.get(sid) == id
 
-    if match_password == False:
+    if not match_password:
         return "fail"
 
-    if match_sid == True:
+    if match_sid:
         return "success"
 
     return "relogin"
+
 
 def beforeRequest(sid, data):
     validation_result = validatePassword(sid, data)
@@ -171,11 +181,18 @@ def beforeRequest(sid, data):
         return "fail"
     return "success"
 
+
 @socketio.on('addPlayer')
 def addPlayer(data):
-    global players_changed 
+    global players_changed
 
-    player = Player(data['id'], data['name'], data['imgUrl'], data['floor'], data['x'], data['y'])
+    player = Player(
+        data['id'],
+        data['name'],
+        data['imgUrl'],
+        data['floor'],
+        data['x'],
+        data['y'])
     players_lock.acquire()
     try:
         players_changed = True
@@ -189,9 +206,10 @@ def addPlayer(data):
 
     emit('playerList', players, broadcast=True, to=player.floor)
 
+
 @socketio.on('moveFloor')
 def moveFloor(data):
-    global players_changed 
+    global players_changed
 
     validation_result = beforeRequest(request.sid, data)
     if validation_result == "fail":
@@ -203,7 +221,8 @@ def moveFloor(data):
         prevRoom = players[data['id']]['floor']
         nextRoom = data['floor']
         players[data['id']]['floor'] = nextRoom
-        # move player away until the player move to the right position at the next floor
+        # move player away until the player move to the right position at the
+        # next floor
         players[data['id']]['x'] = 999
         players[data['id']]['y'] = 999
     finally:
@@ -212,12 +231,13 @@ def moveFloor(data):
     leave_room(prevRoom)
     join_room(nextRoom)
 
-    emit('removePlayer', { 'id': data['id'] }, broadcast=True)
+    emit('removePlayer', {'id': data['id']}, broadcast=True)
     emit('playerList', players, broadcast=True, to=nextRoom)
+
 
 @socketio.on('addChat')
 def addChat(data):
-    global players_changed 
+    global players_changed
 
     validation_result = beforeRequest(request.sid, data)
     if validation_result == "fail":
@@ -241,6 +261,7 @@ def addChat(data):
         broadcast=True,
         to=floor
     )
+
 
 @socketio.on('removeChat')
 def removeChat(data):
@@ -269,6 +290,7 @@ def removeChat(data):
         to=floor
     )
 
+
 @socketio.on('movePlayer')
 def movePlayer(data):
     global players_changed
@@ -287,14 +309,17 @@ def movePlayer(data):
     finally:
         players_lock.release()
 
+
 @socketio.on('getPlayers')
 def getPlayers():
     emit('debugPlayerList', players)
     emit('debugMessage', players)
 
+
 @socketio.on("debugMessage")
 def debugMessage(data):
     print(data)
+
 
 @socketio.on('disconnect')
 def disconnect():
@@ -305,14 +330,15 @@ def disconnect():
     try:
         players_changed = True
         id = players_sid_to_id.get(request.sid)
-        if id != None:
+        if id is not None:
             players.pop(id, None)
             players_sid_to_id.pop(request.sid)
             players_id_to_password.pop(id)
     finally:
         players_lock.release()
-    if id != None:
-        emit('removePlayer', { 'id': id }, broadcast=True)
+    if id is not None:
+        emit('removePlayer', {'id': id}, broadcast=True)
+
 
 def broadcastPlayserListLoop():
     while True:
@@ -322,7 +348,7 @@ def broadcastPlayserListLoop():
         players_lock.acquire()
         players_changed_local = players_changed
         players_lock.release()
-        if players_changed_local == False:
+        if not players_changed_local:
             continue
 
         players_lock.acquire()
@@ -331,12 +357,17 @@ def broadcastPlayserListLoop():
         # TODO: only send players room by room
         socketio.emit('playerList', players, broadcast=True)
 
+
 thread = None
+
+
 @socketio.on('connect')
 def connect_for_main():
     global thread
     if thread is None:
-        thread = socketio.start_background_task(target=broadcastPlayserListLoop)
+        thread = socketio.start_background_task(
+            target=broadcastPlayserListLoop)
+
 
 if __name__ == "__main__":
     socketio.run(app, debug=True, port=config_value["port"], host="0.0.0.0")

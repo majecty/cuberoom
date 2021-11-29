@@ -8,6 +8,7 @@ from flask_cors import CORS
 
 from player import Player
 from config import load_config
+from players import Players
 
 config_value = load_config()
 
@@ -48,6 +49,8 @@ players_sid_to_id = {}
 players_id_to_password = {}
 players_changed = False
 players_lock = Lock()
+
+new_players = Players()
 
 
 def validate_password(sid, data):
@@ -91,14 +94,8 @@ def add_player(data):
         data['floor'],
         data['x'],
         data['y'])
-    players_lock.acquire()
-    try:
-        players_changed = True
-        players_sid_to_id[request.sid] = data['id']
-        players_id_to_password[data['id']] = data['password']
-        players[data['id']] = player.serialize()
-    finally:
-        players_lock.release()
+
+    new_players.add_player(player)
 
     join_room(player.floor)
 
@@ -107,47 +104,27 @@ def add_player(data):
 
 @socketio.on('moveFloor')
 def move_floor(data):
-    global players_changed
-
     validation_result = before_request(request.sid, data)
     if validation_result == "fail":
         return
 
-    players_lock.acquire()
-    try:
-        players_changed = True
-        prev_room = players[data['id']]['floor']
-        next_room = data['floor']
-        players[data['id']]['floor'] = next_room
-        # move player away until the player move to the right position at the
-        # next floor
-        players[data['id']]['x'] = 999
-        players[data['id']]['y'] = 999
-    finally:
-        players_lock.release()
-
+    player_id = data['id']
+    (prev_room, next_room) = players.move_floor(player_id, data["floor"])
     leave_room(prev_room)
     join_room(next_room)
 
-    emit('removePlayer', {'id': data['id']}, broadcast=True)
+    emit('removePlayer', {'id': player_id}, broadcast=True)
     emit('playerList', players, broadcast=True, to=next_room)
 
 
 @socketio.on('addChat')
 def add_chat(data):
-    global players_changed
-
     validation_result = before_request(request.sid, data)
     if validation_result == "fail":
         return
 
-    players_lock.acquire()
-    try:
-        players_changed = True
-        players[data['id']]['chat'] = data['chat']
-    finally:
-        players_lock.release()
-    floor = players[data['id']]['floor']
+    player = players.add_chat(data["id"], data["chat"])
+    floor = player.floor
 
     emit(
         'addChat',
@@ -163,19 +140,11 @@ def add_chat(data):
 
 @socketio.on('removeChat')
 def remove_chat(data):
-    global players_changed
-
     validation_result = before_request(request.sid, data)
     if validation_result == "fail":
         return
 
-    players_lock.acquire()
-    try:
-        players_changed = True
-        players[data['id']]['chat'] = ''
-    finally:
-        players_lock.release()
-    floor = players[data['id']]['floor']
+    floor = players.remove_chat(data["id"])
 
     emit(
         'removeChat',
@@ -191,22 +160,12 @@ def remove_chat(data):
 
 @socketio.on('movePlayer')
 def move_player(data):
-    global players_changed
-
     validation_result = before_request(request.sid, data)
     if validation_result == "fail":
         return
 
-    players_lock.acquire()
-    try:
-        players_changed = True
-
-        if data['id'] in players:
-            players[data['id']]['x'] = data['x']
-            players[data['id']]['y'] = data['y']
-            players[data['id']]['direction'] = data['direction']
-    finally:
-        players_lock.release()
+    players.move_player(data["id"], data["x"], data["y"],
+                        data["direction"])
 
 
 @socketio.on('getPlayers')

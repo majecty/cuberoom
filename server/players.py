@@ -18,7 +18,7 @@ class Players():
         player_id = data["id"]
         password = data["password"]
 
-        match_password = self.password_container.match_password(
+        match_password = self.password_container.match(
             player_id, password)
         match_sid = self.sid_container.get(sid) == player_id
 

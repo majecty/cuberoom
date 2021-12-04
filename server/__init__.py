@@ -68,7 +68,7 @@ def add_player(data):
         data['x'],
         data['y'])
 
-    players.add_player(player)
+    players.add_player(player, request.sid, data['password'])
 
     join_room(player.floor)
 

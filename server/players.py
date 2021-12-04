@@ -74,7 +74,7 @@ class Players():
             self.players[player_id].chat = ''
         finally:
             self.players_lock.release()
-        return self.players[player_id]
+        return self.players[player_id].floor
 
     def move_player(self, player_id, x, y, direction):
         self.players_lock.acquire()

@@ -103,6 +103,20 @@ class Players():
             self.players_lock.release()
         return player_id
 
+    def remove_player_if_different(self, sid, new_id):
+        player_id = None
+        self.players_lock.acquire()
+        try:
+            self.players_changed = True
+            player_id = self.sid_container.get(sid)
+            if player_id is not None and player_id != new_id:
+                self.sid_container.remove(sid)
+                self.players.pop(player_id, None)
+                self.password_container.remove(player_id)
+        finally:
+            self.players_lock.release()
+        return player_id
+
     def get_players_to_share(self):
         self.players_lock.acquire()
         try:

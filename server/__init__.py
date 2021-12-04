@@ -72,7 +72,7 @@ def add_player(data):
 
     join_room(player.floor)
 
-    emit('playerList', players, broadcast=True, to=player.floor)
+    emit('playerList', players.serialize(), broadcast=True, to=player.floor)
 
 
 @socketio.on('moveFloor')
@@ -87,7 +87,7 @@ def move_floor(data):
     join_room(next_room)
 
     emit('removePlayer', {'id': player_id}, broadcast=True)
-    emit('playerList', players, broadcast=True, to=next_room)
+    emit('playerList', players.serialize(), broadcast=True, to=next_room)
 
 
 @socketio.on('addChat')
@@ -143,8 +143,8 @@ def move_player(data):
 
 @socketio.on('getPlayers')
 def get_players():
-    emit('debugPlayerList', players)
-    emit('debugMessage', players)
+    emit('debugPlayerList', players.serialize())
+    emit('debugMessage', players.serialize())
 
 
 @socketio.on("debugMessage")

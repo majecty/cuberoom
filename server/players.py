@@ -1,4 +1,6 @@
 from threading import Lock
+from sid_container import SidContainer
+from password_container import PasswordContainer
 
 
 class Players():
@@ -6,8 +8,8 @@ class Players():
 
     def __init__(self):
         self.players = {}
-        self.players_sid_to_id = {}
-        self.players_id_to_password = {}
+        self.sid_container = SidContainer()
+        self.password_container = PasswordContainer()
         self.players_changed = False
         self.players_lock = Lock()
 
@@ -16,8 +18,9 @@ class Players():
         player_id = data["id"]
         password = data["password"]
 
-        match_password = self.players_id_to_password.get(player_id) == password
-        match_sid = self.players_sid_to_id.get(sid) == player_id
+        match_password = self.password_container.match_password(
+            player_id, password)
+        match_sid = self.sid_container.get(sid) == player_id
 
         if not match_password:
             return "fail"
@@ -31,8 +34,8 @@ class Players():
         self.players_lock.acquire()
         try:
             self.players_changed = True
-            self.players_sid_to_id[sid] = player.id
-            self.players_id_to_password[player.id] = password
+            self.sid_container.add(sid, player.id)
+            self.password_container.add(player.id, password)
             self.players[player.id] = player
         finally:
             self.players_lock.release()
@@ -91,11 +94,11 @@ class Players():
         self.players_lock.acquire()
         try:
             self.players_changed = True
-            player_id = self.players_sid_to_id.get(sid)
+            player_id = self.sid_container.get(sid)
             if player_id is not None:
+                self.sid_container.remove(sid)
                 self.players.pop(player_id, None)
-                self.players_sid_to_id.pop(sid)
-                self.players_id_to_password.pop(player_id)
+                self.password_container.remove(player_id)
         finally:
             self.players_lock.release()
         return player_id

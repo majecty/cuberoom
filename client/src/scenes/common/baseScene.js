@@ -188,6 +188,24 @@ export function baseSceneCreate({
     y: selfScene.y,
   });
   selfScene.login = () => {
+    if (selfScene.player == null) {
+      selfScene.player = playerCreate(
+        selfScene,
+        selfScene.x,
+        selfScene.y,
+        playerName,
+        "",
+        getPlayerId(),
+        playerImgUrl
+      ); // 소켓 연결 되면 이 부분을 지워야 함
+      selfScene.player = playerAddKey(selfScene.player, selfScene);
+
+      selfScene.players = playersAddPlayer(
+        selfScene.players,
+        getPlayerId(),
+        selfScene.player
+      );
+    }
     protocol.addPlayer(selfScene.socket, {
       name: playerName,
       imgUrl: playerImgUrl,

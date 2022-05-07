@@ -1,5 +1,6 @@
 import { log } from "../log";
 import { zoom } from "../constant";
+import { protocol } from "../network/protocol";
 
 export const FLOOR_NAMES = {
   EntranceScene: "entrance",
@@ -35,7 +36,7 @@ export function listenRemovePlayerOnPlayer(
   getId,
   removePlayer
 ) {
-  socket.on("removePlayer", (data) => {
+  protocol.onRemovePlayer(socket, (data) => {
     if (scene.stop) {
       return;
     }

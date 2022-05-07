@@ -99,7 +99,7 @@
 
     window.socket = socket;
 
-    socket.on('disconnect', (reason) => {
+    protocol.onDisconnect(socket,(reason) => {
       console.log("disconnected", reason);
       if (reason === "io server disconnect") {
         console.log("manual reconnect");
@@ -107,21 +107,21 @@
       }
     });
 
-    socket.on('connect_error', (err) => {
+    protocol.onConnectError(socket, (err) => {
       console.error(err);
     });
 
-    socket.on("needLogin", () => {
+    protocol.onNeedLogin(socket, () => {
       if (window.scene != null) {
         window.scene.login();
       }
     });
 
-    window.socket.on('debugMessage', (data) => {
+    protocol.onDebugMessage(socket, (data) => {
       console.log("debugMessage", data);
     });
 
-    window.socket.on("connect", () => {
+    protocol.onConnect(socket, () => {
       console.log("connected");
       if (window.game == null) {
         const config = {

@@ -8,10 +8,11 @@ import { chatUpdateText } from "../../entity/player/chat";
 import { playerCreateAnimations } from "../../entity/player/animation";
 import { log } from "../../log";
 import { loadIdAndPassword } from "../../pages/storage";
+import { protocol } from "../../network/protocol";
 
 /* eslint no-param-reassign: ["error", { "props": false }] */
 export function playersContainerListenRemovePlayer(scene, container, socket) {
-  socket.on("removePlayer", (dataFromServer) => {
+  protocol.onRemovePlayer(socket, (dataFromServer) => {
     if (scene.stop) {
       return;
     }
@@ -90,8 +91,10 @@ export function playersContainerListenPlayerList({
     }
   }
 
-  socket.on("playerList", (data) => listener(data));
-  socket.on("debugPlayerList", (data) => listener(data, true));
+  protocol.onPlayerList(socket, listener);
+  protocol.onDebugPlayerList(socket, (data) => {
+    listener(data, true);
+  });
 }
 
 /**
@@ -107,7 +110,7 @@ export function playersContainerListenAddChat(
   /**
    * @param dataFromServer field id, chat, floor
    */
-  socket.on("addChat", (dataFromServer) => {
+  protocol.onAddChat(socket, (dataFromServer) => {
     if (scene.stop) {
       return;
     }
@@ -132,7 +135,7 @@ export function playersContainerListenRemoveChat(
   socket,
   sceneName
 ) {
-  socket.on("removeChat", (data) => {
+  protocol.onRemoveChat(socket, (data) => {
     if (scene.stop) {
       return;
     }

@@ -71,6 +71,48 @@ function movePlayer(socket, { floor, direction, x, y }) {
   });
 }
 
+function onDisconnect(socket, callback) {
+  socket.on("disconnect", (reason) => {
+    callback(reason);
+  });
+}
+
+function onConnectError(socket, callback) {
+  socket.on("connect_error", callback);
+}
+
+function onNeedLogin(socket, callback) {
+  socket.on("needLogin", callback);
+}
+
+function onDebugMessage(socket, callback) {
+  socket.on("debugMessage", callback);
+}
+
+function onConnect(socket, callback) {
+  socket.on("connect", callback);
+}
+
+function onRemovePlayer(socket, callback) {
+  socket.on("removePlayer", callback);
+}
+
+function onPlayerList(socket, callback) {
+  socket.on("playerList", callback);
+}
+
+function onDebugPlayerList(socket, callback) {
+  socket.on("debugPlayerList", callback);
+}
+
+function onAddChat(socket, callback) {
+  socket.on("addChat", callback);
+}
+
+function onRemoveChat(socket, callback) {
+  socket.on("removeChat", callback);
+}
+
 export const protocol = {
   getPlayers,
   moveFloor,
@@ -78,4 +120,15 @@ export const protocol = {
   addChat,
   removeChat,
   movePlayer,
+
+  onDisconnect,
+  onConnectError,
+  onNeedLogin,
+  onDebugMessage,
+  onConnect,
+  onRemovePlayer,
+  onPlayerList,
+  onDebugPlayerList,
+  onAddChat,
+  onRemoveChat,
 };

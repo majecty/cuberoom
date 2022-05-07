@@ -33,7 +33,7 @@ import {
   loadPlayerNameAndImgUrl,
   loadFloorAndMovement,
 } from "../../pages/storage";
-import { protocol, getPlayerId } from "../../network/protocol";
+import { protocol } from "../../network/protocol";
 import { ifDebug } from "../../common/debug";
 import { isFirstScene, saveSceneToHistory } from "./history";
 
@@ -61,7 +61,7 @@ export function baseSceneConstructor(selfScene, sceneName) {
     selfScene,
     selfScene.socket,
     selfScene.sceneName,
-    () => getPlayerId(),
+    () => protocol.getPlayerId(),
     () => {
       selfScene.player = null;
     }
@@ -137,7 +137,7 @@ export function baseScenePreload(selfScene) {
   const { playerImgUrl } = loadPlayerNameAndImgUrl();
   // FIXME: move this to player code
   for (const [key, file] of allCharacterImageNames(
-    getPlayerId(),
+    protocol.getPlayerId(),
     playerImgUrl
   )) {
     selfScene.load.image(key, file);
@@ -159,7 +159,7 @@ export function baseSceneCreate({
   window.scene = selfScene;
   selfScene.stop = false;
   log(selfScene.sceneName, "create");
-  playerCreateAnimations(getPlayerId(), selfScene);
+  playerCreateAnimations(protocol.getPlayerId(), selfScene);
 
   selfScene.map = mapCreate(selfScene, mapName);
   const { playerName, playerImgUrl } = loadPlayerNameAndImgUrl();
@@ -169,14 +169,14 @@ export function baseSceneCreate({
     selfScene.y,
     playerName,
     "",
-    getPlayerId(),
+    protocol.getPlayerId(),
     playerImgUrl
   ); // 소켓 연결 되면 이 부분을 지워야 함
   selfScene.player = playerAddKey(selfScene.player, selfScene);
 
   selfScene.players = playersAddPlayer(
     selfScene.players,
-    getPlayerId(),
+    protocol.getPlayerId(),
     selfScene.player
   );
 
@@ -195,14 +195,14 @@ export function baseSceneCreate({
         selfScene.y,
         playerName,
         "",
-        getPlayerId(),
+        protocol.getPlayerId(),
         playerImgUrl
       ); // 소켓 연결 되면 이 부분을 지워야 함
       selfScene.player = playerAddKey(selfScene.player, selfScene);
 
       selfScene.players = playersAddPlayer(
         selfScene.players,
-        getPlayerId(),
+        protocol.getPlayerId(),
         selfScene.player
       );
     }

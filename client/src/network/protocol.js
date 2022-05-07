@@ -10,7 +10,7 @@ function createSocket() {
   return socket;
 }
 
-export function getPlayerId() {
+function getPlayerId() {
   const id = loadFromBrowserStorage("id");
   return id;
 }
@@ -123,8 +123,10 @@ function onRemoveChat(socket, callback) {
   socket.on("removeChat", callback);
 }
 
+/* eslint-disable import/prefer-default-export */
 export const protocol = {
   createSocket,
+  getPlayerId,
 
   getPlayers,
   moveFloor,

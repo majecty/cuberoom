@@ -1,4 +1,14 @@
+import { io } from "socket.io-client";
 import { loadFromBrowserStorage, loadIdAndPassword } from "../pages/storage";
+import ENV from "../../ENV";
+
+function createSocket() {
+  const socket =
+    ENV.ENVIRONMENT === "production"
+      ? io.connect(ENV.GET_SOCKETIO_URL(), { transports: ["websocket"] })
+      : io.connect(ENV.GET_SOCKETIO_URL());
+  return socket;
+}
 
 export function getPlayerId() {
   const id = loadFromBrowserStorage("id");
@@ -114,6 +124,8 @@ function onRemoveChat(socket, callback) {
 }
 
 export const protocol = {
+  createSocket,
+
   getPlayers,
   moveFloor,
   addPlayer,

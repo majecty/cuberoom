@@ -93,10 +93,7 @@
   }
 
   function initializeSocket() {
-    const socket = ENV.ENVIRONMENT === 'production'
-      ? io.connect(ENV.GET_SOCKETIO_URL(), { transports: ['websocket'] })
-      : io.connect(ENV.GET_SOCKETIO_URL());
-
+    const socket = protocol.createSocket();
     window.socket = socket;
 
     protocol.onDisconnect(socket,(reason) => {

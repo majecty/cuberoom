@@ -131,6 +131,7 @@ function onRemoveChat(socket, callback) {
 export const protocol = {
   createSocket,
   socketConnect,
+  getPlayerId,
 
   getPlayers,
   moveFloor,

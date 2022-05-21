@@ -31,6 +31,7 @@
     "@sentry/browser": "^6.13.2",
     "@sentry/tracing": "^6.13.2",
     "axios": "^0.21.1",
+    "nanoevents": "^6.0.2",
     "phaser": "^3.55.2",
     "sirv-cli": "^1.0.0",
     "socket.io-client": "^4.1.3",

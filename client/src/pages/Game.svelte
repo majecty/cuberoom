@@ -78,15 +78,6 @@
           return;
         }
         window.scene.cameras.main.fadeIn(500);
-        ifDebug(() => {
-          if (window.socket.disconnected) {
-            return;
-          }
-          window.socket.emit("debugMessage", {
-            width: window.visualViewport.width / zoom,
-            height: window.visualViewport.height / zoom
-          });
-        });
         window.game.scale.resize(window.visualViewport.width / zoom, window.visualViewport.height / zoom);
       }, 100);
     });
@@ -100,7 +91,7 @@
       console.log("disconnected", reason);
       if (reason === "io server disconnect") {
         console.log("manual reconnect");
-        socket.connect();
+        protocol.socketConnect(socket);
       }
     });
 

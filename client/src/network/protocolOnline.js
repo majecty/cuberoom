@@ -10,6 +10,10 @@ function createSocket() {
   return socket;
 }
 
+function socketConnect(socket) {
+  socket.connect();
+}
+
 function getPlayerId() {
   const id = loadFromBrowserStorage("id");
   return id;
@@ -126,6 +130,7 @@ function onRemoveChat(socket, callback) {
 /* eslint-disable import/prefer-default-export */
 export const protocol = {
   createSocket,
+  socketConnect,
 
   getPlayers,
   moveFloor,

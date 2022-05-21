@@ -78,50 +78,38 @@
           return;
         }
         window.scene.cameras.main.fadeIn(500);
-        ifDebug(() => {
-          if (window.socket.disconnected) {
-            return;
-          }
-          window.socket.emit("debugMessage", {
-            width: window.visualViewport.width / zoom,
-            height: window.visualViewport.height / zoom
-          });
-        });
         window.game.scale.resize(window.visualViewport.width / zoom, window.visualViewport.height / zoom);
       }, 100);
     });
   }
 
   function initializeSocket() {
-    const socket = ENV.ENVIRONMENT === 'production'
-      ? io.connect(ENV.GET_SOCKETIO_URL(), { transports: ['websocket'] })
-      : io.connect(ENV.GET_SOCKETIO_URL());
-
+    const socket = protocol.createSocket();
     window.socket = socket;
 
-    socket.on('disconnect', (reason) => {
+    protocol.onDisconnect(socket,(reason) => {
       console.log("disconnected", reason);
       if (reason === "io server disconnect") {
         console.log("manual reconnect");
-        socket.connect();
+        protocol.socketConnect(socket);
       }
     });
 
-    socket.on('connect_error', (err) => {
+    protocol.onConnectError(socket, (err) => {
       console.error(err);
     });
 
-    socket.on("needLogin", () => {
+    protocol.onNeedLogin(socket, () => {
       if (window.scene != null) {
         window.scene.login();
       }
     });
 
-    window.socket.on('debugMessage', (data) => {
+    protocol.onDebugMessage(socket, (data) => {
       console.log("debugMessage", data);
     });
 
-    window.socket.on("connect", () => {
+    protocol.onConnect(socket, () => {
       console.log("connected");
       if (window.game == null) {
         const config = {

@@ -73,6 +73,17 @@
     if (clothesNum < 1) clothesNum = 12;
   }
 
+  function decideWithoutServer() {
+    name = name || names[Math.floor(Math.random() * names.length)];
+    const prefix = `/static/character-resource/`;
+    const playerImgUrl = `${prefix}/skin${skinNum}_hairC${hairColorNum}_cloth${clothesNum}`
+      + `_hairS${hairStyleNum}_faceS${eyeNum}/`;
+
+    saveCharacterSelection(playerImgUrl, name);
+    navigate('/map');
+  }
+
+
   function decide() {
     name = name || names[Math.floor(Math.random() * names.length)];
     axios.post(`${ENV.GET_SERVER_URL()}/character-selection`, {
@@ -138,7 +149,7 @@
         <div class="center">피부색</div>
         <button class="right" on:click={increaseSkinNum}></button>
       </div>
-      <button class="decide" on:click={decide}>
+      <button class="decide" on:click={decideWithoutServer}>
         <img src="/static/img/ui/decide.png" alt="결정" />
       </button>
     </div>

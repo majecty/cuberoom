@@ -10,6 +10,9 @@ require (
 	github.com/googollee/go-socket.io v1.7.0 // indirect
 	github.com/gookit/color v1.5.4 // indirect
 	github.com/gorilla/websocket v1.5.0 // indirect
+	github.com/huandu/go-sqlbuilder v1.27.0 // indirect
+	github.com/huandu/xstrings v1.3.2 // indirect
+	github.com/mattn/go-sqlite3 v1.14.22 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/rs/cors v1.10.1 // indirect
 	github.com/vmihailenco/msgpack/v5 v5.3.5 // indirect

@@ -14,6 +14,7 @@ require (
 	github.com/huandu/xstrings v1.3.2 // indirect
 	github.com/mattn/go-sqlite3 v1.14.22 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
+	github.com/mkafonso/go-verify v0.0.0-20240407135649-381f41bf6f8a // indirect
 	github.com/rs/cors v1.10.1 // indirect
 	github.com/vmihailenco/msgpack/v5 v5.3.5 // indirect
 	github.com/vmihailenco/tagparser/v2 v2.0.0 // indirect

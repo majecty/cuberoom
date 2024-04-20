@@ -29,30 +29,10 @@ func main() {
         client := clients[0].(*socket.Socket)
 		fmt.Println("connected:", client.Id())
 
-        client.On("event", func(datas ...any) {
-			fmt.Println("event:", datas)
-        })
+		RegisterPlayersEvents(client);
+		RegisterChatEvents(client);
+		RegisterPlayerEvents(client);
 
-		client.On("getPlayers", func(datas ...any) {
-			fmt.Println("getPlayers:", datas)
-		})
-
-		client.On("moveFloor", func(datas ...any) {
-			fmt.Println("moveFloor:", datas)
-		})
-
-		client.On("addChat", func(datas ...any) {
-			fmt.Println("addChat:", datas)
-		})
-
-		client.On("removeChat", func(datas ...any) {
-			fmt.Println("removeChat:", datas)
-		})
-
-		client.On("movePlayer", func(datas ...any) {
-			fmt.Println("movePlayer:", datas)
-		})
-		
         client.On("disconnect", func(...any) {
 			fmt.Println("disconnect")
         })

@@ -8,13 +8,13 @@ import (
 )
 
 type PlayerAddInput struct {
-	Id string `json:"id"`
-	Floor string `json:"floor"`
-	ImgUrl string `json:"imgUrl"`
-	Name string `json:"name"`
+	Id       string `json:"id"`
+	Floor    string `json:"floor"`
+	ImgUrl   string `json:"imgUrl"`
+	Name     string `json:"name"`
 	Password string `json:"password"`
-	X int `json:"x"`
-	Y int `json:"y"`
+	X        int    `json:"x"`
+	Y        int    `json:"y"`
 }
 
 func RegisterPlayersEvents(socket *socket.Socket) {

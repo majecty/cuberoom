@@ -6,6 +6,8 @@ import (
 	"log"
 	"net/http"
 
+	network "cuberoom-go/network"
+
 	"github.com/huandu/go-sqlbuilder"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/rs/cors"
@@ -29,9 +31,9 @@ func main() {
         client := clients[0].(*socket.Socket)
 		fmt.Println("connected:", client.Id())
 
-		RegisterPlayersEvents(client);
-		RegisterChatEvents(client);
-		RegisterPlayerEvents(client);
+		network.RegisterPlayersEvents(client);
+		network.RegisterChatEvents(client);
+		network.RegisterPlayerEvents(client);
 
         client.On("disconnect", func(...any) {
 			fmt.Println("disconnect")

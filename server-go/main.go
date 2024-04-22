@@ -1,28 +1,20 @@
 package main
 
 import (
-	"database/sql"
 	"fmt"
-	"log"
 	"net/http"
 
+	"cuberoom-go/db"
 	network "cuberoom-go/network"
 
-	"github.com/huandu/go-sqlbuilder"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/rs/cors"
 	"github.com/zishang520/socket.io/socket"
 )
 
 func main() {
-	db, err := sql.Open("sqlite3", ":memory:")
-	if err != nil {
-		log.Fatal(err)
-	}
-	sql := sqlbuilder.Select("1 + 1").String()
-	fmt.Printf("sql: %s\n", sql)
-
-	defer db.Close()
+	db.PrepareDB()
+	defer db.CleanupDB()
 
 	io := socket.NewServer(nil, nil)
 	http.Handle("/socket.io/", io.ServeHandler(nil))

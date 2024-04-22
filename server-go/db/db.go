@@ -20,21 +20,32 @@ func PrepareDB() (err error) {
 		log.Fatal(err)
 	}
 
+	pingErr := database.Ping()
+	if pingErr != nil {
+		log.Fatal(pingErr)
+	}
+	fmt.Println("Connected to the database")
+
 	// sql := sqlbuilder.CreateTable("players").
 	// String()
 	ctb := sqlbuilder.NewCreateTableBuilder()
 	ctb.CreateTable("players")
-	ctb.Define("id", "TEXT", "NOT NULL", "PRIMARY KEY", `COMMENT "player id"`)
-	ctb.Define("floor", "TEXT", "NOT NULL", `COMMENT "player floor"`)
-	ctb.Define("img_url", "TEXT", "NOT NULL", `COMMENT "player image url"`)
-	ctb.Define("name", "TEXT", "NOT NULL", `COMMENT "player name"`)
-	ctb.Define("password", "TEXT", "NOT NULL", `COMMENT "player password"`)
-	ctb.Define("x", "INTEGER", "NOT NULL", `COMMENT "player x"`)
-	ctb.Define("y", "INTEGER", "NOT NULL", `COMMENT "player y"`)
+	ctb.Define("id", "TEXT", "NOT NULL", "PRIMARY KEY")
+	ctb.Define("floor", "TEXT", "NOT NULL")
+	ctb.Define("img_url", "TEXT", "NOT NULL")
+	ctb.Define("name", "TEXT", "NOT NULL")
+	ctb.Define("password", "TEXT", "NOT NULL")
+	ctb.Define("x", "INTEGER", "NOT NULL")
+	ctb.Define("y", "INTEGER", "NOT NULL")
 
 	fmt.Printf("sql: %s\n", ctb.String())
 
-	// database.
+	execResult, execErr := database.Exec(ctb.String())
+	if execErr != nil {
+		log.Fatal("players table creation error", execErr)
+	} else {
+		fmt.Println("players table created", execResult)
+	}
 
 	return nil
 }

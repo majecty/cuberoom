@@ -5,7 +5,9 @@ import (
 	"net/http"
 
 	"cuberoom-go/db"
+	"cuberoom-go/db/initializer"
 	network "cuberoom-go/network"
+	"cuberoom-go/players"
 
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/rs/cors"
@@ -14,6 +16,7 @@ import (
 
 func main() {
 	db.PrepareDB()
+	initializer.Initialize()
 	defer db.CleanupDB()
 
 	io := socket.NewServer(nil, nil)
@@ -23,7 +26,7 @@ func main() {
 		client := clients[0].(*socket.Socket)
 		fmt.Println("connected:", client.Id())
 
-		network.RegisterPlayersEvents(client)
+		players.RegisterPlayersEvents(client)
 		network.RegisterChatEvents(client)
 		network.RegisterPlayerEvents(client)
 

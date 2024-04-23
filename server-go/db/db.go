@@ -10,6 +10,13 @@ import (
 
 var database *sql.DB
 
+func GetDatabase() *sql.DB {
+	if database == nil {
+		panic("Database not initialized")
+	}
+	return database
+}
+
 func PrepareDB() (err error) {
 	if database != nil {
 		panic("Database already initialized")
@@ -24,9 +31,6 @@ func PrepareDB() (err error) {
 		log.Fatal(pingErr)
 	}
 	fmt.Println("Connected to the database")
-
-	CreatePlayerTable()
-
 	return nil
 }
 

@@ -1,4 +1,4 @@
-package network
+package players
 
 import (
 	"fmt"
@@ -40,4 +40,8 @@ func RegisterPlayersEvents(socket *socket.Socket) {
 		}
 		fmt.Println("Player:", player)
 	})
+}
+
+func AddPlayer(player *PlayerAddInput) {
+	fmt.Println("AddPlayer:", player)
 }

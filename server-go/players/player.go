@@ -1,8 +1,10 @@
-package db
+package players
 
 import (
 	"fmt"
 	"log"
+
+	"cuberoom-go/db"
 
 	sqlbuilder "github.com/huandu/go-sqlbuilder"
 )
@@ -30,7 +32,7 @@ func CreatePlayerTable() {
 	ctb.Define("x", "INTEGER", "NOT NULL")
 	ctb.Define("y", "INTEGER", "NOT NULL")
 
-	execResult, execErr := database.Exec(ctb.String())
+	execResult, execErr := db.GetDatabase().Exec(ctb.String())
 	if execErr != nil {
 		log.Fatal("players table creation error", execErr)
 	} else {
@@ -41,7 +43,7 @@ func CreatePlayerTable() {
 func InsertPlayer(player *PlayerRow) error {
 	ib := playerStruct.InsertInto("players", player)
 	sql, args := ib.Build()
-	_, insertErr := database.Exec(sql, args...)
+	_, insertErr := db.GetDatabase().Exec(sql, args...)
 
 	if insertErr != nil {
 		return fmt.Errorf("insert player error: %v", insertErr)
@@ -54,7 +56,7 @@ func SelectPlayer(id string) (*PlayerRow, error) {
 	sb.Where(sb.Equal("id", id))
 	sql, args := sb.Build()
 	fmt.Println("sql", sql, "args", args)
-	row := database.QueryRow(sql, args...)
+	row := db.GetDatabase().QueryRow(sql, args...)
 
 	var player PlayerRow
 	scanErr := row.Scan(playerStruct.Addr(&player)...)

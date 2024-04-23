@@ -1,12 +1,14 @@
-package db
+package players
 
 import (
+	"cuberoom-go/db"
 	"testing"
 )
 
 func TestDB(t *testing.T) {
-	PrepareDB()
-	defer CleanupDB()
+	db.PrepareDB()
+	CreatePlayerTable()
+	defer db.CleanupDB()
 	t.Log("TestDB")
 
 	err := InsertPlayer(&PlayerRow{

@@ -66,3 +66,24 @@ func SelectPlayer(id string) (*PlayerRow, error) {
 	fmt.Println("player", player)
 	return &player, nil
 }
+
+func SelectAllPlayer() ([]*PlayerRow, error) {
+	sb := playerStruct.SelectFrom("players")
+	sql, args := sb.Build()
+	rows, err := db.GetDatabase().Query(sql, args...)
+	defer rows.Close()
+	if err != nil {
+		panic(fmt.Errorf("select all player error: %v", err))
+	}
+
+	var players []*PlayerRow
+	for rows.Next() {
+		var player PlayerRow
+		scanErr := rows.Scan(playerStruct.Addr(&player)...)
+		if scanErr != nil {
+			panic(fmt.Errorf("scan player error: %v", scanErr))
+		}
+		players = append(players, &player)
+	}
+	return players, nil
+}

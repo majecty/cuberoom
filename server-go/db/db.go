@@ -39,4 +39,5 @@ func CleanupDB() {
 		panic("Database not initialized")
 	}
 	database.Close()
+	database = nil
 }

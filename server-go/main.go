@@ -26,7 +26,7 @@ func main() {
 		client := clients[0].(*socket.Socket)
 		fmt.Println("connected:", client.Id())
 
-		players.RegisterPlayersEvents(client)
+		players.RegisterPlayersEvents(io, client)
 		network.RegisterChatEvents(client)
 		network.RegisterPlayerEvents(client)
 

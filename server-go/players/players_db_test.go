@@ -17,8 +17,10 @@ func TestInsertSelect(t *testing.T) {
 		ImgUrl:   "https://example.com",
 		Name:     "test",
 		Password: "test",
-		X:        0,
-		Y:        0,
+		Position: Position{
+			X: 0,
+			Y: 0,
+		},
 	})
 
 	if err != nil {
@@ -49,8 +51,10 @@ func TestInsertSelectAll(t *testing.T) {
 		ImgUrl:   "https://example.com",
 		Name:     "test",
 		Password: "test",
-		X:        0,
-		Y:        0,
+		Position: Position{
+			X: 0,
+			Y: 0,
+		},
 	})
 
 	if err != nil {

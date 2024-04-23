@@ -1,4 +1,4 @@
-package network
+package player
 
 import (
 	"fmt"
@@ -15,5 +15,4 @@ func RegisterPlayerEvents(socket *socket.Socket) {
 	socket.On("movePlayer", func(datas ...any) {
 		fmt.Println("movePlayer:", datas)
 	})
-
 }

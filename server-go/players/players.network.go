@@ -98,8 +98,10 @@ func AddPlayer(player *PlayerAddInput) (*PlayerRow, error) {
 		ImgUrl:   player.ImgUrl,
 		Name:     player.Name,
 		Password: player.Password,
-		X:        player.X,
-		Y:        player.Y,
+		Position: Position{
+			X: player.X,
+			Y: player.Y,
+		},
 	}
 	err := InsertPlayer(playerRow)
 

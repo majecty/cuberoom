@@ -7,6 +7,7 @@ import (
 	"cuberoom-go/db"
 	"cuberoom-go/db/initializer"
 	network "cuberoom-go/network"
+	"cuberoom-go/player"
 	"cuberoom-go/players"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -28,7 +29,7 @@ func main() {
 
 		players.RegisterPlayersEvents(io, client)
 		network.RegisterChatEvents(client)
-		network.RegisterPlayerEvents(client)
+		player.RegisterPlayerEvents(client)
 
 		client.On("disconnect", func(...any) {
 			fmt.Println("disconnect")

@@ -9,17 +9,21 @@ import (
 	sqlbuilder "github.com/huandu/go-sqlbuilder"
 )
 
+type Position struct {
+	X int `db:"x" fieldtag:"pos"`
+	Y int `db:"y" fieldtag:"pos"`
+}
+
 type PlayerRow struct {
+	Position
 	Id       string `db:"id"`
 	Floor    string `db:"floor"`
 	ImgUrl   string `db:"img_url"`
 	Name     string `db:"name"`
 	Password string `db:"password"`
-	X        int    `db:"x"`
-	Y        int    `db:"y"`
 }
 
-var playerStruct = sqlbuilder.NewStruct(new(PlayerRow))
+var PlayerStruct = sqlbuilder.NewStruct(new(PlayerRow))
 
 func CreatePlayerTable() {
 	ctb := sqlbuilder.NewCreateTableBuilder()
@@ -41,7 +45,7 @@ func CreatePlayerTable() {
 }
 
 func InsertPlayer(player *PlayerRow) error {
-	ib := playerStruct.InsertInto("players", player)
+	ib := PlayerStruct.InsertInto("players", player)
 	sql, args := ib.Build()
 	_, insertErr := db.GetDatabase().Exec(sql, args...)
 
@@ -52,14 +56,14 @@ func InsertPlayer(player *PlayerRow) error {
 }
 
 func SelectPlayer(id string) (*PlayerRow, error) {
-	sb := playerStruct.SelectFrom("players")
+	sb := PlayerStruct.SelectFrom("players")
 	sb.Where(sb.Equal("id", id))
 	sql, args := sb.Build()
 	fmt.Println("sql", sql, "args", args)
 	row := db.GetDatabase().QueryRow(sql, args...)
 
 	var player PlayerRow
-	scanErr := row.Scan(playerStruct.Addr(&player)...)
+	scanErr := row.Scan(PlayerStruct.Addr(&player)...)
 	if scanErr != nil {
 		return nil, fmt.Errorf("select player error: %v", scanErr)
 	}
@@ -68,7 +72,7 @@ func SelectPlayer(id string) (*PlayerRow, error) {
 }
 
 func SelectAllPlayer() ([]*PlayerRow, error) {
-	sb := playerStruct.SelectFrom("players")
+	sb := PlayerStruct.SelectFrom("players")
 	sql, args := sb.Build()
 	rows, err := db.GetDatabase().Query(sql, args...)
 	defer rows.Close()
@@ -79,7 +83,7 @@ func SelectAllPlayer() ([]*PlayerRow, error) {
 	var players []*PlayerRow
 	for rows.Next() {
 		var player PlayerRow
-		scanErr := rows.Scan(playerStruct.Addr(&player)...)
+		scanErr := rows.Scan(PlayerStruct.Addr(&player)...)
 		if scanErr != nil {
 			panic(fmt.Errorf("scan player error: %v", scanErr))
 		}

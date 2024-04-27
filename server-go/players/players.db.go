@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"cuberoom-go/db"
+	"cuberoom-go/players/playerstypes"
 
 	sqlbuilder "github.com/huandu/go-sqlbuilder"
 )
@@ -16,12 +17,12 @@ type Position struct {
 
 type PlayerRow struct {
 	Position
-	Id        string `db:"id"`
-	Floor     string `db:"floor" fieldtag:"pos"`
-	Direction string `db:"direction" fieldtag:"pos"`
-	ImgUrl    string `db:"img_url"`
-	Name      string `db:"name"`
-	Password  string `db:"password"`
+	Id        playerstypes.PlayerId `db:"id"`
+	Floor     string                `db:"floor" fieldtag:"pos"`
+	Direction string                `db:"direction" fieldtag:"pos"`
+	ImgUrl    string                `db:"img_url"`
+	Name      string                `db:"name"`
+	Password  string                `db:"password"`
 }
 
 var PlayerStruct = sqlbuilder.NewStruct(new(PlayerRow))
@@ -75,6 +76,33 @@ func SelectPlayer(id string) (*PlayerRow, error) {
 
 func SelectAllPlayer() ([]*PlayerRow, error) {
 	sb := PlayerStruct.SelectFrom("players")
+	sql, args := sb.Build()
+	rows, err := db.GetDatabase().Query(sql, args...)
+	if err != nil {
+		panic(fmt.Errorf("select all player error: %v", err))
+	}
+	defer rows.Close()
+
+	var players []*PlayerRow
+	for rows.Next() {
+		var player PlayerRow
+		scanErr := rows.Scan(PlayerStruct.Addr(&player)...)
+		if scanErr != nil {
+			panic(fmt.Errorf("scan player error: %v", scanErr))
+		}
+		players = append(players, &player)
+	}
+	return players, nil
+}
+
+func SelectPlayers(playerIds []playerstypes.PlayerId) ([]*PlayerRow, error) {
+	var idInterfaces []interface{}
+	for _, id := range playerIds {
+		idInterfaces = append(idInterfaces, id)
+	}
+
+	sb := PlayerStruct.SelectFrom("players")
+	sb.Where(sb.In("id", idInterfaces...))
 	sql, args := sb.Build()
 	rows, err := db.GetDatabase().Query(sql, args...)
 	defer rows.Close()

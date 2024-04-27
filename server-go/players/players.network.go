@@ -1,6 +1,7 @@
 package players
 
 import (
+	"cuberoom-go/players/playerstypes"
 	"fmt"
 
 	"github.com/mkafonso/go-verify/z"
@@ -8,23 +9,23 @@ import (
 )
 
 type PlayerAddInput struct {
-	Id       string `json:"id"`
-	Floor    string `json:"floor"`
-	ImgUrl   string `json:"imgUrl"`
-	Name     string `json:"name"`
-	Password string `json:"password"`
-	X        int    `json:"x"`
-	Y        int    `json:"y"`
+	Id       playerstypes.PlayerId `json:"id"`
+	Floor    string                `json:"floor"`
+	ImgUrl   string                `json:"imgUrl"`
+	Name     string                `json:"name"`
+	Password string                `json:"password"`
+	X        int                   `json:"x"`
+	Y        int                   `json:"y"`
 }
 
 type PlayerOutput struct {
-	Id       string `json:"id"`
-	Floor    string `json:"floor"`
-	ImgUrl   string `json:"imgUrl"`
-	Name     string `json:"name"`
-	Password string `json:"password"`
-	X        int    `json:"x"`
-	Y        int    `json:"y"`
+	Id       playerstypes.PlayerId `json:"id"`
+	Floor    string                `json:"floor"`
+	ImgUrl   string                `json:"imgUrl"`
+	Name     string                `json:"name"`
+	Password string                `json:"password"`
+	X        int                   `json:"x"`
+	Y        int                   `json:"y"`
 }
 
 func (player *PlayerOutput) fromPlayerRow(row *PlayerRow) {
@@ -47,6 +48,7 @@ func RegisterPlayersEvents(io *socket.Server, socket *socket.Socket) {
 		}
 		playerOutputs := make([]*PlayerOutput, len(players))
 		for i, player := range players {
+			playerOutputs[i] = &PlayerOutput{}
 			playerOutputs[i].fromPlayerRow(player)
 		}
 
@@ -70,14 +72,17 @@ func RegisterPlayersEvents(io *socket.Server, socket *socket.Socket) {
 		}
 
 		playerOutputs := make([]*PlayerOutput, 1)
+		playerOutputs[0] = &PlayerOutput{}
 		playerOutputs[0].fromPlayerRow(row)
-		io.Emit("playerList", playerOutputs)
+		io.Sockets().Emit("playerList", playerOutputs)
 	})
 }
 
-func CheckPlayerInput(datas ...any) (PlayerAddInput, error) {
+func CheckPlayerInput(datas []any) (PlayerAddInput, error) {
 	player := PlayerAddInput{}
 
+	fmt.Println("datas[0]:", datas[0])
+	fmt.Println("type of datas[0]:", fmt.Sprintf("%T", datas[0]))
 	data, ok := datas[0].(map[string]interface{})
 	if !ok {
 		return player, fmt.Errorf("invalid data format")

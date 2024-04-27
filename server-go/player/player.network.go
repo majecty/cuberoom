@@ -3,20 +3,23 @@ package player
 import (
 	"fmt"
 
+	globalevents "cuberoom-go/global_events"
+	"cuberoom-go/players/playerstypes"
+
 	"github.com/mkafonso/go-verify/z"
 	"github.com/zishang520/socket.io/socket"
 )
 
 type MovePlayerInput struct {
-	Id        string `json:"id"`
-	Password  string `json:"password"`
-	Floor     string `json:"floor"`
-	Direction string `json:"direction"`
-	X         int    `json:"x"`
-	Y         int    `json:"y"`
+	Id        playerstypes.PlayerId `json:"id"`
+	Password  string                `json:"password"`
+	Floor     string                `json:"floor"`
+	Direction string                `json:"direction"`
+	X         int                   `json:"x"`
+	Y         int                   `json:"y"`
 }
 
-func RegisterPlayerEvents(io *socket.Server, socket *socket.Socket) {
+func RegisterPlayerEvents(server *socket.Server, socket *socket.Socket) {
 
 	socket.On("moveFloor", func(datas ...any) {
 		fmt.Println("moveFloor:", datas)
@@ -29,14 +32,17 @@ func RegisterPlayerEvents(io *socket.Server, socket *socket.Socket) {
 			fmt.Println("checkMovePlayerInput error:", err)
 			return
 		}
-
+		// server.Sockets().Emit("debugMessage", fmt.Sprintf("movePlayer: server sockets send"))
+		// server.Emit("debugMessage", fmt.Sprintf("movePlayer: server send"))
+		// socket.Send("debugMessage", fmt.Sprintf("movePlayer: socket send"))
+		// socket.Broadcast().Emit("debugMessage", fmt.Sprintf("movePlayer: broadcast"))
 		MovePlayer(input.Id, input.X, input.Y, input.Direction, input.Floor)
 
-		// trigger player move
+		globalevents.RegisterPlayerMove(input.Id)
 	})
 }
 
-func checkMovePlayerInput(datas ...any) (MovePlayerInput, error) {
+func checkMovePlayerInput(datas []any) (MovePlayerInput, error) {
 	input := MovePlayerInput{}
 
 	data, ok := datas[0].(map[string]interface{})

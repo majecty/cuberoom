@@ -3,10 +3,11 @@ package player
 import (
 	"cuberoom-go/db"
 	"cuberoom-go/players"
+	"cuberoom-go/players/playerstypes"
 	"fmt"
 )
 
-func MovePlayer(playerId string, x int, y int, direction string, floor string) error {
+func MovePlayer(playerId playerstypes.PlayerId, x int, y int, direction string, floor string) error {
 	ub := players.PlayerStruct.WithTag("pos").
 		Update("players",
 			&players.PlayerRow{
@@ -16,7 +17,6 @@ func MovePlayer(playerId string, x int, y int, direction string, floor string) e
 			})
 	ub.Where(ub.Equal("id", playerId))
 	sql, args := ub.Build()
-	fmt.Printf("sql: %s, args: %v\n", sql, args)
 
 	_, updateErr := db.GetDatabase().Exec(sql, args...)
 

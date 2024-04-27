@@ -1,12 +1,14 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 
 	"cuberoom-go/chat"
 	"cuberoom-go/db"
 	"cuberoom-go/db/initializer"
+	globalevents "cuberoom-go/global_events"
 	"cuberoom-go/player"
 	"cuberoom-go/players"
 
@@ -26,10 +28,13 @@ func main() {
 	io.On("connection", func(clients ...any) {
 		client := clients[0].(*socket.Socket)
 		fmt.Println("connected:", client.Id())
+		io.Emit("debugMessage", "connected using io.Emit")
+		client.Emit("debugMessage", "connected using client.Emit")
+		io.Send("hello")
 
 		players.RegisterPlayersEvents(io, client)
 		chat.RegisterChatEvents(client)
-		player.RegisterPlayerEvents(client)
+		player.RegisterPlayerEvents(io, client)
 
 		client.On("disconnect", func(...any) {
 			fmt.Println("disconnect")
@@ -37,7 +42,8 @@ func main() {
 	})
 	fmt.Println("Hello, worlsd.")
 	handler := cors.AllowAll().Handler(http.DefaultServeMux)
-	// handler := cors.Default().Handler(mux)
-	// http.ListenAndServe(":8080", handler)
+
+	go globalevents.GlobalEventHandlerLoop(context.Background(), io)
 	http.ListenAndServe(":3000", handler)
+	fmt.Println("Server started on port 3000.")
 }

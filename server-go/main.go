@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
+	"cuberoom-go/chat"
 	"cuberoom-go/db"
 	"cuberoom-go/db/initializer"
-	network "cuberoom-go/network"
 	"cuberoom-go/player"
 	"cuberoom-go/players"
 
@@ -28,7 +28,7 @@ func main() {
 		fmt.Println("connected:", client.Id())
 
 		players.RegisterPlayersEvents(io, client)
-		network.RegisterChatEvents(client)
+		chat.RegisterChatEvents(client)
 		player.RegisterPlayerEvents(client)
 
 		client.On("disconnect", func(...any) {

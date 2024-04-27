@@ -24,7 +24,7 @@ func TestMove(t *testing.T) {
 		t.Error("AddPlayer error", err)
 	}
 
-	MovePlayer("1", 1, 2)
+	MovePlayer("1", 1, 2, "up", "first floor")
 	player, err := players.SelectPlayer("1")
 	if err != nil {
 		t.Error("SelectPlayer error", err)

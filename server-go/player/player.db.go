@@ -6,8 +6,14 @@ import (
 	"fmt"
 )
 
-func MovePlayer(playerId string, x int, y int) error {
-	ub := players.PlayerStruct.WithTag("pos").Update("players", &players.PlayerRow{Position: players.Position{X: x, Y: y}})
+func MovePlayer(playerId string, x int, y int, direction string, floor string) error {
+	ub := players.PlayerStruct.WithTag("pos").
+		Update("players",
+			&players.PlayerRow{
+				Position:  players.Position{X: x, Y: y},
+				Direction: direction,
+				Floor:     floor,
+			})
 	ub.Where(ub.Equal("id", playerId))
 	sql, args := ub.Build()
 	fmt.Printf("sql: %s, args: %v\n", sql, args)

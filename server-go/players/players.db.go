@@ -16,11 +16,12 @@ type Position struct {
 
 type PlayerRow struct {
 	Position
-	Id       string `db:"id"`
-	Floor    string `db:"floor"`
-	ImgUrl   string `db:"img_url"`
-	Name     string `db:"name"`
-	Password string `db:"password"`
+	Id        string `db:"id"`
+	Floor     string `db:"floor" fieldtag:"pos"`
+	Direction string `db:"direction" fieldtag:"pos"`
+	ImgUrl    string `db:"img_url"`
+	Name      string `db:"name"`
+	Password  string `db:"password"`
 }
 
 var PlayerStruct = sqlbuilder.NewStruct(new(PlayerRow))
@@ -30,6 +31,7 @@ func CreatePlayerTable() {
 	ctb.CreateTable("players")
 	ctb.Define("id", "TEXT", "NOT NULL", "PRIMARY KEY")
 	ctb.Define("floor", "TEXT", "NOT NULL")
+	ctb.Define("direction", "TEXT", "NOT NULL")
 	ctb.Define("img_url", "TEXT", "NOT NULL")
 	ctb.Define("name", "TEXT", "NOT NULL")
 	ctb.Define("password", "TEXT", "NOT NULL")

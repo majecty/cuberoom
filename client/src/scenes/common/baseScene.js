@@ -241,6 +241,8 @@ export function baseSceneCreate({
       selfScene.input.activePointer.worldY
     );
   });
+
+  protocol.getPlayers(selfScene.socket);
 }
 
 export function baseSceneUpdate(selfScene, dtMillis) {

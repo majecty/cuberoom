@@ -30,8 +30,18 @@ func BroadcastPlayers(io *socket.Server, updatedPlayers []playerstypes.PlayerId)
 		playerOutputs[i] = &PlayerOutput{}
 		playerOutputs[i].fromPlayerRow(player)
 	}
-	io.Sockets().Emit("playerList", playerOutputs)
-	fmt.Printf("call io.emt playerList with %d players\n", len(serializedPlayers))
+
+	perFloor := make(map[string][]*PlayerOutput)
+	for _, player := range playerOutputs {
+		perFloor[player.Floor] = append(perFloor[player.Floor], player)
+	}
+
+	for floor, players := range perFloor {
+		io.Sockets().In(socket.Room(floor)).Emit("playerList", players)
+	}
+
+	// io.Sockets().Emit("playerList", playerOutputs)
+	// fmt.Printf("call io.emt playerList with %d players\n", len(serializedPlayers))
 	// io.Sockets().Emit("playerList", players)
 	// io.Emit("debugMessage", serializedPlayers)
 }

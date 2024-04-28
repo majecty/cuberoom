@@ -9,8 +9,8 @@ import (
 	"github.com/zishang520/socket.io/socket"
 )
 
-func RegisterChatEvents(server *socket.Server, socket *socket.Socket) {
-	socket.On("addChat", func(datas ...any) {
+func RegisterChatEvents(server *socket.Server, socket_ *socket.Socket) {
+	socket_.On("addChat", func(datas ...any) {
 		fmt.Println("addChat:", datas)
 
 		input, err := checkAddChatInput(datas)
@@ -25,18 +25,18 @@ func RegisterChatEvents(server *socket.Server, socket *socket.Socket) {
 			return
 		}
 		if player == nil {
-			socket.Emit("needLogin")
+			socket_.Emit("needLogin")
 			return
 		}
 
-		server.Sockets().Emit("addChat", AddChatOutput{
+		server.Sockets().In(socket.Room(player.Floor)).Emit("addChat", AddChatOutput{
 			Id:    string(input.Id),
 			Chat:  input.Chat,
 			Floor: player.Floor,
 		})
 	})
 
-	socket.On("removeChat", func(datas ...any) {
+	socket_.On("removeChat", func(datas ...any) {
 		fmt.Println("removeChat:", datas)
 
 		input, err := checkRemoveChatInput(datas)
@@ -51,11 +51,11 @@ func RegisterChatEvents(server *socket.Server, socket *socket.Socket) {
 			return
 		}
 		if player == nil {
-			socket.Emit("needLogin")
+			socket_.Emit("needLogin")
 			return
 		}
 
-		server.Sockets().Emit("removeChat", RemoveChatOutput{
+		server.Sockets().In(socket.Room(player.Floor)).Emit("removeChat", RemoveChatOutput{
 			Id:    string(input.Id),
 			Chat:  "",
 			Floor: player.Floor,

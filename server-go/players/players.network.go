@@ -39,8 +39,8 @@ func (player *PlayerOutput) fromPlayerRow(row *PlayerRow) {
 	player.Y = row.Y
 }
 
-func RegisterPlayersEvents(io *socket.Server, socket *socket.Socket) {
-	socket.On("getPlayers", func(datas ...any) {
+func RegisterPlayersEvents(io *socket.Server, socket_ *socket.Socket) {
+	socket_.On("getPlayers", func(datas ...any) {
 		fmt.Println("getPlayers:", datas)
 		players, err := GetAllPlayer()
 		if err != nil {
@@ -53,11 +53,11 @@ func RegisterPlayersEvents(io *socket.Server, socket *socket.Socket) {
 			playerOutputs[i].fromPlayerRow(player)
 		}
 
-		socket.Emit("debugPlayerList", playerOutputs)
-		socket.Emit("debugMessage", playerOutputs)
+		socket_.Emit("debugPlayerList", playerOutputs)
+		socket_.Emit("debugMessage", playerOutputs)
 	})
 
-	socket.On("addPlayer", func(datas ...any) {
+	socket_.On("addPlayer", func(datas ...any) {
 		fmt.Println("addPlayer:", datas)
 
 		player, err := CheckPlayerInput(datas)
@@ -66,11 +66,13 @@ func RegisterPlayersEvents(io *socket.Server, socket *socket.Socket) {
 			return
 		}
 
-		row, err := AddPlayer(&player, socket.Id())
+		row, err := AddPlayer(&player, socket_.Id())
 		if err != nil {
 			fmt.Println("Error adding player:", err)
 			return
 		}
+
+		socket_.Join(socket.Room(player.Floor))
 
 		playerOutputs := make([]*PlayerOutput, 1)
 		playerOutputs[0] = &PlayerOutput{}
@@ -78,10 +80,10 @@ func RegisterPlayersEvents(io *socket.Server, socket *socket.Socket) {
 		io.Sockets().Emit("playerList", playerOutputs)
 	})
 
-	socket.On("disconnect", func(datas ...any) {
+	socket_.On("disconnect", func(datas ...any) {
 		fmt.Println("disconnect:", datas)
 
-		player, err := SelectPlayerBySocketId(socket.Id())
+		player, err := SelectPlayerBySocketId(socket_.Id())
 		if err != nil {
 			fmt.Println("Error selecting player by socket id:", err)
 			return
@@ -91,7 +93,7 @@ func RegisterPlayersEvents(io *socket.Server, socket *socket.Socket) {
 			return
 		}
 
-		err = RemovePlayerBySocketId(socket.Id())
+		err = RemovePlayerBySocketId(socket_.Id())
 		if err != nil {
 			fmt.Println("Error removing player by socket id:", err)
 			return

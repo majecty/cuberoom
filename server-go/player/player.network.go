@@ -20,9 +20,9 @@ type MovePlayerInput struct {
 	Y         int                   `json:"y"`
 }
 
-func RegisterPlayerEvents(server *socket.Server, socket *socket.Socket) {
+func RegisterPlayerEvents(server *socket.Server, socket_ *socket.Socket) {
 
-	socket.On("moveFloor", func(datas ...any) {
+	socket_.On("moveFloor", func(datas ...any) {
 		fmt.Println("moveFloor:", datas)
 		input, err := checkMoveFloorInput(datas)
 		if err != nil {
@@ -35,18 +35,22 @@ func RegisterPlayerEvents(server *socket.Server, socket *socket.Socket) {
 			return
 		}
 		if player == nil {
-			socket.Emit("needLogin")
+			socket_.Emit("needLogin")
 			return
 		}
-		err = MoveFloor(input.Id, input.Password, input.Floor, socket.Id())
+		err = MoveFloor(input.Id, input.Password, input.Floor, socket_.Id())
 		if err != nil {
 			fmt.Println("MoveFloor error:", err)
 			return
 		}
+
+		socket_.Leave(socket.Room(player.Floor))
+		socket_.Join(socket.Room(input.Floor))
+
 		server.Sockets().Emit("removePlayer", input.Id)
 	})
 
-	socket.On("movePlayer", func(datas ...any) {
+	socket_.On("movePlayer", func(datas ...any) {
 		fmt.Println("movePlayer:", datas)
 		input, err := checkMovePlayerInput(datas)
 		if err != nil {
@@ -59,13 +63,17 @@ func RegisterPlayerEvents(server *socket.Server, socket *socket.Socket) {
 			return
 		}
 		if player == nil {
-			socket.Emit("needLogin")
+			socket_.Emit("needLogin")
 			return
 		}
-		err = MovePlayer(input.Id, input.X, input.Y, input.Direction, input.Floor, socket.Id())
+		err = MovePlayer(input.Id, input.X, input.Y, input.Direction, input.Floor, socket_.Id())
 		if err != nil {
 			fmt.Println("MovePlayer error:", err)
 			return
+		}
+		if player.Floor != input.Floor {
+			socket_.Leave(socket.Room(player.Floor))
+			socket_.Join(socket.Room(input.Floor))
 		}
 
 		globalevents.RegisterPlayerMove(input.Id)

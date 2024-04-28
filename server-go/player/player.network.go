@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	globalevents "cuberoom-go/global_events"
+	"cuberoom-go/players"
 	"cuberoom-go/players/playerstypes"
 
 	"github.com/mkafonso/go-verify/z"
@@ -28,6 +29,15 @@ func RegisterPlayerEvents(server *socket.Server, socket *socket.Socket) {
 			fmt.Println("checkMoveFloorInput error:", err)
 			return
 		}
+		player, err := players.SelectPlayer(input.Id)
+		if err != nil {
+			fmt.Println("SelectPlayer error:", err)
+			return
+		}
+		if player == nil {
+			socket.Emit("needLogin")
+			return
+		}
 		err = MoveFloor(input.Id, input.Password, input.Floor)
 		if err != nil {
 			fmt.Println("MoveFloor error:", err)
@@ -41,6 +51,15 @@ func RegisterPlayerEvents(server *socket.Server, socket *socket.Socket) {
 		input, err := checkMovePlayerInput(datas)
 		if err != nil {
 			fmt.Println("checkMovePlayerInput error:", err)
+			return
+		}
+		player, err := players.SelectPlayer(input.Id)
+		if err != nil {
+			fmt.Println("SelectPlayer error:", err)
+			return
+		}
+		if player == nil {
+			socket.Emit("needLogin")
 			return
 		}
 		err = MovePlayer(input.Id, input.X, input.Y, input.Direction, input.Floor)

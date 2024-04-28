@@ -2,6 +2,7 @@ package chat
 
 import (
 	"cuberoom-go/players"
+	"cuberoom-go/players/playerstypes"
 	"fmt"
 
 	"github.com/mkafonso/go-verify/z"
@@ -23,9 +24,13 @@ func RegisterChatEvents(server *socket.Server, socket *socket.Socket) {
 			fmt.Println("SelectPlayer error:", err)
 			return
 		}
+		if player == nil {
+			socket.Emit("needLogin")
+			return
+		}
 
 		server.Sockets().Emit("addChat", AddChatOutput{
-			Id:    input.Id,
+			Id:    string(input.Id),
 			Chat:  input.Chat,
 			Floor: player.Floor,
 		})
@@ -45,9 +50,13 @@ func RegisterChatEvents(server *socket.Server, socket *socket.Socket) {
 			fmt.Println("SelectPlayer error:", err)
 			return
 		}
+		if player == nil {
+			socket.Emit("needLogin")
+			return
+		}
 
 		server.Sockets().Emit("removeChat", RemoveChatOutput{
-			Id:    input.Id,
+			Id:    string(input.Id),
 			Chat:  "",
 			Floor: player.Floor,
 		})
@@ -55,8 +64,8 @@ func RegisterChatEvents(server *socket.Server, socket *socket.Socket) {
 }
 
 type AddChatInput struct {
-	Id   string `json:"id"`
-	Chat string `json:"chat"`
+	Id   playerstypes.PlayerId `json:"id"`
+	Chat string                `json:"chat"`
 }
 
 func checkAddChatInput(datas []any) (AddChatInput, error) {
@@ -82,7 +91,7 @@ type AddChatOutput struct {
 }
 
 type RemoveChatInput struct {
-	Id string `json:"id"`
+	Id playerstypes.PlayerId `json:"id"`
 }
 
 func checkRemoveChatInput(datas []any) (RemoveChatInput, error) {

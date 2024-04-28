@@ -1,6 +1,7 @@
 package players
 
 import (
+	"database/sql"
 	"errors"
 	"fmt"
 	"log"
@@ -82,15 +83,18 @@ func UpdatePlayer(player *PlayerRow) error {
 	return nil
 }
 
-func SelectPlayer(id string) (*PlayerRow, error) {
+func SelectPlayer(id playerstypes.PlayerId) (*PlayerRow, error) {
 	sb := PlayerStruct.SelectFrom("players")
 	sb.Where(sb.Equal("id", id))
-	sql, args := sb.Build()
-	fmt.Println("sql", sql, "args", args)
-	row := db.GetDatabase().QueryRow(sql, args...)
+	sql_, args := sb.Build()
+	fmt.Println("sql", sql_, "args", args)
+	row := db.GetDatabase().QueryRow(sql_, args...)
 
 	var player PlayerRow
 	scanErr := row.Scan(PlayerStruct.Addr(&player)...)
+	if errors.Is(scanErr, sql.ErrNoRows) {
+		return nil, nil
+	}
 	if scanErr != nil {
 		return nil, fmt.Errorf("select player error: %w", scanErr)
 	}

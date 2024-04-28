@@ -35,10 +35,6 @@ func main() {
 		players.RegisterPlayersEvents(io, client)
 		chat.RegisterChatEvents(io, client)
 		player.RegisterPlayerEvents(io, client)
-
-		client.On("disconnect", func(...any) {
-			fmt.Println("disconnect")
-		})
 	})
 	fmt.Println("Hello, worlsd.")
 	handler := cors.AllowAll().Handler(http.DefaultServeMux)

@@ -77,6 +77,11 @@ func RegisterPlayersEvents(io *socket.Server, socket *socket.Socket) {
 		playerOutputs[0].fromPlayerRow(row)
 		io.Sockets().Emit("playerList", playerOutputs)
 	})
+
+	socket.On("disconnect", func(datas ...any) {
+		fmt.Println("disconnect:", datas)
+		// todo
+	})
 }
 
 func CheckPlayerInput(datas []any) (PlayerAddInput, error) {

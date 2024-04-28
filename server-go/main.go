@@ -33,7 +33,7 @@ func main() {
 		io.Send("hello")
 
 		players.RegisterPlayersEvents(io, client)
-		chat.RegisterChatEvents(client)
+		chat.RegisterChatEvents(io, client)
 		player.RegisterPlayerEvents(io, client)
 
 		client.On("disconnect", func(...any) {

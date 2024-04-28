@@ -21,7 +21,7 @@ func PrepareDB() (err error) {
 	if database != nil {
 		panic("Database already initialized")
 	}
-	database, err = sql.Open("sqlite3", ":memory:")
+	database, err = sql.Open("sqlite3", "file::memory:?cache=shared")
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -62,27 +62,37 @@ export function playersContainerListenPlayerList({
   container,
 }) {
   function listener(data, debug) {
+    debug = true;
     if (scene.stop) {
       return;
     }
     if (debug) {
-      log("listenPlayerList", sceneName);
+      // log("listenPlayerList", data, sceneName);
+      // log("listenPlayerList", sceneName);
     }
-    for (const [id, playerFromServer] of Object.entries(data)) {
-      if (id === loadIdAndPassword().id) {
+    for (const playerFromServer of data) {
+      const id = playerFromServer.id;
+      if (playerFromServer.floor !== sceneName) {
         // do nothing
-      } else if (playerFromServer.floor !== sceneName) {
-        if (debug) {
-          log(
-            "listenPlayerList skip",
-            id.substring(0, 5),
-            playerFromServer.floor,
-            sceneName
-          );
-        }
+        // if (debug) {
+        //   log(
+        //     "listenPlayerList skip",
+        //     id.substring(0, 5),
+        //     playerFromServer.floor,
+        //     sceneName
+        //   );
+        // }
+      } else if (id === loadIdAndPassword().id) {
+        // log("itsme")
       } else if (container.players.entries[id] == null) {
+        if (debug) {
+          log("listenPlayerList create", id.substring(0, 5), id);
+        }
         createOtherPlayer(container, phaserScene, playerFromServer, id, debug);
       } else {
+        if (debug) {
+          log("listenPlayerList update", id.substring(0, 5), id);
+        }
         container.players.entries[id] = playerUpdateFromServer(
           container.players.entries[id],
           playerFromServer

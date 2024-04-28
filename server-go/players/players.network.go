@@ -53,8 +53,10 @@ func RegisterPlayersEvents(io *socket.Server, socket_ *socket.Socket) {
 			playerOutputs[i].fromPlayerRow(player)
 		}
 
-		socket_.Emit("debugPlayerList", playerOutputs)
-		socket_.Emit("debugMessage", playerOutputs)
+		socket_.Emit("playerList", playerOutputs)
+
+		// socket_.Emit("debugPlayerList", playerOutputs)
+		// socket_.Emit("debugMessage", playerOutputs)
 	})
 
 	socket_.On("addPlayer", func(datas ...any) {

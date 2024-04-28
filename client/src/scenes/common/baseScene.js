@@ -242,10 +242,33 @@ export function baseSceneCreate({
     );
   });
 
+  console.log("send getPlayers")
+  // 씬이 로딩 끝난 뒤 호출
   setTimeout(() => {
-    // 씬이 로딩 끝난 뒤 호출
+    if (window.scene !== selfScene) {
+      console.log("scene changed between 3 seconds")
+      return;
+    }
+    if (selfScene.player == null) {
+      console.log("player is null")
+      return;
+    }
     protocol.getPlayers(selfScene.socket);
-  }, 3000);
+
+    console.log("send move player", {
+      floor: selfScene.sceneName,
+      direction: selfScene.player.prevMove,
+      x: selfScene.player.phaser.x,
+      y: selfScene.player.phaser.y,
+    })
+    // 한 번이라도 move player를 호출해야 남에게 보임
+    protocol.movePlayer(selfScene.socket, {
+      floor: selfScene.sceneName,
+      direction: selfScene.player.prevMove,
+      x: selfScene.player.phaser.x,
+      y: selfScene.player.phaser.y,
+    });
+  }, 1000);
 }
 
 export function baseSceneUpdate(selfScene, dtMillis) {

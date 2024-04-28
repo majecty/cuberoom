@@ -40,7 +40,7 @@ export function listenRemovePlayerOnPlayer(
     if (scene.stop) {
       return;
     }
-    if (data.id === getId()) {
+    if (data === getId()) {
       log("removePlayer", sceneName, data.id, data);
       removePlayer();
     }

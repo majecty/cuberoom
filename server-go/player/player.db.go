@@ -25,3 +25,20 @@ func MovePlayer(playerId playerstypes.PlayerId, x int, y int, direction string, 
 	}
 	return nil
 }
+
+func MoveFloor(playerId playerstypes.PlayerId, password string, floor string) error {
+	ub := players.PlayerStruct.WithTag("pos").
+		Update("players",
+			&players.PlayerRow{
+				Floor: floor,
+			})
+	ub.Where(ub.Equal("id", playerId))
+	sql, args := ub.Build()
+
+	_, updateErr := db.GetDatabase().Exec(sql, args...)
+
+	if updateErr != nil {
+		return fmt.Errorf("update player error: %w", updateErr)
+	}
+	return nil
+}

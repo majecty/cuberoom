@@ -14,7 +14,9 @@ export function playersEntries(players) {
  * @param dataFromServer id프로퍼티를 가짐
  */
 export function playersOnRemovePlayer(players, dataFromServer) {
-  const { id } = dataFromServer;
+  // console.log("playersOnRemovePlayer", players, dataFromServer);
+  const id = dataFromServer;
+  // console.log("playersOnRemovePlayer", id, dataFromServer);
   if (players.entries[id]) {
     log("removePlayers", players.sceneName, id, dataFromServer);
     // FIXME: scene.player와 scene.players가 같은 player를 공유한다.

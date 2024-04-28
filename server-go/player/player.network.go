@@ -38,7 +38,7 @@ func RegisterPlayerEvents(server *socket.Server, socket *socket.Socket) {
 			socket.Emit("needLogin")
 			return
 		}
-		err = MoveFloor(input.Id, input.Password, input.Floor)
+		err = MoveFloor(input.Id, input.Password, input.Floor, socket.Id())
 		if err != nil {
 			fmt.Println("MoveFloor error:", err)
 			return
@@ -62,7 +62,7 @@ func RegisterPlayerEvents(server *socket.Server, socket *socket.Socket) {
 			socket.Emit("needLogin")
 			return
 		}
-		err = MovePlayer(input.Id, input.X, input.Y, input.Direction, input.Floor)
+		err = MovePlayer(input.Id, input.X, input.Y, input.Direction, input.Floor, socket.Id())
 		if err != nil {
 			fmt.Println("MovePlayer error:", err)
 			return

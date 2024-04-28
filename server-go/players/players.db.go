@@ -11,6 +11,7 @@ import (
 
 	sqlbuilder "github.com/huandu/go-sqlbuilder"
 	"github.com/mattn/go-sqlite3"
+	"github.com/zishang520/socket.io/socket"
 )
 
 type Position struct {
@@ -26,9 +27,10 @@ type PlayerRow struct {
 	ImgUrl    string                `db:"img_url"`
 	Name      string                `db:"name"`
 	Password  string                `db:"password"`
+	SocketId  string                `db:"socket_id" fieldtag:"pos"`
 }
 
-var PlayerIdDuplicatedError = errors.New("player id duplicated")
+var ErrPlayerIdDuplicated = errors.New("player id duplicated")
 
 var PlayerStruct = sqlbuilder.NewStruct(new(PlayerRow))
 
@@ -43,6 +45,7 @@ func CreatePlayerTable() {
 	ctb.Define("password", "TEXT", "NOT NULL")
 	ctb.Define("x", "INTEGER", "NOT NULL")
 	ctb.Define("y", "INTEGER", "NOT NULL")
+	ctb.Define("socket_id", "TEXT", "NOT NULL")
 
 	execResult, execErr := db.GetDatabase().Exec(ctb.String())
 	if execErr != nil {
@@ -61,7 +64,7 @@ func InsertPlayer(player *PlayerRow) error {
 		sqlError := sqlite3.Error{}
 		if errors.As(insertErr, &sqlError) {
 			if sqlError.ExtendedCode == sqlite3.ErrConstraintPrimaryKey {
-				return PlayerIdDuplicatedError
+				return ErrPlayerIdDuplicated
 			}
 
 		}
@@ -87,7 +90,6 @@ func SelectPlayer(id playerstypes.PlayerId) (*PlayerRow, error) {
 	sb := PlayerStruct.SelectFrom("players")
 	sb.Where(sb.Equal("id", id))
 	sql_, args := sb.Build()
-	fmt.Println("sql", sql_, "args", args)
 	row := db.GetDatabase().QueryRow(sql_, args...)
 
 	var player PlayerRow
@@ -98,7 +100,23 @@ func SelectPlayer(id playerstypes.PlayerId) (*PlayerRow, error) {
 	if scanErr != nil {
 		return nil, fmt.Errorf("select player error: %w", scanErr)
 	}
-	fmt.Println("player", player)
+	return &player, nil
+}
+
+func SelectPlayerBySocketId(socketId socket.SocketId) (*PlayerRow, error) {
+	sb := PlayerStruct.SelectFrom("players")
+	sb.Where(sb.Equal("socket_id", string(socketId)))
+	sql_, args := sb.Build()
+	row := db.GetDatabase().QueryRow(sql_, args...)
+
+	var player PlayerRow
+	scanErr := row.Scan(PlayerStruct.Addr(&player)...)
+	if errors.Is(scanErr, sql.ErrNoRows) {
+		return nil, nil
+	}
+	if scanErr != nil {
+		return nil, fmt.Errorf("select player error: %w", scanErr)
+	}
 	return &player, nil
 }
 
@@ -148,4 +166,26 @@ func SelectPlayers(playerIds []playerstypes.PlayerId) ([]*PlayerRow, error) {
 		players = append(players, &player)
 	}
 	return players, nil
+}
+
+func RemovePlayer(id playerstypes.PlayerId) error {
+	db_ := PlayerStruct.DeleteFrom("players")
+	db_.Where(db_.Equal("id", id))
+	sql, args := db_.Build()
+	_, deleteErr := db.GetDatabase().Exec(sql, args...)
+	if deleteErr != nil {
+		return fmt.Errorf("delete player error: %w", deleteErr)
+	}
+	return nil
+}
+
+func RemovePlayerBySocketId(socketId socket.SocketId) error {
+	db_ := PlayerStruct.DeleteFrom("players")
+	db_.Where(db_.Equal("socket_id", string(socketId)))
+	sql, args := db_.Build()
+	_, deleteErr := db.GetDatabase().Exec(sql, args...)
+	if deleteErr != nil {
+		return fmt.Errorf("delete player error: %w", deleteErr)
+	}
+	return nil
 }

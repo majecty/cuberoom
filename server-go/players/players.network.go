@@ -66,7 +66,7 @@ func RegisterPlayersEvents(io *socket.Server, socket *socket.Socket) {
 			return
 		}
 
-		row, err := AddPlayer(&player)
+		row, err := AddPlayer(&player, socket.Id())
 		if err != nil {
 			fmt.Println("Error adding player:", err)
 			return
@@ -80,7 +80,24 @@ func RegisterPlayersEvents(io *socket.Server, socket *socket.Socket) {
 
 	socket.On("disconnect", func(datas ...any) {
 		fmt.Println("disconnect:", datas)
-		// todo
+
+		player, err := SelectPlayerBySocketId(socket.Id())
+		if err != nil {
+			fmt.Println("Error selecting player by socket id:", err)
+			return
+		}
+		if player == nil {
+			fmt.Println("Player not found by socket id")
+			return
+		}
+
+		err = RemovePlayerBySocketId(socket.Id())
+		if err != nil {
+			fmt.Println("Error removing player by socket id:", err)
+			return
+		}
+
+		io.Sockets().Emit("removePlayer", player.Id)
 	})
 }
 
@@ -102,7 +119,7 @@ func CheckPlayerInput(datas []any) (PlayerAddInput, error) {
 	return player, nil
 }
 
-func AddPlayer(player *PlayerAddInput) (*PlayerRow, error) {
+func AddPlayer(player *PlayerAddInput, socketId socket.SocketId) (*PlayerRow, error) {
 	playerRow := &PlayerRow{
 		Id:       player.Id,
 		Floor:    player.Floor,
@@ -113,9 +130,10 @@ func AddPlayer(player *PlayerAddInput) (*PlayerRow, error) {
 			X: player.X,
 			Y: player.Y,
 		},
+		SocketId: string(socketId),
 	}
 	err := InsertPlayer(playerRow)
-	if errors.Is(err, PlayerIdDuplicatedError) {
+	if errors.Is(err, ErrPlayerIdDuplicated) {
 		err = UpdatePlayer(playerRow)
 		if err != nil {
 			return nil, fmt.Errorf("update player error: %w", err)

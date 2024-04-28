@@ -242,7 +242,10 @@ export function baseSceneCreate({
     );
   });
 
-  protocol.getPlayers(selfScene.socket);
+  setTimeout(() => {
+    // 씬이 로딩 끝난 뒤 호출
+    protocol.getPlayers(selfScene.socket);
+  }, 3000);
 }
 
 export function baseSceneUpdate(selfScene, dtMillis) {

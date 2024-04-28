@@ -1,6 +1,7 @@
 package players
 
 import (
+	"errors"
 	"fmt"
 	"log"
 
@@ -8,6 +9,7 @@ import (
 	"cuberoom-go/players/playerstypes"
 
 	sqlbuilder "github.com/huandu/go-sqlbuilder"
+	"github.com/mattn/go-sqlite3"
 )
 
 type Position struct {
@@ -24,6 +26,8 @@ type PlayerRow struct {
 	Name      string                `db:"name"`
 	Password  string                `db:"password"`
 }
+
+var PlayerIdDuplicatedError = errors.New("player id duplicated")
 
 var PlayerStruct = sqlbuilder.NewStruct(new(PlayerRow))
 
@@ -53,7 +57,27 @@ func InsertPlayer(player *PlayerRow) error {
 	_, insertErr := db.GetDatabase().Exec(sql, args...)
 
 	if insertErr != nil {
-		return fmt.Errorf("insert player error: %v", insertErr)
+		sqlError := sqlite3.Error{}
+		if errors.As(insertErr, &sqlError) {
+			if sqlError.ExtendedCode == sqlite3.ErrConstraintPrimaryKey {
+				return PlayerIdDuplicatedError
+			}
+
+		}
+		return fmt.Errorf("insert player error: %w", insertErr)
+	}
+	return nil
+}
+
+func UpdatePlayer(player *PlayerRow) error {
+	ub := PlayerStruct.Update("players", player)
+	ub.Where(ub.Equal("id", player.Id))
+	sql, args := ub.Build()
+
+	_, updateErr := db.GetDatabase().Exec(sql, args...)
+
+	if updateErr != nil {
+		return fmt.Errorf("update player error: %w", updateErr)
 	}
 	return nil
 }
@@ -68,7 +92,7 @@ func SelectPlayer(id string) (*PlayerRow, error) {
 	var player PlayerRow
 	scanErr := row.Scan(PlayerStruct.Addr(&player)...)
 	if scanErr != nil {
-		return nil, fmt.Errorf("select player error: %v", scanErr)
+		return nil, fmt.Errorf("select player error: %w", scanErr)
 	}
 	fmt.Println("player", player)
 	return &player, nil
@@ -79,7 +103,7 @@ func SelectAllPlayer() ([]*PlayerRow, error) {
 	sql, args := sb.Build()
 	rows, err := db.GetDatabase().Query(sql, args...)
 	if err != nil {
-		panic(fmt.Errorf("select all player error: %v", err))
+		panic(fmt.Errorf("select all player error: %w", err))
 	}
 	defer rows.Close()
 
@@ -88,7 +112,7 @@ func SelectAllPlayer() ([]*PlayerRow, error) {
 		var player PlayerRow
 		scanErr := rows.Scan(PlayerStruct.Addr(&player)...)
 		if scanErr != nil {
-			panic(fmt.Errorf("scan player error: %v", scanErr))
+			panic(fmt.Errorf("scan player error: %w", scanErr))
 		}
 		players = append(players, &player)
 	}
@@ -105,17 +129,17 @@ func SelectPlayers(playerIds []playerstypes.PlayerId) ([]*PlayerRow, error) {
 	sb.Where(sb.In("id", idInterfaces...))
 	sql, args := sb.Build()
 	rows, err := db.GetDatabase().Query(sql, args...)
-	defer rows.Close()
 	if err != nil {
-		panic(fmt.Errorf("select all player error: %v", err))
+		panic(fmt.Errorf("select all player error: %w", err))
 	}
+	defer rows.Close()
 
 	var players []*PlayerRow
 	for rows.Next() {
 		var player PlayerRow
 		scanErr := rows.Scan(PlayerStruct.Addr(&player)...)
 		if scanErr != nil {
-			panic(fmt.Errorf("scan player error: %v", scanErr))
+			panic(fmt.Errorf("scan player error: %w", scanErr))
 		}
 		players = append(players, &player)
 	}

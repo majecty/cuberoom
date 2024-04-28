@@ -2,6 +2,7 @@ package players
 
 import (
 	"cuberoom-go/players/playerstypes"
+	"errors"
 	"fmt"
 
 	"github.com/mkafonso/go-verify/z"
@@ -90,7 +91,7 @@ func CheckPlayerInput(datas []any) (PlayerAddInput, error) {
 
 	err := z.ParseStruct(data, &player)
 	if err != nil {
-		return player, fmt.Errorf("error parsing struct: %v", err)
+		return player, fmt.Errorf("error parsing struct: %w", err)
 	}
 
 	return player, nil
@@ -109,6 +110,12 @@ func AddPlayer(player *PlayerAddInput) (*PlayerRow, error) {
 		},
 	}
 	err := InsertPlayer(playerRow)
+	if errors.Is(err, PlayerIdDuplicatedError) {
+		err = UpdatePlayer(playerRow)
+		if err != nil {
+			return nil, fmt.Errorf("update player error: %w", err)
+		}
+	}
 
 	return playerRow, err
 }

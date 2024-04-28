@@ -21,7 +21,7 @@ func MovePlayer(playerId playerstypes.PlayerId, x int, y int, direction string, 
 	_, updateErr := db.GetDatabase().Exec(sql, args...)
 
 	if updateErr != nil {
-		return fmt.Errorf("update player error: %v", updateErr)
+		return fmt.Errorf("update player error: %w", updateErr)
 	}
 	return nil
 }

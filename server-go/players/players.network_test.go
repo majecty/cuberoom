@@ -15,7 +15,9 @@ func TestCheckPlayerInput(t *testing.T) {
 		"x":        0,
 		"y":        0,
 	}
-	player, err := CheckPlayerInput(testInput)
+	// one length slice
+	inputs := []any{testInput}
+	player, err := CheckPlayerInput(inputs)
 	if err != nil {
 		t.Error("CheckPlayerInput error", err)
 	}

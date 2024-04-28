@@ -52,7 +52,7 @@ func checkMovePlayerInput(datas []any) (MovePlayerInput, error) {
 
 	err := z.ParseStruct(data, &input)
 	if err != nil {
-		return input, fmt.Errorf("ParseStruct error: %v", err)
+		return input, fmt.Errorf("ParseStruct error: %w", err)
 	}
 
 	return input, nil

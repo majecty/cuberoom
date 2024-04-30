@@ -2,10 +2,12 @@ function getDevSocketioURL() {
   if (location.host.indexOf("cuberoom") !== -1) {
     // run server in localhost but using DNS
     // it will help debuggin in Mobile
-    return "https://cuberoom.i.juhyung.dev/";
+    // return "https://cuberoom.i.juhyung.dev/";
+    return "https://3000-cuberoom.i.juhyung.dev/";
   } else {
     // run server in localhost
     return "http://localhost:3000";
+    // return "https://3000-cuberoom.i.juhyung.dev/";
   }
 }
 
@@ -36,7 +38,8 @@ function getProdURL() {
   } else if (location.host.indexOf() !== -1) {
     return "https://prev.cuberoom.net/";
   } else {
-    return "https://cuberoom.net";
+    // return "https://cuberoom.net";
+    return "https://3000-cuberoom.i.juhyung.dev/"
   }
 }
 

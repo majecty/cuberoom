@@ -75,7 +75,7 @@
 
   function decideWithoutServer() {
     name = name || names[Math.floor(Math.random() * names.length)];
-    const prefix = `/static/character-resource/`;
+    const prefix = `/static/character-resource`;
     const playerImgUrl = `${prefix}/skin${skinNum}_hairC${hairColorNum}_cloth${clothesNum}`
       + `_hairS${hairStyleNum}_faceS${eyeNum}/`;
 

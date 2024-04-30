@@ -62,7 +62,6 @@ export function playersContainerListenPlayerList({
   container,
 }) {
   function listener(data, debug) {
-    debug = true;
     if (scene.stop) {
       return;
     }

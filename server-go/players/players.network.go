@@ -41,7 +41,6 @@ func (player *PlayerOutput) fromPlayerRow(row *PlayerRow) {
 
 func RegisterPlayersEvents(io *socket.Server, socket_ *socket.Socket) {
 	socket_.On("getPlayers", func(datas ...any) {
-		fmt.Println("getPlayers:", datas)
 		players, err := GetAllPlayer()
 		if err != nil {
 			fmt.Println("Error getting players:", err)

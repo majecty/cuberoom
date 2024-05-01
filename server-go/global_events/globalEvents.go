@@ -18,7 +18,7 @@ type GlobalEvent struct {
 
 var globalEvent GlobalEvent = GlobalEvent{
 	updatedPlayers: hashset.New[playerstypes.PlayerId](),
-	channel:        make(chan playerstypes.PlayerId, 100),
+	channel:        make(chan playerstypes.PlayerId, 1000),
 }
 
 func RegisterPlayerMove(playerId playerstypes.PlayerId) {

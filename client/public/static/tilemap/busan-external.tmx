@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="40" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="2">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="40" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="4">
  <editorsettings>
-  <export target="busan-test.json" format="json"/>
+  <export target="busan-external.json" format="json"/>
  </editorsettings>
  <tileset firstgid="1" name="collision" tilewidth="16" tileheight="16" tilecount="4" columns="2">
   <image source="simple_tile.png" width="32" height="32"/>
@@ -30,7 +30,7 @@
   </tile>
  </tileset>
  <imagelayer id="2" name="Image Layer 1" visible="0">
-  <image source="../img/tilesetimages/busanhome.png" width="640" height="320"/>
+  <image source="../img/tilesetimages/busanhome.png"/>
  </imagelayer>
  <layer id="4" name="collision" width="40" height="20">
   <data encoding="base64">
@@ -44,6 +44,12 @@
  </layer>
  <objectgroup id="7" name="Object Layer 1">
   <object id="1" name="spawnPoint" x="58.5" y="249">
+   <point/>
+  </object>
+  <object id="2" name="spawn1F1" x="340.027" y="237.137">
+   <point/>
+  </object>
+  <object id="3" name="spawn1F2" x="406.66" y="237.137">
    <point/>
   </object>
  </objectgroup>

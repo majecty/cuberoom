@@ -3,14 +3,15 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "eighth-floor.json",
+    "activeFile": "busan-test.tmx",
     "expandedProjectPaths": [
         "."
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
         "": {
-            "scaleInDock": 1
+            "scaleInDock": 1,
+            "scaleInEditor": 1
         },
         "busan-test.json": {
             "scale": 2.041015625,
@@ -23,15 +24,21 @@
         "busan-test.json#busaninteractive": {
             "scaleInDock": 1
         },
+        "busan-test.json#collision": {
+            "scaleInDock": 1
+        },
         "busan-test.tmx": {
             "scale": 2,
-            "selectedLayer": 1,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 170.25,
+                "x": 350.25,
                 "y": 163.25
             }
         },
         "busan-test.tmx#busaninteractive": {
+            "scaleInDock": 1
+        },
+        "busan-test.tmx#collision": {
             "scaleInDock": 1
         },
         "busan-test.tmx#interactive-tile": {
@@ -195,21 +202,27 @@
         "sixth-floor.tmx",
         "entrance.tmx",
         "busan-test.tmx",
+        "interactive-tile.tsx",
+        "entrance.json",
         "fifth-floor.tmx",
-        "eighth-floor.json"
+        "eighth-floor.json",
+        "busan-test.json",
+        "eighth-floor.tmx",
+        "collision.tsx"
     ],
     "project": "untitled.tiled-project",
     "recentFiles": [
-        "busan-test.json",
-        "collision.tsx",
-        "fifth-floor.tmx",
-        "eighth-floor.json",
-        "eighth-floor.tmx",
         "sixth-floor.tmx",
         "entrance.tmx",
+        "collision.tsx",
+        "eighth-floor.tmx",
+        "busan-test.json",
+        "eighth-floor.json",
+        "fifth-floor.tmx",
+        "entrance.json",
+        "interactive-tile.tsx",
         "busan-test.tmx",
         "first-floor.tmx",
-        "interactive-tile.tsx",
         "sixth-floor.json"
     ],
     "tileset.embedInMap": true,

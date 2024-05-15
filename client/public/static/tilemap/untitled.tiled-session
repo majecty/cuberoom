@@ -55,8 +55,8 @@
             "scale": 0.75,
             "selectedLayer": 7,
             "viewCenter": {
-                "x": 1115.3333333333333,
-                "y": 383.33333333333337
+                "x": 1114,
+                "y": 382
             }
         },
         "eighth-floor.json#background": {
@@ -72,8 +72,8 @@
             "scale": 1.5483766233766234,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 821.1826378695744,
-                "y": 393.63807926189975
+                "x": 400.09645628014255,
+                "y": 385.24218913818413
             }
         },
         "eighth-floor.tmx#background": {
@@ -89,8 +89,8 @@
             "scale": 2,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 741,
-                "y": 249.75
+                "x": 599.75,
+                "y": 399.75
             }
         },
         "entrance.json#background": {
@@ -106,8 +106,8 @@
             "scale": 1.0885416666666665,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 600.3444976076556,
-                "y": 400.07655502392356
+                "x": 599.4258373205743,
+                "y": 400.07655502392345
             }
         },
         "entrance.tmx#background": {
@@ -123,8 +123,8 @@
             "scale": 1.6328125,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 399.311004784689,
-                "y": 303.46411483253587
+                "x": 400.22966507177034,
+                "y": 304.07655502392345
             }
         },
         "fifth-floor.tmx#background": {
@@ -178,8 +178,8 @@
             "scale": 1.4903125,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 400.2516250786328,
-                "y": 400.2516250786328
+                "x": 399.5806248689453,
+                "y": 400.25162507863286
             }
         },
         "sixth-floor.tmx#background": {

@@ -9,18 +9,17 @@
   import SeventhFloorScene from '../scenes/SeventhFloorScene';
   import EighthFloorScene from '../scenes/EighthFloorScene';
   import SecondBasementScene from '../scenes/SecondBasementScene';
-  import BusanTestScene from '../scenes/BusanTestScene';
-  import { io } from 'socket.io-client';
-  import ENV from '../../ENV';
+  import BusanExternalScene from '../scenes/BusanExternalScene';
   import { playersEntries } from "../scenes/common/players";
   import { saveCharacterSelection, saveIdAndPassword, loadFloorAndMovement, isSavePrepared } from "./storage";
   import { protocol } from "../network/protocol"
   import names from '../entity/names';
   import { getRandomInt, uuidv4, randomPassword } from "../util/random";
-  import { readDebug, urlParam } from "../common/urlParam";
+  import { urlParam } from "../common/urlParam";
   import { ifDebug } from "../common/debug";
   import { onMount } from 'svelte';
   import { zoom } from "../constant";
+  import { FLOOR_NAMES } from '../scenes/common';
 
   const savePrepared = isSavePrepared();
 
@@ -153,26 +152,26 @@
 
   function getSceneConstructor(floor) {
     switch (floor) {
-      case "entrance":
+      case FLOOR_NAMES.EntranceScene:
         return EntranceScene;
-      case "1F":
+      case FLOOR_NAMES.FirstFloorScene:
         return FirstFloorScene;
-      case "2F":
+      case FLOOR_NAMES.SecondFloorScene:
         return SecondFloorScene;
-      case "5F":
+      case FLOOR_NAMES.FifthFloorScene:
         return FifthFloorScene;
-      case "6F":
+      case FLOOR_NAMES.SixthFloorScene:
         return SixthFloorScene;
-      case "7F":
+      case FLOOR_NAMES.SeventhFloorScene:
         return SeventhFloorScene;
-      case "8F":
+      case FLOOR_NAMES.EighthFloorScene:
         return EighthFloorScene;
-      case "B1":
+      case FLOOR_NAMES.FirstBasementScene:
         return FirstBasementScene;
-      case "B2":
+      case FLOOR_NAMES.SecondBasementScene:
         return SecondBasementScene;
-      case "busan-test":
-        return BusanTestScene;
+      case FLOOR_NAMES.BusanExternalScene:
+        return BusanExternalScene;
     }
     return null;
   }
@@ -202,7 +201,7 @@
       EntranceScene, FirstFloorScene, FirstBasementScene,
       SecondFloorScene, FifthFloorScene, SixthFloorScene,
       SeventhFloorScene, EighthFloorScene, SecondBasementScene,
-      BusanTestScene,
+      BusanExternalScene,
     ];
     if (firstSceneConstructor == null) {
       console.log("scene list", allScenes);

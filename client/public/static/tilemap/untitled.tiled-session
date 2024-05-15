@@ -1,0 +1,220 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "eighth-floor.json",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "": {
+            "scaleInDock": 1
+        },
+        "busan-test.json": {
+            "scale": 2.041015625,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 316.5090909090909,
+                "y": 156.29473684210527
+            }
+        },
+        "busan-test.json#busaninteractive": {
+            "scaleInDock": 1
+        },
+        "busan-test.tmx": {
+            "scale": 2,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 170.25,
+                "y": 163.25
+            }
+        },
+        "busan-test.tmx#busaninteractive": {
+            "scaleInDock": 1
+        },
+        "busan-test.tmx#interactive-tile": {
+            "scaleInDock": 1
+        },
+        "busan-test.tmx#simple_tile": {
+            "scaleInDock": 1
+        },
+        "collision.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "eighth-floor.json": {
+            "scale": 0.75,
+            "selectedLayer": 7,
+            "viewCenter": {
+                "x": 1115.3333333333333,
+                "y": 383.33333333333337
+            }
+        },
+        "eighth-floor.json#background": {
+            "scaleInDock": 1
+        },
+        "eighth-floor.json#collision": {
+            "scaleInDock": 1
+        },
+        "eighth-floor.json#interactive-tile": {
+            "scaleInDock": 0.5
+        },
+        "eighth-floor.tmx": {
+            "scale": 1.5483766233766234,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 821.1826378695744,
+                "y": 393.63807926189975
+            }
+        },
+        "eighth-floor.tmx#background": {
+            "scaleInDock": 1
+        },
+        "eighth-floor.tmx#collision": {
+            "scaleInDock": 1
+        },
+        "eighth-floor.tmx#interactive-tile": {
+            "scaleInDock": 1
+        },
+        "entrance.json": {
+            "scale": 2,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 741,
+                "y": 249.75
+            }
+        },
+        "entrance.json#background": {
+            "scaleInDock": 1
+        },
+        "entrance.json#collision": {
+            "scaleInDock": 1
+        },
+        "entrance.json#interactive-tile": {
+            "scaleInDock": 1
+        },
+        "entrance.tmx": {
+            "scale": 1.0885416666666665,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 600.3444976076556,
+                "y": 400.07655502392356
+            }
+        },
+        "entrance.tmx#background": {
+            "scaleInDock": 1
+        },
+        "entrance.tmx#collision": {
+            "scaleInDock": 1
+        },
+        "entrance.tmx#interactive-tile": {
+            "scaleInDock": 1
+        },
+        "fifth-floor.tmx": {
+            "scale": 1.6328125,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 399.311004784689,
+                "y": 303.46411483253587
+            }
+        },
+        "fifth-floor.tmx#background": {
+            "scaleInDock": 1
+        },
+        "fifth-floor.tmx#collision": {
+            "scaleInDock": 1
+        },
+        "fifth-floor.tmx#interactive-tile": {
+            "scaleInDock": 1
+        },
+        "first-floor.tmx": {
+            "scale": 1.6328125,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 396.55502392344494,
+                "y": 300.4019138755981
+            }
+        },
+        "first-floor.tmx#background": {
+            "scaleInDock": 1
+        },
+        "first-floor.tmx#collision": {
+            "scaleInDock": 1
+        },
+        "first-floor.tmx#interactive-tile": {
+            "scaleInDock": 1
+        },
+        "interactive-tile.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "sixth-floor.json": {
+            "scale": 1.4903125,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 400.25162507863286,
+                "y": 400.2516250786329
+            }
+        },
+        "sixth-floor.json#background": {
+            "scaleInDock": 1
+        },
+        "sixth-floor.json#collision": {
+            "scaleInDock": 1
+        },
+        "sixth-floor.json#interactive-tile": {
+            "scaleInDock": 1
+        },
+        "sixth-floor.tmx": {
+            "scale": 1.4903125,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 400.2516250786328,
+                "y": 400.2516250786328
+            }
+        },
+        "sixth-floor.tmx#background": {
+            "scaleInDock": 1
+        },
+        "sixth-floor.tmx#collision": {
+            "scaleInDock": 1
+        },
+        "sixth-floor.tmx#interactive-tile": {
+            "scaleInDock": 1
+        }
+    },
+    "last.exportedFilePath": "/home/juhyung/code/cuberoom/client/public/static/tilemap",
+    "last.externalTilesetPath": "/home/juhyung/code/cuberoom/client/public/static/tilemap",
+    "last.imagePath": "/home/juhyung/code/cuberoom/client/public/static/tilemap",
+    "map.lastUsedExportFilter": "All Files (*)",
+    "map.lastUsedFormat": "tmx",
+    "map.layerDataFormat": "1",
+    "openFiles": [
+        "sixth-floor.tmx",
+        "entrance.tmx",
+        "busan-test.tmx",
+        "fifth-floor.tmx",
+        "eighth-floor.json"
+    ],
+    "project": "untitled.tiled-project",
+    "recentFiles": [
+        "busan-test.json",
+        "collision.tsx",
+        "fifth-floor.tmx",
+        "eighth-floor.json",
+        "eighth-floor.tmx",
+        "sixth-floor.tmx",
+        "entrance.tmx",
+        "busan-test.tmx",
+        "first-floor.tmx",
+        "interactive-tile.tsx",
+        "sixth-floor.json"
+    ],
+    "tileset.embedInMap": true,
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    }
+}

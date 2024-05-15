@@ -7,10 +7,10 @@
 
 
   if (window.disableDoubleTapToZoom !== true) {
-    var elm = document.body; // or some selection of the element you want to disable
-    var doubleTouchStartTimestamp = 0;
-    var catcher = function(evt) {
-        var now = +(new Date());
+    const elm = document.body; // or some selection of the element you want to disable
+    let doubleTouchStartTimestamp = 0;
+    const catcher = function(evt) {
+        const now = +(new Date());
         if (doubleTouchStartTimestamp + 1000 > now) {
             event.preventDefault();
         }

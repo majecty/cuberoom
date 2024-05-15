@@ -1,6 +1,6 @@
 <script>
   import { Link, navigate } from 'svelte-routing';
-  import axios from 'axios';
+  // import axios from 'axios';
   import ENV from '../../ENV';
   import names from '../entity/names';
   import { saveIdAndPassword, saveCharacterSelection, resetSave } from "./storage";
@@ -84,25 +84,25 @@
   }
 
 
-  function decide() {
-    name = name || names[Math.floor(Math.random() * names.length)];
-    axios.post(`${ENV.GET_SERVER_URL()}/character-selection`, {
-      name,
-      faceS: eyeNum,
-      hairS: hairStyleNum,
-      hairC: hairColorNum,
-      skin: skinNum,
-      cloth: clothesNum,
-    })
-    .then((res) => {
-      const playerImgUrl = res.data;
-      saveCharacterSelection(playerImgUrl, name);
-      navigate('/map');
-    })
-    .catch((err) => {
-      console.error(err);
-    });
-  }
+  // function decide() {
+  //   name = name || names[Math.floor(Math.random() * names.length)];
+  //   axios.post(`${ENV.GET_SERVER_URL()}/character-selection`, {
+  //     name,
+  //     faceS: eyeNum,
+  //     hairS: hairStyleNum,
+  //     hairC: hairColorNum,
+  //     skin: skinNum,
+  //     cloth: clothesNum,
+  //   })
+  //   .then((res) => {
+  //     const playerImgUrl = res.data;
+  //     saveCharacterSelection(playerImgUrl, name);
+  //     navigate('/map');
+  //   })
+  //   .catch((err) => {
+  //     console.error(err);
+  //   });
+  // }
 </script>
 
 <main>

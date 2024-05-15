@@ -9,6 +9,7 @@
   import SeventhFloorScene from '../scenes/SeventhFloorScene';
   import EighthFloorScene from '../scenes/EighthFloorScene';
   import SecondBasementScene from '../scenes/SecondBasementScene';
+  import BusanTestScene from '../scenes/BusanTestScene';
   import { io } from 'socket.io-client';
   import ENV from '../../ENV';
   import { playersEntries } from "../scenes/common/players";
@@ -170,6 +171,8 @@
         return FirstBasementScene;
       case "B2":
         return SecondBasementScene;
+      case "busan-test":
+        return BusanTestScene;
     }
     return null;
   }
@@ -191,13 +194,15 @@
     let { floor } = loadFloorAndMovement();
     const floorFromUrl = urlParam.readFloor();
     if (floorFromUrl != null) {
+      console.log("floor from url", floorFromUrl);
       floor = floorFromUrl;
     }
     const firstSceneConstructor = getSceneConstructor(floor);
     const allScenes = [
       EntranceScene, FirstFloorScene, FirstBasementScene,
       SecondFloorScene, FifthFloorScene, SixthFloorScene,
-      SeventhFloorScene, EighthFloorScene, SecondBasementScene
+      SeventhFloorScene, EighthFloorScene, SecondBasementScene,
+      BusanTestScene,
     ];
     if (firstSceneConstructor == null) {
       console.log("scene list", allScenes);

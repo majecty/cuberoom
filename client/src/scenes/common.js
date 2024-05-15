@@ -12,6 +12,8 @@ export const FLOOR_NAMES = {
   EighthFloorScene: "8F",
   FirstBasementScene: "B1",
   SecondBasementScene: "B2",
+
+  BusanTestScene: "BusanTestScene",
 };
 
 export const FLOOR_TO_SCENE = {
@@ -24,6 +26,8 @@ export const FLOOR_TO_SCENE = {
   "8F": "EighthFloorScene",
   B1: "FirstBasementScene",
   B2: "SecondBasementScene",
+
+  BusanTestScene: "BusanTestScene",
 };
 
 /**

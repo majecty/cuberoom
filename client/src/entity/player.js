@@ -62,6 +62,11 @@ export function playerCreate(scene, x, y, name, chatText, id) {
   };
 }
 
+export function playerUpdateInitialPos(player, x, y) {
+  player.phaser.x = x;
+  player.phaser.y = y - 45;
+}
+
 function updateUpdateAtPosition(player, newX, newY) {
   // FIXME: do not update nameLabel, chat this way
   player.nameLabel.x = newX;

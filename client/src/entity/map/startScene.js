@@ -1,30 +1,15 @@
 import { log } from "../../log";
+import { FLOOR_NAMES, FLOOR_TO_SCENE } from "../../scenes/common";
 // seems layer collision. entity is using scenes
 import { playersReset } from "../../scenes/common/players";
 
 export function getFloorName(sceneName) {
-  switch (sceneName) {
-    case "EntranceScene":
-      return "entrance";
-    case "FirstFloorScene":
-      return "1F";
-    case "SecondFloorScene":
-      return "2F";
-    case "FifthFloorScene":
-      return "5F";
-    case "SixthFloorScene":
-      return "6F";
-    case "SeventhFloorScene":
-      return "7F";
-    case "EighthFloorScene":
-      return "8F";
-    case "FirstBasementScene":
-      return "B1";
-    case "SecondBasementScene":
-      return "B2";
-    default:
-      throw new Error(`invalie sceneName: {sceneName}`);
+
+  if (FLOOR_NAMES[sceneName]) {
+    return FLOOR_NAMES[sceneName];
   }
+
+  throw new Error(`invalid sceneName: ${sceneName}`);
 }
 
 /* eslint no-param-reassign: ["error", { "props": false }] */

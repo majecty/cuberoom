@@ -9,14 +9,14 @@ import {
 } from "./common/baseScene";
 import { zoom } from "../constant";
 import { playerUpdateInitialPos } from "../entity/player";
-import { protocol } from "../network/protocolOnline";
+import { protocol } from "../network/protocol";
 import startScene from "../entity/map/startScene";
 
 function backgroundStatic(scene) {
   const sprite = scene.add.sprite(
+    240 / zoom,
     640 / zoom,
-    320 / zoom,
-    "busanexternal-background"
+    "busan1F-background"
   );
   sprite.scale = 2 / zoom;
 }
@@ -24,24 +24,30 @@ function backgroundStatic(scene) {
 function tileInteraction(scene, curTileName) {
   console.log("curTileName", curTileName);
   switch (curTileName) {
-    case "door1":
-      protocol.moveFloor(scene.socket, FLOOR_TO_SCENE.Busan1F);
-      startScene(scene, FLOOR_TO_SCENE.Busan1F, {
-        spawnPointName: "spawnExternal1"
+    case "toExternal1":
+      protocol.moveFloor(scene.socket, FLOOR_TO_SCENE.BusanExternal);
+      startScene(scene, FLOOR_TO_SCENE.BusanExternal, {
+        spawnPointName: "spawn1F1",
       });
       break;
-    case "door2":
-      protocol.moveFloor(scene.socket, FLOOR_TO_SCENE.Busan1F);
-      startScene(scene, FLOOR_TO_SCENE.Busan1F, { spawnPointName: "spawnExternal2" });
+    case "toExternal2":
+      protocol.moveFloor(scene.socket, FLOOR_TO_SCENE.BusanExternal);
+      startScene(scene, FLOOR_TO_SCENE.BusanExternal, {
+        spawnPointName: "spawn1F2",
+      });
+      break;
+    case "elevator":
+      break;
+    case "popup":
       break;
     default:
       break;
   }
 }
 
-class BusanExternalScene extends Phaser.Scene {
+class Busan1FScene extends Phaser.Scene {
   constructor() {
-    super("BusanExternalScene");
+    super("Busan1FScene");
     this.x = 0;
     this.y = 0;
     baseSceneConstructor(this, FLOOR_NAMES.BusanExternalScene);
@@ -49,8 +55,11 @@ class BusanExternalScene extends Phaser.Scene {
 
   init(data) {
     baseSceneInit(this, data);
-
-    const availableSpawnPoints = ["spawn1F1", "spawn1F2"];
+    const availableSpawnPoints = [
+      "spawnExternal1",
+      "spawnExternal2",
+      "spawnRoof",
+    ];
     if (!availableSpawnPoints.includes(data.spawnPointName)) {
       console.error("Invalid spawn point name " + data.spawnPointName);
       return;
@@ -59,12 +68,12 @@ class BusanExternalScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image("busanexternal-background", "/static/img/tilesetimages/busan_external.png");
+    this.load.image("busan1F-background", "/static/img/tilesetimages/busan1F.png");
     this.load.image("collision-tileset", "/static/tilemap/simple_tile.png");
     this.load.image("interactive-tile", "/static/tilemap/busan-interactive.png");
     this.load.tilemapTiledJSON({
-      key: "busantest-map",
-      url: "/static/tilemap/busan-external.json",
+      key: "busan1f-map",
+      url: "/static/tilemap/busan1F.json",
     });
     baseScenePreload(this);
   }
@@ -73,24 +82,24 @@ class BusanExternalScene extends Phaser.Scene {
     backgroundStatic(this);
     baseSceneCreate({
       selfScene: this,
-      mapName: "busantest-map",
-      mapBackgroundLayerName: "busantest-background",
+      mapName: "busan1f-map",
+      mapBackgroundLayerName: "busan1F-background",
       onMoveToTile: (tileName) => {
         tileInteraction(this, tileName);
       },
     });
 
-    this.x = (this.map.objects.spawnPoint.x * 2) / zoom;
-    this.y = (this.map.objects.spawnPoint.y * 2) / zoom; 
+
+    this.x = (this.map.objects.spawnExternal1.x * 2) / zoom;
+    this.y = (this.map.objects.spawnExternal1.y * 2) / zoom; 
     if (this.spawnPointName) {
       console.log("spawn point name", this.spawnPointName);
-      console.log(this);
-      console.log(this.map.objects);
-      this.x = this.map.objects[this.spawnPointName].x * 2 / zoom;
-      this.y = this.map.objects[this.spawnPointName].y * 2 / zoom;
+      const { x, y } = this.map.objects[this.spawnPointName];
+      this.x = x * 2 / zoom;
+      this.y = y * 2 / zoom;
     }
+
     playerUpdateInitialPos(this.player, this.x, this.y);
-    // object
   }
 
   update(_time, delta) {
@@ -98,4 +107,4 @@ class BusanExternalScene extends Phaser.Scene {
   }
 }
 
-export default BusanExternalScene;
+export default Busan1FScene;

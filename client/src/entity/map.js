@@ -3,6 +3,14 @@
 import { assert } from "../assert";
 import { depth, zoom } from "../constant";
 
+/**
+ * 맵에 필요한 layer
+ * 1. collision
+ * 2. interaction
+ * 3. overCharacter 
+ * 4. 아무 이름의 object layer
+ */
+
 function extractObjects(phaserObjectLayer) {
   const results = {};
   for (const tiledObject of phaserObjectLayer.objects) {

@@ -25,20 +25,22 @@ function tileInteraction(scene, curTileName) {
   console.log("curTileName", curTileName);
   switch (curTileName) {
     case "toExternal1":
-      protocol.moveFloor(scene.socket, FLOOR_TO_SCENE.BusanExternal);
+      protocol.moveFloor(scene.socket, FLOOR_NAMES.Busan1FScene);
       startScene(scene, FLOOR_TO_SCENE.BusanExternal, {
         spawnPointName: "spawn1F1",
       });
       break;
     case "toExternal2":
-      protocol.moveFloor(scene.socket, FLOOR_TO_SCENE.BusanExternal);
+      protocol.moveFloor(scene.socket, FLOOR_NAMES.Busan1FScene);
       startScene(scene, FLOOR_TO_SCENE.BusanExternal, {
         spawnPointName: "spawn1F2",
       });
       break;
-    case "elevator":
-      break;
-    case "popup":
+    case "toTop":
+      protocol.moveFloor(scene.socket, FLOOR_NAMES.BusanTopScene);
+      startScene(scene, FLOOR_TO_SCENE.BusanTop, {
+        spawnPointName: "spawnPoint",
+      });
       break;
     default:
       break;
@@ -50,7 +52,7 @@ class Busan1FScene extends Phaser.Scene {
     super("Busan1FScene");
     this.x = 0;
     this.y = 0;
-    baseSceneConstructor(this, FLOOR_NAMES.BusanExternalScene);
+    baseSceneConstructor(this, FLOOR_TO_SCENE.BusanExternal);
   }
 
   init(data) {
@@ -58,7 +60,7 @@ class Busan1FScene extends Phaser.Scene {
     const availableSpawnPoints = [
       "spawnExternal1",
       "spawnExternal2",
-      "spawnRoof",
+      "spawnTop",
     ];
     if (!availableSpawnPoints.includes(data.spawnPointName)) {
       console.error("Invalid spawn point name " + data.spawnPointName);

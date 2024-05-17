@@ -11,6 +11,7 @@
   import SecondBasementScene from '../scenes/SecondBasementScene';
   import BusanExternalScene from '../scenes/BusanExternalScene';
   import Busan1FScene from '../scenes/Busan1FScene';
+  import BusanTopScene from '../scenes/BusanTopScene';
   import { playersEntries } from "../scenes/common/players";
   import { saveCharacterSelection, saveIdAndPassword, loadFloorAndMovement, isSavePrepared } from "./storage";
   import { protocol } from "../network/protocol"
@@ -175,6 +176,8 @@
         return BusanExternalScene;
       case FLOOR_NAMES.Busan1FScene:
         return Busan1FScene;
+      case FLOOR_NAMES.BusanTopScene:
+        return BusanTopScene;
     }
     return null;
   }
@@ -204,7 +207,7 @@
       EntranceScene, FirstFloorScene, FirstBasementScene,
       SecondFloorScene, FifthFloorScene, SixthFloorScene,
       SeventhFloorScene, EighthFloorScene, SecondBasementScene,
-      BusanExternalScene, Busan1FScene,
+      BusanExternalScene, Busan1FScene, BusanTopScene,
     ];
     if (firstSceneConstructor == null) {
       console.log("scene list", allScenes);

@@ -69,10 +69,10 @@
                 3
             ],
             "scale": 3,
-            "selectedLayer": 2,
+            "selectedLayer": 1,
             "viewCenter": {
                 "x": 78.16666666666666,
-                "y": 231.5
+                "y": 230.5
             }
         },
         "busan1F.tmx#busan-interaction": {
@@ -80,6 +80,23 @@
             "scaleInEditor": 1
         },
         "busan1F.tmx#collision": {
+            "scaleInDock": 1
+        },
+        "busanTop.tmx": {
+            "expandedObjectLayers": [
+                5
+            ],
+            "scale": 1.5,
+            "selectedLayer": 4,
+            "viewCenter": {
+                "x": 239.66666666666666,
+                "y": 276.3333333333333
+            }
+        },
+        "busanTop.tmx#busan-interaction": {
+            "scaleInDock": 1
+        },
+        "busanTop.tmx#collision": {
             "scaleInDock": 1
         },
         "collision.tsx": {
@@ -230,13 +247,13 @@
     "last.exportedFilePath": "/home/juhyung/code/cuberoom/client/public/static/tilemap",
     "last.externalTilesetPath": "/home/juhyung/code/cuberoom/client/public/static/tilemap",
     "last.imagePath": "/home/juhyung/code/cuberoom/client/public/static/tilemap",
-    "map.height": 40,
+    "map.height": 30,
     "map.lastUsedExportFilter": "JSON map files (*.tmj *.json)",
     "map.lastUsedFormat": "tmx",
     "map.layerDataFormat": "1",
     "map.tileHeight": 16,
     "map.tileWidth": 16,
-    "map.width": 15,
+    "map.width": 20,
     "openFiles": [
         "sixth-floor.tmx",
         "entrance.tmx",

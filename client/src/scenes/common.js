@@ -15,6 +15,7 @@ export const FLOOR_NAMES = {
 
   BusanExternalScene: "BusanExternal",
   Busan1FScene: "Busan1F",
+  BusanTopScene: "BusanTop",
 };
 
 export const FLOOR_TO_SCENE = {
@@ -30,6 +31,7 @@ export const FLOOR_TO_SCENE = {
 
   BusanExternal: "BusanExternalScene",
   Busan1F: "Busan1FScene",
+  BusanTop: "BusanTopScene",
 };
 
 /**

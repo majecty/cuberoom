@@ -49,7 +49,7 @@ class FifthFloorScene extends Phaser.Scene {
     super(FLOOR_TO_SCENE["5F"]);
     this.x = spawnPoints.floor5F.from2F.x;
     this.y = spawnPoints.floor5F.from2F.y;
-    baseSceneConstructor(this, FLOOR_NAMES.FifthFloorScene);
+    baseSceneConstructor(this, FLOOR_TO_SCENE["5F"]);
   }
 
   init(data) {

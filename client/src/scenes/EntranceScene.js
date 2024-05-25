@@ -39,7 +39,7 @@ class EntranceScene extends Phaser.Scene {
     this.x = spawnPoints.entrance.start.x;
     this.y = spawnPoints.entrance.start.y;
 
-    baseSceneConstructor(this, FLOOR_NAMES.EntranceScene);
+    baseSceneConstructor(this, FLOOR_TO_SCENE.entrance);
   }
 
   init(data) {

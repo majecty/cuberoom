@@ -54,7 +54,7 @@ class FirstFloorScene extends Phaser.Scene {
 
     this.x = spawnPoints.floor1F.fromEntrance.x;
     this.y = spawnPoints.floor1F.fromEntrance.y;
-    baseSceneConstructor(this, FLOOR_NAMES.FirstFloorScene);
+    baseSceneConstructor(this, FLOOR_TO_SCENE["1F"]);
   }
 
   init(data) {

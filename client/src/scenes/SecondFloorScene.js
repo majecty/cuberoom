@@ -47,7 +47,7 @@ class SecondFloorScene extends Phaser.Scene {
     super(FLOOR_TO_SCENE["2F"]);
     this.x = spawnPoints.floor2F.from1F.x;
     this.y = spawnPoints.floor2F.from1F.y;
-    baseSceneConstructor(this, FLOOR_NAMES.SecondFloorScene);
+    baseSceneConstructor(this, FLOOR_TO_SCENE["2F"]);
   }
 
   init(data) {

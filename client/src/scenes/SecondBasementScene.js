@@ -67,7 +67,7 @@ class SecondBasementScene extends Phaser.Scene {
     super(FLOOR_TO_SCENE.B2);
     this.x = spawnPoints.floorB2.fromB1_3.x;
     this.y = spawnPoints.floorB2.fromB1_3.y;
-    baseSceneConstructor(this, FLOOR_NAMES.SecondBasementScene);
+    baseSceneConstructor(this, FLOOR_TO_SCENE.B2);
   }
 
   init(data) {

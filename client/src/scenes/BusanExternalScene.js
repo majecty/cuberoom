@@ -14,8 +14,8 @@ import startScene from "../entity/map/startScene";
 
 function backgroundStatic(scene) {
   const sprite = scene.add.sprite(
-    640 / zoom,
-    320 / zoom,
+    600 / zoom,
+    400 / zoom,
     "busanexternal-background"
   );
   sprite.scale = 2 / zoom;
@@ -59,7 +59,7 @@ class BusanExternalScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image("busanexternal-background", "/static/img/tilesetimages/busan_external.png");
+    this.load.image("busanexternal-background", "/static/img/tilesetimages/busanExternal.png");
     this.load.image("collision-tileset", "/static/tilemap/simple_tile.png");
     this.load.image("interactive-tile", "/static/tilemap/busan-interactive.png");
     this.load.tilemapTiledJSON({

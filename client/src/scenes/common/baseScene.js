@@ -327,7 +327,7 @@ export function baseSceneUpdate(selfScene, dtMillis) {
       const sceneName = selfScene.sceneName;
       const floor = FLOOR_NAMES[sceneName];
       if (floor == null) {
-        logErr("floor is null", sceneName);
+        logErr("floor is null in baseSceneUpdate", sceneName);
         return;
       }
 

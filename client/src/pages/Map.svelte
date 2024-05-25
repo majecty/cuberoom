@@ -28,11 +28,15 @@
 
 <style>
   main {
-    height: 100%;
     background-image: url('/static/img/ui/map_seoulbusan.png');
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
+    position: absolute;
+    left: 0%;
+    right: 0%;
+    top: 0%;
+    bottom: 0%;
   }
 
   .guide {
@@ -50,6 +54,35 @@
   }
 
   :global(a.start-game-seoul) {
+    opacity: 0.5;
+    transform:translate(-50%, -50%);
+    z-index : 2;
+    position: absolute;
+  }
+
+  /* 가로가 길 때 */
+  @media (min-aspect-ratio: 4/3) {
+    :global(a.start-game-seoul) {
+      width : 70%;
+      height: 30%;
+      top: 40%;
+      left: 25%;
+      background-color: purple;
+    }
+  }
+
+  /* 세로가 길 때 */
+  @media (max-aspect-ratio: 4/3) {
+    :global(a.start-game-seoul) {
+      width : 80%;
+      height: 25%;
+      top: 40%;
+      left: 20%;
+      background-color: blue;
+    }
+  }
+
+  :global(a.start-game-busan) {
     width : 173px;
     height: 152px;
     z-index : 2;
@@ -61,6 +94,7 @@
     left: calc(70%);
     background-color: black;
   }
+
 
   @media (orientation: portrait) {
     main {

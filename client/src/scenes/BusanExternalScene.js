@@ -43,7 +43,7 @@ function tileInteraction(scene, curTileName) {
 
 class BusanExternalScene extends Phaser.Scene {
   constructor() {
-    super("BusanExternalScene");
+    super(FLOOR_TO_SCENE.BusanExternal);
     this.x = 0;
     this.y = 0;
     baseSceneConstructor(this, FLOOR_NAMES.BusanExternalScene);

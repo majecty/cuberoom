@@ -16,7 +16,7 @@ import {
   playerOnMapCreate,
   playerOnMapUpdate,
 } from "../../relation/playerOnMap";
-import { listenRemovePlayerOnPlayer, cameraInit } from "../common";
+import { listenRemovePlayerOnPlayer, cameraInit, FLOOR_NAMES } from "../common";
 import { playersCreate, playersAddPlayer, playersEntries } from "./players";
 import {
   playersContainerListenRemovePlayer,
@@ -319,14 +319,21 @@ export function baseSceneUpdate(selfScene, dtMillis) {
         return;
       }
 
+      const sceneName = selfScene.sceneName;
+      const floor = FLOOR_NAMES[sceneName];
+      if (floor == null) {
+        logErr("floor is null", sceneName);
+        return;
+      }
+
       saveMovement(
-        selfScene.sceneName,
+        floor,
         selfScene.player.phaser.x,
         selfScene.player.phaser.y
       );
 
       protocol.movePlayer(selfScene.socket, {
-        floor: selfScene.sceneName,
+        floor,
         direction: selfScene.player.prevMove,
         x: selfScene.player.phaser.x,
         y: selfScene.player.phaser.y,

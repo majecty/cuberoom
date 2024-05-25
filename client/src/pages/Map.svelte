@@ -120,6 +120,8 @@
 
     .guide img {
       width: 90%;
+      top: 10%;
+      position: absolute;
     }
 
     :global(a.start-game) {

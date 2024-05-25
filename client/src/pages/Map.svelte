@@ -1,5 +1,7 @@
 <script>
   import { Link } from 'svelte-routing';
+  import { resetMap } from './storage';
+  resetMap();
 </script>
 
 <main>

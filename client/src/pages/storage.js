@@ -6,6 +6,12 @@ export function resetSave() {
   localStorage.clear();
 }
 
+export function resetMap() {
+  localStorage.removeItem("floor");
+  localStorage.removeItem("playerX");
+  localStorage.removeItem("playerY");
+}
+
 export function saveToBrowserStorage(key, value) {
   const prefix = readIdPrefix();
   const prefixedKey = `${prefix}${key}`;

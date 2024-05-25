@@ -3,9 +3,9 @@
 </script>
 
 <main>
-  <!-- <div class="seoul">
-    <img src="/static/img/ui/map_seoulbusan.png" alt="" />
-  </div> -->
+  <div class="seoul">
+    <img src="/static/img/ui/map_seoul.png" alt="" />
+  </div>
   <div class="guide">
     <img
       src="/static/img/ui/map_tutorial.png"
@@ -17,22 +17,27 @@
       "
     />
   </div>
-  <!-- <img class="flag" src="/static/img/ui/map_click.png" alt="" /> -->
-  <Link to="/game?map=seoul" class="start-game-seoul">
-    <!-- <img src="/static/img/ui/map_gangnam.png" alt="클릭" /> -->
-  </Link>
-  <Link to="/game?map=busan" class="start-game-busan">
-    <!-- <img src="/static/img/ui/map_gangnam.png" alt="클릭" /> -->
+  <img class="flag" src="/static/img/ui/map_click.png" alt="" />
+  <Link to="/game" class="start-game">
+    <img src="/static/img/ui/map_gangnam.png" alt="클릭" />
   </Link>
 </main>
 
 <style>
   main {
     height: 100%;
-    background-image: url('/static/img/ui/map_seoulbusan.png');
-    background-position: center;
+    background-image: url('/static/img/ui/map_background.jpg');
     background-repeat: no-repeat;
     background-size: cover;
+  }
+
+  .seoul {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .guide {
@@ -49,17 +54,26 @@
     width: 450px;
   }
 
-  :global(a.start-game-seoul) {
+  .flag {
+    position: absolute;
+    top: 50%;
+    left: calc(50% + 55px);
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  :global(a.start-game) {
     width : 173px;
     height: 152px;
     z-index : 2;
-    /* opacity: 0; */
-    opacity: 0.5;
-    transform:translate(-50%, -50%);
+    opacity: 0;
     position: absolute;
     top: calc(50% + 56px);
-    left: calc(70%);
-    background-color: black;
+    left: calc(50% + 62px);
+  }
+
+  :global(a.start-game:hover) {
+    opacity: 1;
   }
 
   @media (orientation: portrait) {

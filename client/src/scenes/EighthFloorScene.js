@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { FLOOR_NAMES } from "./common";
+import { FLOOR_NAMES, FLOOR_TO_SCENE } from "./common";
 import {
   baseSceneConstructor,
   baseSceneInit,
@@ -40,7 +40,7 @@ function tileInteraction(scene, curTileName) {
 
 class EighthFloorScene extends Phaser.Scene {
   constructor() {
-    super("EighthFloorScene");
+    super(FLOOR_TO_SCENE["8F"]);
     this.x = spawnPoints.floor8F.from7F.x;
     this.y = spawnPoints.floor8F.from7F.y;
     baseSceneConstructor(this, FLOOR_NAMES.EighthFloorScene);

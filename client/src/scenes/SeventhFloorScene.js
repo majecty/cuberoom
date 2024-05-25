@@ -6,7 +6,7 @@ import {
   baseSceneCreate,
   baseSceneUpdate,
 } from "./common/baseScene";
-import { FLOOR_NAMES } from "./common";
+import { FLOOR_NAMES, FLOOR_TO_SCENE } from "./common";
 import startScene from "../entity/map/startScene";
 import { showElevatorPanel } from "../entity/map/elevator";
 import { spawnPoints } from "./common/constants";
@@ -44,7 +44,7 @@ function tileInteraction(scene, curTileName) {
 
 class SeventhFloorScene extends Phaser.Scene {
   constructor() {
-    super("SeventhFloorScene");
+    super(FLOOR_TO_SCENE["7F"]);
     this.x = spawnPoints.floor7F.from6F.x;
     this.y = spawnPoints.floor7F.from6F.y;
     baseSceneConstructor(this, FLOOR_NAMES.SeventhFloorScene);

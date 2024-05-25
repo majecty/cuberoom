@@ -30,7 +30,7 @@ function tileInteraction(scene, curTileName) {
 
 class BusanTopScene extends Phaser.Scene {
   constructor() {
-    super({ key: 'BusanTopScene' });
+    super(FLOOR_TO_SCENE.BusanTop);
     this.x = 0;
     this.y = 0;
     baseSceneConstructor(this, FLOOR_TO_SCENE.BusanTop);

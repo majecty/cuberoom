@@ -25,12 +25,14 @@ function tileInteraction(scene, curTileName) {
   console.log("curTileName", curTileName);
   switch (curTileName) {
     case "door1":
+      console.log("Move on door1");
       protocol.moveFloor(scene.socket, FLOOR_NAMES.Busan1FScene);
       startScene(scene, FLOOR_TO_SCENE.Busan1F, {
         spawnPointName: "spawnExternal1"
       });
       break;
     case "door2":
+      console.log("Move on door2");
       protocol.moveFloor(scene.socket, FLOOR_NAMES.Busan1FScene);
       startScene(scene, FLOOR_TO_SCENE.Busan1F, { spawnPointName: "spawnExternal2" });
       break;
@@ -88,6 +90,8 @@ class BusanExternalScene extends Phaser.Scene {
       console.log(this.map.objects);
       this.x = this.map.objects[this.spawnPointName].x * 2 / zoom;
       this.y = this.map.objects[this.spawnPointName].y * 2 / zoom;
+    } else {
+      console.log("No spawn point name");
     }
     playerUpdateInitialPos(this.player, this.x, this.y);
     // object

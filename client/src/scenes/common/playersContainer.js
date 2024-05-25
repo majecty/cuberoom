@@ -57,7 +57,7 @@ function createOtherPlayer(
 export function playersContainerListenPlayerList({
   scene,
   socket,
-  sceneName,
+  floor,
   phaserScene,
   container,
 }) {
@@ -71,7 +71,7 @@ export function playersContainerListenPlayerList({
     }
     for (const playerFromServer of data) {
       const id = playerFromServer.id;
-      if (playerFromServer.floor !== sceneName) {
+      if (playerFromServer.floor !== floor) {
         // do nothing
         // if (debug) {
         //   log(

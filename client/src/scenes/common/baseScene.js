@@ -66,10 +66,15 @@ export function baseSceneConstructor(selfScene, sceneName) {
       selfScene.player = null;
     }
   );
+  const floor = FLOOR_NAMES[sceneName];
+  if (floor == null) {
+    logErr("floor is null in baseSceneConstructor", sceneName);
+    return;
+  }
   playersContainerListenPlayerList({
     scene: selfScene,
     socket: selfScene.socket,
-    sceneName: selfScene.sceneName,
+    floor,
     phaserScene: selfScene,
     container: selfScene,
   });

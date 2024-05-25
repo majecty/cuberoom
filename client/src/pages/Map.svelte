@@ -54,7 +54,7 @@
   }
 
   :global(a.start-game-seoul) {
-    opacity: 0.5;
+    opacity: 0;
     transform:translate(-50%, -50%);
     z-index : 2;
     position: absolute;
@@ -83,16 +83,33 @@
   }
 
   :global(a.start-game-busan) {
-    width : 173px;
-    height: 152px;
-    z-index : 2;
-    /* opacity: 0; */
-    opacity: 0.5;
-    transform:translate(-50%, -50%);
-    position: absolute;
-    top: calc(50% + 56px);
-    left: calc(70%);
-    background-color: black;
+      opacity: 0;
+      z-index : 2;
+      transform:translate(-50%, -50%);
+      position: absolute;
+      background-color: black;
+  }
+
+  /* 가로가 길 때 */
+  @media (min-aspect-ratio: 4/3) {
+    :global(a.start-game-busan) {
+      width : 80%;
+      height: 40%;
+      top: 75%;
+      left: 70%;
+      background-color: yellowgreen;
+    }
+  }
+
+  /* 세로가 길 때 */
+  @media (max-aspect-ratio: 4/3) {
+    :global(a.start-game-busan) {
+      width : 80%;
+      height: 30%;
+      top: 70%;
+      left: 70%;
+      background-color: yellow;
+    }
   }
 
 

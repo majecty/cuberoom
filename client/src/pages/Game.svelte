@@ -202,7 +202,14 @@
       console.log("floor from url", floorFromUrl);
       floor = floorFromUrl;
     }
-    const firstSceneConstructor = getSceneConstructor(floor);
+    let defaultFirstFloor = null;
+    const busanOrSeoul = urlParam.readBusanOrSeoul();
+    if (busanOrSeoul === "busan") {
+      defaultFirstFloor = FLOOR_NAMES.BusanExternalScene;
+    } else if (busanOrSeoul === "seoul") {
+      defaultFirstFloor = FLOOR_NAMES.EntranceScene;
+    }
+    const firstSceneConstructor = getSceneConstructor(floor ?? defaultFirstFloor);
     const allScenes = [
       EntranceScene, FirstFloorScene, FirstBasementScene,
       SecondFloorScene, FifthFloorScene, SixthFloorScene,

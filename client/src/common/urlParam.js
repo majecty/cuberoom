@@ -24,8 +24,26 @@ export function readFloor() {
   return urlParams.get("floor");
 }
 
+export function readBusanOrSeoul() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const mapParam = urlParams.get("map");
+  if (mapParam == null) {
+    return "seoul";
+  }
+
+  if (mapParam === "busan") {
+    return "busan";
+  }
+  if (mapParam === "seoul") {
+    return "seoul";
+  }
+  console.error(`Invalid map param: ${mapParam}`);
+  return "seoul";
+}
+
 export const urlParam = {
   readIdPrefix,
   readDebug,
   readFloor,
+  readBusanOrSeoul,
 };

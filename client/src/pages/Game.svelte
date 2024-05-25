@@ -179,6 +179,7 @@
       case FLOOR_NAMES.BusanTopScene:
         return BusanTopScene;
     }
+    console.log("no scene for floor", floor);
     return null;
   }
 
@@ -197,6 +198,7 @@
   // 저장된 씬부터 시작
   function createSceneList() {
     let { floor } = loadFloorAndMovement();
+    console.log("floor from storage", floor);
     const floorFromUrl = urlParam.readFloor();
     if (floorFromUrl != null) {
       console.log("floor from url", floorFromUrl);
@@ -206,8 +208,10 @@
     const busanOrSeoul = urlParam.readBusanOrSeoul();
     if (busanOrSeoul === "busan") {
       defaultFirstFloor = FLOOR_NAMES.BusanExternalScene;
+      console.log("default map to busan");
     } else if (busanOrSeoul === "seoul") {
       defaultFirstFloor = FLOOR_NAMES.EntranceScene;
+      console.log("default map to seoul");
     }
     const firstSceneConstructor = getSceneConstructor(floor ?? defaultFirstFloor);
     const allScenes = [

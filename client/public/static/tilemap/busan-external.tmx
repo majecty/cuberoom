@@ -59,10 +59,10 @@
   <object id="1" name="spawnPoint" x="34.6336" y="371.587">
    <point/>
   </object>
-  <object id="2" name="spawn1F1" x="314.928" y="358.803">
+  <object id="2" name="spawn1F1" x="317.595" y="336.803">
    <point/>
   </object>
-  <object id="3" name="spawn1F2" x="442.506" y="355.394">
+  <object id="3" name="spawn1F2" x="451.173" y="334.727">
    <point/>
   </object>
  </objectgroup>

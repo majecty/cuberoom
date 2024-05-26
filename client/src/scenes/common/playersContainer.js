@@ -31,7 +31,6 @@ function createOtherPlayer(
   debug
 ) {
   loadPlayerImages(phaserScene, playerFromServer, id, debug);
-  phaserScene.load.start();
   phaserScene.load.once("complete", () => {
     const { players } = container;
     if (debug) {
@@ -52,6 +51,8 @@ function createOtherPlayer(
       );
     }
   });
+
+  phaserScene.load.start();
 }
 
 export function playersContainerListenPlayerList({

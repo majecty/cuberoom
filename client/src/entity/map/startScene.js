@@ -21,7 +21,6 @@ export default function startScene(currentScene, targetSceneName, spawnPos) {
   currentScene.stop = true;
   currentScene.cameras.main.on("camerafadeoutcomplete", () => {
     log("start next scene");
-    currentScene.scene.pause(currentScene.scene.key);
     currentScene.scene.start(targetSceneName, spawnPos);
   });
 }

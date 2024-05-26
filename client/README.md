@@ -42,3 +42,26 @@ yarn run eslint-watch
 yarn run build
 ```
 
+## 프론트엔드 배포
+
+모든 static 파일 배포(1번만 하면 됨)
+
+```sh
+cd client/public
+aws s3 sync . s3://cuberoom
+```
+
+character-resource 제외 배포
+
+```sh
+cd client/public
+aws s3 sync . s3://cuberoom --exclude 'static/character-resource
+```
+
+배포 자동화 스크립트
+
+```sh
+# 주의사항: character-resource 빼는 것 안들어가있음.
+# 주의사항: updated at 기준으로 바뀐 것만 찾아서 deploy
+go run scripts/deploy-client/deployClient.go
+```

@@ -98,13 +98,19 @@ export function baseSceneInit(selfScene, data) {
   log(selfScene.sceneName, "init");
 
   const isFirstLoadedScene = isFirstScene();
-  saveSceneToHistory(selfScene.sceneName);
+  const sceneFloor = FLOOR_NAMES[selfScene.sceneName];
+  if (sceneFloor == null) {
+    logErr("floor is null in baseSceneInit", selfScene.sceneName);
+    return;
+  }
+
+  saveSceneToHistory(sceneFloor);
 
   let debugPosUsed = false;
   if (isFirstLoadedScene) {
     ifDebug(() => {
       const { floor, x, y } = loadFloorAndMovement();
-      if (floor !== selfScene.sceneName) {
+      if (floor !== sceneFloor) {
         log("floor != scenename", floor, selfScene.sceneName);
         return;
       }
@@ -163,6 +169,11 @@ export function baseSceneCreate({
 }) {
   window.scene = selfScene;
   selfScene.stop = false;
+  const floor = FLOOR_NAMES[selfScene.sceneName];
+  if (floor == null) {
+    logErr("floor is null in baseSceneCreate", selfScene.sceneName);
+    return;
+  }
   log(selfScene.sceneName, "create");
   playerCreateAnimations(protocol.getPlayerId(), selfScene);
 
@@ -188,7 +199,7 @@ export function baseSceneCreate({
   protocol.addPlayer(selfScene.socket, {
     name: playerName,
     imgUrl: playerImgUrl,
-    floor: selfScene.sceneName,
+    floor,
     x: selfScene.x,
     y: selfScene.y,
   });
@@ -214,7 +225,7 @@ export function baseSceneCreate({
     protocol.addPlayer(selfScene.socket, {
       name: playerName,
       imgUrl: playerImgUrl,
-      floor: selfScene.sceneName,
+      floor,
       x: selfScene.x,
       y: selfScene.y,
     });
@@ -261,14 +272,14 @@ export function baseSceneCreate({
     protocol.getPlayers(selfScene.socket);
 
     console.log("send move player", {
-      floor: selfScene.sceneName,
+      floor,
       direction: selfScene.player.prevMove,
       x: selfScene.player.phaser.x,
       y: selfScene.player.phaser.y,
     })
     // 한 번이라도 move player를 호출해야 남에게 보임
     protocol.movePlayer(selfScene.socket, {
-      floor: selfScene.sceneName,
+      floor,
       direction: selfScene.player.prevMove,
       x: selfScene.player.phaser.x,
       y: selfScene.player.phaser.y,

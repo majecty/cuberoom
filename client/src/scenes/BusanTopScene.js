@@ -68,20 +68,19 @@ class BusanTopScene extends Phaser.Scene {
       onMoveToTile: (tileName) => {
         tileInteraction(this, tileName);
       },
+      onMapCreated: () => {
+        if (this.spawnPointName) {
+          console.log("spawn point name", this.spawnPointName);
+          const { x, y } = this.map.objects[this.spawnPointName];
+          this.x = x * 2 / zoom;
+          this.y = y * 2 / zoom;
+        } else if (this.x === 0 && this.y === 0) {
+          console.log("spawn point name not found and no initial position");
+          this.x = this.map.objects.spawnPoint.x * 2 / zoom;
+          this.y = this.map.objects.spawnPoint.y * 2 / zoom;
+        }
+      }
     });
-
-    if (this.spawnPointName) {
-      console.log("spawn point name", this.spawnPointName);
-      const { x, y } = this.map.objects[this.spawnPointName];
-      this.x = x * 2 / zoom;
-      this.y = y * 2 / zoom;
-      playerUpdateInitialPos(this.player, this.x, this.y);
-    } else if (this.x === 0 && this.y === 0) {
-      console.log("spawn point name not found and no initial position");
-      this.x = this.map.objects.spawnPoint.x * 2 / zoom;
-      this.y = this.map.objects.spawnPoint.y * 2 / zoom;
-      playerUpdateInitialPos(this.player, this.x, this.y);
-    }
   }
 
   update(_time, delta) {

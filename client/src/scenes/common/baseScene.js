@@ -164,6 +164,7 @@ export function baseSceneCreate({
   mapName,
   mapBackgroundLayerName,
   onMoveToTile,
+  onMapCreated,
 }) {
   window.scene = selfScene;
   selfScene.stop = false;
@@ -176,6 +177,9 @@ export function baseSceneCreate({
   playerCreateAnimations(protocol.getPlayerId(), selfScene);
 
   selfScene.map = mapCreate(selfScene, mapName);
+  if (onMapCreated) {
+    onMapCreated();
+  }
   const { playerName, playerImgUrl } = loadPlayerNameAndImgUrl();
   selfScene.player = playerCreate(
     selfScene,

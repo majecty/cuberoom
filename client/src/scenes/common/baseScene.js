@@ -249,10 +249,13 @@ export function baseSceneCreate({
 
   selfScene.cursors = selfScene.input.keyboard.createCursorKeys();
   selfScene.input.on("pointerdown", () => {
+    // console.log("pointerdown event", selfScene.input.activePointer.worldX, selfScene.input.activePointer.worldY,
+    // selfScene.input.activePointer.x, selfScene.input.activePointer.y
+    // );
     mouseInputUpdateEvent(
       selfScene.player,
       selfScene.input.activePointer.worldX,
-      selfScene.input.activePointer.worldY
+      selfScene.input.activePointer.worldY,
     );
   });
 

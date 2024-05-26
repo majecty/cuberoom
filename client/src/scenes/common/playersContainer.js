@@ -86,7 +86,7 @@ export function playersContainerListenPlayerList({
         // log("itsme")
       } else if (container.players.entries[id] == null) {
         if (debug) {
-          log("listenPlayerList create", id.substring(0, 5), id);
+          log("listenPlayerList create", id.substring(0, 5), playerFromServer.name, id);
         }
         createOtherPlayer(container, phaserScene, playerFromServer, id, debug);
       } else {

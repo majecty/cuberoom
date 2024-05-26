@@ -52,9 +52,13 @@ class BusanExternalScene extends Phaser.Scene {
   init(data) {
     baseSceneInit(this, data);
 
+    if (data.spawnPointName == null) {
+      return;
+    }
+
     const availableSpawnPoints = ["spawn1F1", "spawn1F2"];
     if (!availableSpawnPoints.includes(data.spawnPointName)) {
-      console.error("Invalid spawn point name " + data.spawnPointName);
+      console.log("Invalid spawn point name " + data.spawnPointName);
       return;
     }
     this.spawnPointName = data.spawnPointName;
@@ -82,19 +86,16 @@ class BusanExternalScene extends Phaser.Scene {
       },
     });
 
-    this.x = (this.map.objects.spawnPoint.x * 2) / zoom;
-    this.y = (this.map.objects.spawnPoint.y * 2) / zoom; 
     if (this.spawnPointName) {
       console.log("spawn point name", this.spawnPointName);
-      console.log(this);
-      console.log(this.map.objects);
       this.x = this.map.objects[this.spawnPointName].x * 2 / zoom;
       this.y = this.map.objects[this.spawnPointName].y * 2 / zoom;
-    } else {
-      console.log("No spawn point name");
+    } else if (this.x === 0 && this.y === 0) {
+      console.log("spawn point name not found and no initial position");
+      this.x = this.map.objects.spawnPoint.x * 2 / zoom;
+      this.y = this.map.objects.spawnPoint.y * 2 / zoom;
     }
     playerUpdateInitialPos(this.player, this.x, this.y);
-    // object
   }
 
   update(_time, delta) {

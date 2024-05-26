@@ -108,25 +108,23 @@ export function baseSceneInit(selfScene, data) {
 
   let debugPosUsed = false;
   if (isFirstLoadedScene) {
-    ifDebug(() => {
-      const { floor, x, y } = loadFloorAndMovement();
-      if (floor !== sceneFloor) {
-        log("floor != scenename", floor, selfScene.sceneName);
-        return;
-      }
+    const { floor, x, y } = loadFloorAndMovement();
+    if (floor !== sceneFloor) {
+      log("floor != scenename", floor, selfScene.sceneName);
+      return;
+    }
 
-      log("use prev pos for debug", {
-        x,
-        y,
-        floor,
-      });
-      debugPosUsed = true;
-      selfScene.x = Number(x);
-      selfScene.destinationX = Number(x);
-      selfScene.y = Number(y);
-      selfScene.destinationY = Number(y);
+    log("use prev pos for debug", {
+      x,
+      y,
+      floor,
     });
-  }
+    debugPosUsed = true;
+    selfScene.x = Number(x);
+    selfScene.destinationX = Number(x);
+    selfScene.y = Number(y);
+    selfScene.destinationY = Number(y);
+  };
 
   if (debugPosUsed) {
     return;

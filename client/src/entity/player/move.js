@@ -36,10 +36,13 @@ export function playerMove(
     if (newPlayer.lastMouseInput != null) {
       scene.destinationX = newPlayer.lastMouseInput.x;
       scene.destinationY = newPlayer.lastMouseInput.y;
+      // console.log("newPlayer.lastMouseInput", newPlayer.lastMouseInput.x, newPlayer.lastMouseInput.y, scene.sceneName);
     } else if (pointer.isDown) {
-      scene.destinationX = scene.input.activePointer.worldX;
-      scene.destinationY = scene.input.activePointer.worldY;
+      // scene.destinationX = scene.input.activePointer.worldX;
+      // scene.destinationY = scene.input.activePointer.worldY;
+      // console.log("pointer.isDown", scene.input.activePointer.worldX, scene.input.activePointer.worldY, scene.sceneName, scene.input.activePointer.x, scene.input.activePointer.y);
     }
+    // console.log("mouse move", scene.destinationX, scene.destinationY);
     mouseInputReset(newPlayer);
     newPlayer.lastMoveInput = "mouse";
   }

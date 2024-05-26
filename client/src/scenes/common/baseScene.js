@@ -57,20 +57,20 @@ export function baseSceneConstructor(selfScene, sceneName) {
   selfScene.stop = false;
 
   playersContainerListenRemovePlayer(selfScene, selfScene, selfScene.socket);
-  listenRemovePlayerOnPlayer(
-    selfScene,
-    selfScene.socket,
-    selfScene.sceneName,
-    () => protocol.getPlayerId(),
-    () => {
-      selfScene.player = null;
-    }
-  );
   const floor = FLOOR_NAMES[sceneName];
   if (floor == null) {
     logErr("floor is null in baseSceneConstructor", sceneName);
     return;
   }
+  listenRemovePlayerOnPlayer(
+    selfScene,
+    selfScene.socket,
+    floor,
+    () => protocol.getPlayerId(),
+    () => {
+      selfScene.player = null;
+    }
+  );
   playersContainerListenPlayerList({
     scene: selfScene,
     socket: selfScene.socket,
@@ -82,13 +82,13 @@ export function baseSceneConstructor(selfScene, sceneName) {
     selfScene,
     selfScene,
     selfScene.socket,
-    selfScene.sceneName
+    floor,
   );
   playersContainerListenRemoveChat(
     selfScene,
     selfScene,
     selfScene.socket,
-    selfScene.sceneName
+    floor,
   );
   window.scenes[sceneName] = selfScene;
 }

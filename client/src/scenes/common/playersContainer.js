@@ -114,7 +114,7 @@ export function playersContainerListenAddChat(
   scene,
   container,
   socket,
-  sceneName
+  floor
 ) {
   /**
    * @param dataFromServer field id, chat, floor
@@ -125,7 +125,7 @@ export function playersContainerListenAddChat(
     }
     const { players } = container;
     if (
-      dataFromServer.floor === sceneName &&
+      dataFromServer.floor === floor &&
       players.entries[dataFromServer.id]
     ) {
       const player = players.entries[dataFromServer.id];
@@ -142,14 +142,14 @@ export function playersContainerListenRemoveChat(
   scene,
   container,
   socket,
-  sceneName
+  floor
 ) {
   protocol.onRemoveChat(socket, (data) => {
     if (scene.stop) {
       return;
     }
     const { players } = container;
-    if (data.floor === sceneName && players.entries[data.id]) {
+    if (data.floor === floor && players.entries[data.id]) {
       const player = players.entries[data.id];
       player.chat = chatUpdateText(scene, player.chat, "");
     }

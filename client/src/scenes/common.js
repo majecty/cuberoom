@@ -40,7 +40,7 @@ export const FLOOR_TO_SCENE = {
 export function listenRemovePlayerOnPlayer(
   scene,
   socket,
-  sceneName,
+  floor,
   getId,
   removePlayer
 ) {
@@ -49,7 +49,7 @@ export function listenRemovePlayerOnPlayer(
       return;
     }
     if (data === getId()) {
-      log("removePlayer", sceneName, data.id, data);
+      log("removePlayer", floor, data.id, data);
       removePlayer();
     }
   });

@@ -14,8 +14,8 @@ import startScene from "../entity/map/startScene";
 
 function backgroundStatic(scene) {
   const sprite = scene.add.sprite(
-    240 / zoom,
-    (640 + 16 * 5) / zoom,
+    272 / zoom,
+    680 / zoom,
     "busan1F-background"
   );
   sprite.scale = 2 / zoom;

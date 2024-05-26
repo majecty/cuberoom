@@ -90,12 +90,13 @@ class BusanExternalScene extends Phaser.Scene {
       console.log("spawn point name", this.spawnPointName);
       this.x = this.map.objects[this.spawnPointName].x * 2 / zoom;
       this.y = this.map.objects[this.spawnPointName].y * 2 / zoom;
+      playerUpdateInitialPos(this.player, this.x, this.y);
     } else if (this.x === 0 && this.y === 0) {
       console.log("spawn point name not found and no initial position");
       this.x = this.map.objects.spawnPoint.x * 2 / zoom;
       this.y = this.map.objects.spawnPoint.y * 2 / zoom;
+      playerUpdateInitialPos(this.player, this.x, this.y);
     }
-    playerUpdateInitialPos(this.player, this.x, this.y);
   }
 
   update(_time, delta) {

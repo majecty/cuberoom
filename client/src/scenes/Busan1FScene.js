@@ -8,14 +8,13 @@ import {
   baseSceneUpdate,
 } from "./common/baseScene";
 import { zoom } from "../constant";
-import { playerUpdateInitialPos } from "../entity/player";
 import { protocol } from "../network/protocol";
 import startScene from "../entity/map/startScene";
 
 function backgroundStatic(scene) {
   const sprite = scene.add.sprite(
-    272 / zoom,
-    680 / zoom,
+    336 / zoom,
+    744 / zoom,
     "busan1F-background"
   );
   sprite.scale = 2 / zoom;

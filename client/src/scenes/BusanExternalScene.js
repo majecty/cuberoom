@@ -15,7 +15,7 @@ import startScene from "../entity/map/startScene";
 function backgroundStatic(scene) {
   const sprite = scene.add.sprite(
     600 / zoom,
-    400 / zoom,
+    460 / zoom,
     "busanexternal-background"
   );
   sprite.scale = 2 / zoom;

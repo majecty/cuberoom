@@ -149,7 +149,17 @@ const works = {
     description: ``,
     alt: ``,
     url: "https://tobe.aladin.co.kr/n/24847", // SOUL4ME 홈페이지
-  }
+  },
+  10: {
+    id: "work-10",
+    imgUrl: "",
+    popupname: "Flat is the new deep",
+    title: "2018년 광주비엔날레 작품 <Flat is the new deep>(평면이 새로운 깊이다)",
+    medium: "",
+    description: ``,
+    alt: "",
+    url: "https://standlaid.github.io/portfolio/FIND.html",
+  },
 };
 
 export default works;

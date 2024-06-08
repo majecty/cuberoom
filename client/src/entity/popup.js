@@ -14,6 +14,10 @@ export function popupCreateFromTilemapPosition(scene, { x, y }, workNum) {
 }
 
 export function popupCreate(scene, { x, y }, workNum) {
+  if (popupSprite != null) {
+    popupSprite.destroy();
+    popupSprite = null;
+  }
   const work = works[workNum];
   popupSprite = scene.add.sprite(x, y, "popup");
   popupSprite.setInteractive();
@@ -65,6 +69,9 @@ export function popupCreate(scene, { x, y }, workNum) {
 }
 
 export function popupDestroy() {
-  popupSprite.destroy();
+  if (popupSprite != null) {
+    popupSprite.destroy();
+  }
+  popupSprite = null;
   // if (descriptionContainer) document.body.removeChild(descriptionContainer);
 }

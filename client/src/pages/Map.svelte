@@ -122,22 +122,26 @@
   }
 
   :global(a.start-game-busan) {
-      opacity: 0;
+      opacity: 0.9;
       z-index : 2;
-      transform:translate(-50%, -50%);
+      /* transform:translate(-50%, -50%); */
       position: absolute;
       background-color: black;
+
+      top: calc(50% + 1vh);
+      left: calc(50% + 1vw);
   }
 
   /* 가로가 길 때 */
   @media (min-aspect-ratio: 4/3) {
     :global(a.start-game-busan) {
       width : 13%;
-      bottom: var(--busan-bottom, 33%);
-      left: 57%;
+      /* bottom: var(--busan-bottom, 33%); */
+      /* top: calc(50% + 1vh); */
+      /* left: 57%; */
       background-color: yellowgreen;
       aspect-ratio: 1;
-      transform:translate(-50%);
+      /* transform:translate(-50%); */
     }
   }
 
@@ -145,11 +149,12 @@
   @media (max-aspect-ratio: 4/3) {
     :global(a.start-game-busan) {
       height: 17%;
-      bottom: 24%;
-      right: var(--busan-right, 37%);
+      /* bottom: 24%; */
+      /* right: var(--busan-right, 37%); */
+      /* left: calc(50% + 1vw); */
       background-color: yellow;
       aspect-ratio: 1;
-      transform: translate(0, -50%);
+      /* transform: translate(0, -50%); */
     }
   }
 

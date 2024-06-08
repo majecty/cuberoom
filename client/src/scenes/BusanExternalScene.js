@@ -36,6 +36,9 @@ function tileInteraction(scene, curTileName) {
       protocol.moveFloor(scene.socket, FLOOR_NAMES.Busan1FScene);
       startScene(scene, FLOOR_TO_SCENE.Busan1F, { spawnPointName: "spawnExternal2" });
       break;
+    case "BackToMap":
+      window.location.href = "/map";
+      break;
     default:
       break;
   }

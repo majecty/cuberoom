@@ -28,6 +28,9 @@ function tileInteraction(scene, curTileName) {
       protocol.moveFloor(scene.socket, "1F");
       startScene(scene, "FirstFloorScene", spawnPoints.floor1F.fromEntrance);
       break;
+    case "BackToMap":
+      window.location.href = "/map";
+      break;
     default:
       break;
   }
@@ -49,7 +52,7 @@ class EntranceScene extends Phaser.Scene {
   preload() {
     this.load.image(
       "entrance-background",
-      "/static/img/entrance_background.png"
+      "/static/img/tilesetimages/entrance_background.png"
     );
     this.load.image("collision-tileset", "/static/tilemap/simple_tile.png");
     this.load.image("interactive-tile", "/static/tilemap/interactive-tile.png");

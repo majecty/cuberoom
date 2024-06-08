@@ -8,8 +8,8 @@ import { baseSceneConstructor, baseSceneCreate, baseSceneInit, baseScenePreload,
 
 function backgroundStatic(scene) {
   const sprite = scene.add.sprite(
-    464 / zoom,
-    456 / zoom,
+    528 / zoom,
+    616 / zoom,
     "busanTop-background"
   );
   sprite.scale = 2 / zoom;

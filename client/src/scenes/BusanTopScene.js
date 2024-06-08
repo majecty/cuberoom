@@ -5,6 +5,7 @@ import { playerUpdateInitialPos } from "../entity/player";
 import { protocol } from "../network/protocolOnline";
 import { FLOOR_NAMES, FLOOR_TO_SCENE } from "./common";
 import { baseSceneConstructor, baseSceneCreate, baseSceneInit, baseScenePreload, baseSceneUpdate } from "./common/baseScene";
+import { popupCreateFromTilemapPosition, popupDestroy } from "../entity/popup";
 
 function backgroundStatic(scene) {
   const sprite = scene.add.sprite(
@@ -15,13 +16,37 @@ function backgroundStatic(scene) {
   sprite.scale = 2 / zoom;
 }
 
-function tileInteraction(scene, curTileName) {
+function tileInteraction(scene, curTileName, prevTileName) {
+  if (prevTileName !== curTileName) {
+    if (["green", "blue", "freetime"].includes(prevTileName)) {
+      console.log("destroy popup");
+      popupDestroy();
+    }
+  }
   switch (curTileName) {
     case "moveTo1F":
       protocol.moveFloor(scene.socket, FLOOR_NAMES.Busan1FScene);
       startScene(scene, FLOOR_TO_SCENE.Busan1F, {
         spawnPointName: "spawnTop",
       });
+      break;
+    case "green":
+      if (document.getElementById("green") == null) {
+        const { x, y } = scene.map.objects["green"];
+        popupCreateFromTilemapPosition(scene, { x, y }, 12);
+      }
+      break;
+    case "blue":
+      if (document.getElementById("blue") == null) {
+        const { x, y } = scene.map.objects["blue"];
+        popupCreateFromTilemapPosition(scene, { x, y }, 13);
+      }
+      break;
+    case "freetime":
+      if (document.getElementById("freetime") == null) {
+        const { x, y } = scene.map.objects["freetime"];
+        popupCreateFromTilemapPosition(scene, { x, y }, 14);
+      }
       break;
     default:
       break;
@@ -52,6 +77,7 @@ class BusanTopScene extends Phaser.Scene {
     this.load.image('busanTop-background', '/static/img/tilesetimages/busanTop.png');
     this.load.image("collision-tileset", "/static/tilemap/simple_tile.png");
     this.load.image("interactive-tile", "/static/tilemap/busan-interactive.png");
+    this.load.image("popup", "/static/img/ui-map/popup.png");
     this.load.tilemapTiledJSON({
       key: "busanTop-map",
       url: "/static/tilemap/busanTop.json",
@@ -65,8 +91,8 @@ class BusanTopScene extends Phaser.Scene {
       selfScene: this,
       mapName: "busanTop-map",
       mapBackgroundLayerName: "busanTop-background",
-      onMoveToTile: (tileName) => {
-        tileInteraction(this, tileName);
+      onMoveToTile: (tileName, prevTileName) => {
+        tileInteraction(this, tileName, prevTileName);
       },
       onMapCreated: () => {
         if (this.spawnPointName) {

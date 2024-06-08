@@ -170,6 +170,37 @@ const works = {
     alt: "",
     url: "https://tobe.aladin.co.kr/n/194158",
   },
+  12: {
+    id: "work-12",
+    imgUrl: "",
+    popupname: "Green",
+    title: "Green:픽셀에 대한 찬사",
+    medium: "",
+    description: ``,
+    alt: "",
+    url: "https://tobe.aladin.co.kr/n/194161"
+  },
+  13: {
+    id: "work-13",
+    imgUrl: "",
+    popupname: "Blue",
+    title: "Blue:이야기에 대한 이야기",
+    medium: "",
+    description: ``,
+    alt: "",
+    url: "https://tobe.aladin.co.kr/n/194163"
+  },
+  14: {
+    id: "work-14",
+    imgUrl: "",
+    popupname: "시험 시간",
+    title: "시험 시간",
+    medium: "2022부산시립미술관에서 전시한 <시험 시간> 은 18가지 문항에 답변을 하면 64가지 취미활동 중 내게 맞는 취미를 추천해주는 검사입니다.",
+    // description: `2022부산시립미술관에서 전시한 <시험 시간> 은 18가지 문항에 답변을 하면 64가지 취미활동 중 내게 맞는 취미를 추천해주는 검사입니다.`,
+    description: "",
+    alt: "",
+    url: "https://freetime-in-busan.web.app",
+  }
 };
 
 export default works;

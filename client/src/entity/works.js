@@ -140,6 +140,16 @@ const works = {
     // <랜선 집들이! 첫 번째 집! **드디어**> https://youtu.be/8tHXNXaIxg0
     // <스텀블 포스> https://youtu.be/MW6PEmwsQYk
   },
+  9: {
+    id: "work-9",
+    imgUrl: "",
+    popupname: "나의살던고향은",
+    title: "2020년 연재한 웹툰<나의살던고향은>의 1화",
+    medium: "",
+    description: ``,
+    alt: ``,
+    url: "https://tobe.aladin.co.kr/n/24847", // SOUL4ME 홈페이지
+  }
 };
 
 export default works;

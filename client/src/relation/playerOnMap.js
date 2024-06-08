@@ -44,7 +44,7 @@ export function playerOnMapUpdate(playerOnMap, player, map) {
       popupDestroy();
     }
 
-    playerOnMap.onMoveToTile(curTileName);
+    playerOnMap.onMoveToTile(curTileName, playerOnMap.prevTileName);
   }
 
   return {

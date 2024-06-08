@@ -10,6 +10,7 @@ import {
 import { zoom } from "../constant";
 import { protocol } from "../network/protocol";
 import startScene from "../entity/map/startScene";
+import { popupCreate, popupCreateFromTilemapPosition, popupDestroy } from "../entity/popup";
 
 function backgroundStatic(scene) {
   const sprite = scene.add.sprite(
@@ -20,8 +21,14 @@ function backgroundStatic(scene) {
   sprite.scale = 2 / zoom;
 }
 
-function tileInteraction(scene, curTileName) {
+function tileInteraction(scene, curTileName, prevTileName) {
   console.log("curTileName", curTileName);
+  if (prevTileName !== curTileName) {
+    if (["myhome"].includes(prevTileName)) {
+      console.log("destroy myhome popup");
+      popupDestroy();
+    }
+  }
   switch (curTileName) {
     case "toExternal1":
       protocol.moveFloor(scene.socket, FLOOR_NAMES.Busan1FScene);
@@ -40,6 +47,14 @@ function tileInteraction(scene, curTileName) {
       startScene(scene, FLOOR_TO_SCENE.BusanTop, {
         spawnPointName: "spawnPoint",
       });
+      break;
+    case "myhome":
+      if (document.getElementById("myhome") == null) {
+        console.log("create myhome popup");
+        const { x, y } = scene.map.objects["myhome"];
+        // popupCreate(scene, { x: x * 2 + 5, y: y * 2 - 40 }, 9);
+        popupCreateFromTilemapPosition(scene, { x, y }, 9);
+      }
       break;
     default:
       break;
@@ -72,6 +87,7 @@ class Busan1FScene extends Phaser.Scene {
     this.load.image("busan1F-background", "/static/img/tilesetimages/busan1F.png");
     this.load.image("collision-tileset", "/static/tilemap/simple_tile.png");
     this.load.image("interactive-tile", "/static/tilemap/busan-interactive.png");
+    this.load.image("popup", "/static/img/ui-map/popup.png");
     this.load.tilemapTiledJSON({
       key: "busan1f-map",
       url: "/static/tilemap/busan1F.json",
@@ -85,10 +101,11 @@ class Busan1FScene extends Phaser.Scene {
       selfScene: this,
       mapName: "busan1f-map",
       mapBackgroundLayerName: "busan1F-background",
-      onMoveToTile: (tileName) => {
-        tileInteraction(this, tileName);
+      onMoveToTile: (tileName, prevTileName) => {
+        tileInteraction(this, tileName, prevTileName);
       },
       onMapCreated: () => {
+        console.log("map created", this.map.objects);
         if (this.spawnPointName) {
           console.log("spawn point name", this.spawnPointName);
           const { x, y } = this.map.objects[this.spawnPointName];

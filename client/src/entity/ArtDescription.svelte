@@ -25,7 +25,9 @@
 </script>
 
 <HTMLPopup id="{id}">
+  {#if popupLeftUrl != null && popupLeftUrl.length > 0}
   <img class="popup-left" src="{popupLeftUrl}" />
+  {/if}
   <div class="popup-right">
     <div class="title">{title}</div>
     <div class="medium">{medium}</div>
@@ -35,8 +37,10 @@
     {/if}
     <div class="alt">{alt}</div>
     <button class="more" on:click="{handleMoreClick}">
-      {#if moreStatus === "folded"} 더보기 {/if} {#if moreStatus === "unfolded"}
-      접기 {/if}
+      {#if description.length > 0}
+        {#if moreStatus === "folded"} 더보기 {/if} {#if moreStatus === "unfolded"}
+        접기 {/if}
+      {/if}
     </button>
     <div class="description" class:folded="{moreStatus === 'folded'}">
       {description}

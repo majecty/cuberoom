@@ -9,6 +9,10 @@ import {
 
 let popupSprite;
 
+export function popupCreateFromTilemapPosition(scene, { x, y }, workNum) {
+  return popupCreate(scene, { x: x * 2 + 5, y: y * 2 - 40 }, workNum);
+}
+
 export function popupCreate(scene, { x, y }, workNum) {
   const work = works[workNum];
   popupSprite = scene.add.sprite(x, y, "popup");

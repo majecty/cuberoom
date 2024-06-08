@@ -2,7 +2,22 @@
   import { Link } from 'svelte-routing';
   import { resetMap } from './storage';
   resetMap();
+
+  let innerWidth = window.innerWidth;
+  let innerHeight = window.innerHeight;
+
+  let seoulTop = `--seoul-top:31%`;
+  $: {
+    if (innerWidth / innerHeight > 1024 / 769) {
+      // top = 31%  when width / height = 1.33
+      // top = 0 when width / height = 3.77
+      let seoulTopPercentage = `${(3.77 - (innerWidth / innerHeight)) / (3.77 - 1.33) * 31}`;
+      seoulTop = `--seoul-top:${seoulTopPercentage}%`;
+    }
+  }
 </script>
+
+<svelte:window bind:innerWidth bind:innerHeight />
 
 <main>
   <!-- <div class="seoul">
@@ -20,7 +35,7 @@
     />
   </div>
   <!-- <img class="flag" src="/static/img/ui/map_click.png" alt="" /> -->
-  <Link to="/game?map=seoul" class="start-game-seoul">
+  <Link to="/game?map=seoul" class="start-game-seoul" style="{seoulTop}">
     <!-- <img src="/static/img/ui/map_gangnam.png" alt="클릭" /> -->
   </Link>
   <Link to="/game?map=busan" class="start-game-busan">
@@ -65,11 +80,12 @@
   /* 가로가 길 때 */
   @media (min-aspect-ratio: 4/3) {
     :global(a.start-game-seoul) {
-      width : 70%;
-      height: 30%;
-      top: 40%;
-      left: 25%;
+      width : 13%;
+      top: var(--seoul-top, 40%);
+      left: 48%;
       background-color: purple;
+      aspect-ratio: 1;
+      transform:translate(-50%);
     }
   }
 

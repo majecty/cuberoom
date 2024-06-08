@@ -160,6 +160,16 @@ const works = {
     alt: "",
     url: "https://standlaid.github.io/portfolio/FIND.html",
   },
+  11: {
+    id: "work-11",
+    imgUrl: "",
+    popupname: "Red",
+    title: "Red:전시에 대한 메모",
+    medium: "",
+    description: ``,
+    alt: "",
+    url: "https://tobe.aladin.co.kr/n/194158",
+  },
 };
 
 export default works;

@@ -24,7 +24,7 @@ function backgroundStatic(scene) {
 function tileInteraction(scene, curTileName, prevTileName) {
   console.log("curTileName", curTileName);
   if (prevTileName !== curTileName) {
-    if (["myhome", "flatisthenewdeep"].includes(prevTileName)) {
+    if (["myhome", "flatisthenewdeep", "red"].includes(prevTileName)) {
       console.log("destroy myhome popup");
       popupDestroy();
     }
@@ -61,6 +61,13 @@ function tileInteraction(scene, curTileName, prevTileName) {
         console.log("create flatisthenewdeep popup");
         const { x, y } = scene.map.objects["flatisthenewdeep"];
         popupCreateFromTilemapPosition(scene, { x, y }, 10);
+      }
+      break;
+    case "red":
+      if (document.getElementById("red") == null) {
+        console.log("create red popup");
+        const { x, y } = scene.map.objects["red"];
+        popupCreateFromTilemapPosition(scene, { x, y }, 11);
       }
       break;
     default:

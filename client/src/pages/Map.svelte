@@ -92,20 +92,23 @@
 
   :global(a.start-game-seoul) {
     opacity: 0;
-    transform:translate(-50%, -50%);
     z-index : 2;
     position: absolute;
+    bottom: 51%;
+    right: 50%;
+    aspect-ratio: 1;
+    /* 서울 클릭 범위의 34%가 가로로 중앙을 넘김 */
+    transform: translateX(34%);
   }
 
   /* 가로가 길 때 */
   @media (min-aspect-ratio: 4/3) {
     :global(a.start-game-seoul) {
       width : 13%;
-      top: var(--seoul-top, 40%);
-      left: 48%;
+      /* top: var(--seoul-top, 40%); */
+      /* left: 48%; */
       background-color: purple;
-      aspect-ratio: 1;
-      transform:translate(-50%);
+      /* transform:translate(-50%); */
     }
   }
 
@@ -113,23 +116,23 @@
   @media (max-aspect-ratio: 4/3) {
     :global(a.start-game-seoul) {
       height: 17%;
-      top: 40%;
-      left: var(--seoul-left, 41%);
+      /* top: 40%; */
+      /* left: var(--seoul-left, 41%); */
       background-color: blue;
-      aspect-ratio: 1;
-      transform: translate(0, -50%)
+      /* aspect-ratio: 1; */
+      /* transform: translate(0, -50%) */
     }
   }
 
   :global(a.start-game-busan) {
-      opacity: 0.9;
+      opacity: 0;
       z-index : 2;
       /* transform:translate(-50%, -50%); */
       position: absolute;
       background-color: black;
 
-      top: calc(50% + 1vh);
-      left: calc(50% + 1vw);
+      top: 51%;
+      left: 51%;
   }
 
   /* 가로가 길 때 */

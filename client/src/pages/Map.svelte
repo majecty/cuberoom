@@ -9,6 +9,7 @@
   let seoulTop = `--seoul-top:31%`;
   let seoulLeft = `--seoul-left:41%`;
   let busanBottom = `--busan-bottom:33%`;
+  let busanRight = `--busan-right:37%`;
   $: {
     // 가로가 길 때
     if (innerWidth / innerHeight > 1024 / 769) {
@@ -26,6 +27,11 @@
       // left = 41 when height / width = 0.75
       let seoulLeftPercentage = (4.17 - (innerHeight / innerWidth)) / (4.17 - 0.75) * 41;
       seoulLeft = `--seoul-left:${seoulLeftPercentage}%`;
+
+      // right = 0 when height / width = 580 / 202 = 2.87
+      // right = 37 when height / width = 580 / 762 = 0.76
+      let busanRightPercentage = (2.87 - (innerHeight / innerWidth)) / (2.87 - 0.76) * 37;
+      busanRight = `--busan-right:${busanRightPercentage}%`;
     }
   }
 </script>
@@ -48,10 +54,10 @@
     />
   </div>
   <!-- <img class="flag" src="/static/img/ui/map_click.png" alt="" /> -->
-  <Link to="/game?map=seoul" class="start-game-seoul" style="{seoulTop}">
+  <Link to="/game?map=seoul" class="start-game-seoul" style="{seoulTop};{seoulLeft}">
     <!-- <img src="/static/img/ui/map_gangnam.png" alt="클릭" /> -->
   </Link>
-  <Link to="/game?map=busan" class="start-game-busan">
+  <Link to="/game?map=busan" class="start-game-busan" style="{busanBottom};{busanRight}">
     <!-- <img src="/static/img/ui/map_gangnam.png" alt="클릭" /> -->
   </Link>
 </main>
@@ -137,11 +143,12 @@
   /* 세로가 길 때 */
   @media (max-aspect-ratio: 4/3) {
     :global(a.start-game-busan) {
-      width : 80%;
-      height: 30%;
-      top: 70%;
-      left: 70%;
+      height: 17%;
+      bottom: 24%;
+      right: var(--busan-right, 37%);
       background-color: yellow;
+      aspect-ratio: 1;
+      transform: translate(0, -50%);
     }
   }
 

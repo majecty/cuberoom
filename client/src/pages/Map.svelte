@@ -7,12 +7,18 @@
   let innerHeight = window.innerHeight;
 
   let seoulTop = `--seoul-top:31%`;
+  let seoulLeft = `--seoul-left:41%`;
   $: {
     if (innerWidth / innerHeight > 1024 / 769) {
       // top = 31%  when width / height = 1.33
       // top = 0 when width / height = 3.77
       let seoulTopPercentage = `${(3.77 - (innerWidth / innerHeight)) / (3.77 - 1.33) * 31}`;
       seoulTop = `--seoul-top:${seoulTopPercentage}%`;
+    } else {
+      // left = 0 when height / width = 4.17
+      // left = 41 when height / width = 0.75
+      let seoulLeftPercentage = (4.17 - (innerHeight / innerWidth)) / (4.17 - 0.75) * 41;
+      seoulLeft = `--seoul-left:${seoulLeftPercentage}%`;
     }
   }
 </script>
@@ -92,11 +98,12 @@
   /* 세로가 길 때 */
   @media (max-aspect-ratio: 4/3) {
     :global(a.start-game-seoul) {
-      width : 80%;
-      height: 25%;
+      height: 17%;
       top: 40%;
-      left: 20%;
+      left: var(--seoul-left, 41%);
       background-color: blue;
+      aspect-ratio: 1;
+      transform: translate(0, -50%)
     }
   }
 

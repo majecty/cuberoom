@@ -8,12 +8,19 @@
 
   let seoulTop = `--seoul-top:31%`;
   let seoulLeft = `--seoul-left:41%`;
+  let busanBottom = `--busan-bottom:33%`;
   $: {
+    // 가로가 길 때
     if (innerWidth / innerHeight > 1024 / 769) {
       // top = 31%  when width / height = 1.33
       // top = 0 when width / height = 3.77
       let seoulTopPercentage = `${(3.77 - (innerWidth / innerHeight)) / (3.77 - 1.33) * 31}`;
       seoulTop = `--seoul-top:${seoulTopPercentage}%`;
+
+      // buttom = 0% when width / height = 1758 / 442 = 3.98
+      // bottom = 33% when width / height = 1024 / 769 = 1.33
+      let busanBottomPercentage = (3.98 - (innerWidth / innerHeight)) / (3.98 - 1.33) * 33;
+      busanBottom = `--busan-bottom:${busanBottomPercentage}%`;
     } else {
       // left = 0 when height / width = 4.17
       // left = 41 when height / width = 0.75
@@ -118,11 +125,12 @@
   /* 가로가 길 때 */
   @media (min-aspect-ratio: 4/3) {
     :global(a.start-game-busan) {
-      width : 80%;
-      height: 40%;
-      top: 75%;
-      left: 70%;
+      width : 13%;
+      bottom: var(--busan-bottom, 33%);
+      left: 57%;
       background-color: yellowgreen;
+      aspect-ratio: 1;
+      transform:translate(-50%);
     }
   }
 

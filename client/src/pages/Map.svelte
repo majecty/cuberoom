@@ -6,6 +6,7 @@
   let innerWidth = window.innerWidth;
   let innerHeight = window.innerHeight;
 
+  // 위치를 계산할 때 가로 세로 비율이 필요해서 자바스크립트로 계산
   let seoulTop = `--seoul-top:31%`;
   let seoulLeft = `--seoul-left:41%`;
   let busanBottom = `--busan-bottom:33%`;

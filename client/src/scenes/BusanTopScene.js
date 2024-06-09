@@ -74,13 +74,13 @@ class BusanTopScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image('busanTop-background', '/static/img/tilesetimages/busanTop.png');
+    this.load.image('busanTop-background', '/static/img/tilesetimages/busanTop.png?v=1');
     this.load.image("collision-tileset", "/static/tilemap/simple_tile.png");
     this.load.image("interactive-tile", "/static/tilemap/busan-interactive.png");
     this.load.image("popup", "/static/img/ui-map/popup.png");
     this.load.tilemapTiledJSON({
       key: "busanTop-map",
-      url: "/static/tilemap/busanTop.json",
+      url: "/static/tilemap/busanTop.json?v=1",
     });
     baseScenePreload(this);
   }

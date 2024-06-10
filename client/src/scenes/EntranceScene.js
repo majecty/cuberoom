@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { FLOOR_NAMES, FLOOR_TO_SCENE } from "./common";
+import { FLOOR_TO_SCENE } from "./common";
 import {
   baseSceneConstructor,
   baseSceneInit,
@@ -11,6 +11,7 @@ import startScene from "../entity/map/startScene";
 import { spawnPoints } from "./common/constants";
 import { protocol } from "../network/protocol";
 import { zoom } from "../constant";
+import ENV from "../../ENV";
 
 function backgroundStatic(scene) {
   const sprite = scene.add.sprite(
@@ -60,7 +61,7 @@ class EntranceScene extends Phaser.Scene {
 
     this.load.tilemapTiledJSON({
       key: "entrance-map",
-      url: "/static/tilemap/entrance.json",
+      url: `/static/tilemap/entrance.json?v=${ENV.version}`,
     });
     baseScenePreload(this);
   }

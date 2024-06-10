@@ -8,9 +8,9 @@ import {
   baseSceneUpdate,
 } from "./common/baseScene";
 import { zoom } from "../constant";
-import { playerUpdateInitialPos } from "../entity/player";
 import { protocol } from "../network/protocolOnline";
 import startScene from "../entity/map/startScene";
+import ENV from "../../ENV";
 
 function backgroundStatic(scene) {
   const sprite = scene.add.sprite(
@@ -73,7 +73,7 @@ class BusanExternalScene extends Phaser.Scene {
     this.load.image("interactive-tile", "/static/tilemap/busan-interactive.png");
     this.load.tilemapTiledJSON({
       key: "busantest-map",
-      url: "/static/tilemap/busan-external.json",
+      url: `/static/tilemap/busan-external.json?v=${ENV.version}`,
     });
     baseScenePreload(this);
   }

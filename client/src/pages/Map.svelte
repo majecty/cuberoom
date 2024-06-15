@@ -63,8 +63,10 @@
           continue;
         }
         if (key.toLowerCase().includes('busan')) {
+          // console.log('busan', key, total[key]);
           busanNum += total[key];
-        } else if (key.includes('seoul')) {
+        } else {
+          // console.log('seoul', key, total[key]);
           seoulNum += total[key];
         }
       }
@@ -136,9 +138,11 @@
   <Link to="/game?map=seoul" class="start-game-seoul" style="{seoulTop};{seoulLeft}">
     <!-- <img src="/static/img/ui/map_gangnam.png" alt="클릭" /> -->
   </Link>
+  <p id="seoul-current-player-num">현재 접속자 수 {seoulNum}명</p>
   <Link to="/game?map=busan" class="start-game-busan" style="{busanBottom};{busanRight}">
     <!-- <img src="/static/img/ui/map_gangnam.png" alt="클릭" /> -->
   </Link>
+  <p id="busan-current-player-num">현재 접속자 수 {busanNum}명</p>
 </main>
 
 <style>

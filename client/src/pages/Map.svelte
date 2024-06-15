@@ -135,11 +135,11 @@
     />
   </div>
   <!-- <img class="flag" src="/static/img/ui/map_click.png" alt="" /> -->
-  <Link to="/game?map=seoul" class="start-game-seoul" style="{seoulTop};{seoulLeft}">
+  <Link to="/game?map=seoul" class="start-game-seoul seoul" style="{seoulTop};{seoulLeft}">
     <!-- <img src="/static/img/ui/map_gangnam.png" alt="클릭" /> -->
   </Link>
   <p id="seoul-current-player-num">현재 접속자 수 {seoulNum}명</p>
-  <Link to="/game?map=busan" class="start-game-busan" style="{busanBottom};{busanRight}">
+  <Link to="/game?map=busan" class="start-game-busan busan" style="{busanBottom};{busanRight}">
     <!-- <img src="/static/img/ui/map_gangnam.png" alt="클릭" /> -->
   </Link>
   <p id="busan-current-player-num">현재 접속자 수 {busanNum}명</p>
@@ -172,7 +172,7 @@
     width: 450px;
   }
 
-  :global(a.start-game-seoul) {
+  :global(.seoul) {
     opacity: 0;
     z-index : 2;
     position: absolute;
@@ -185,7 +185,7 @@
 
   /* 가로가 길 때 */
   @media (min-aspect-ratio: 4/3) {
-    :global(a.start-game-seoul) {
+    :global(.seoul) {
       width : 13%;
       /* top: var(--seoul-top, 40%); */
       /* left: 48%; */
@@ -196,7 +196,7 @@
 
   /* 세로가 길 때 */
   @media (max-aspect-ratio: 4/3) {
-    :global(a.start-game-seoul) {
+    :global(.seoul) {
       height: 17%;
       /* top: 40%; */
       /* left: var(--seoul-left, 41%); */
@@ -206,7 +206,7 @@
     }
   }
 
-  :global(a.start-game-busan) {
+  :global(.busan) {
       opacity: 0;
       z-index : 2;
       /* transform:translate(-50%, -50%); */
@@ -219,7 +219,7 @@
 
   /* 가로가 길 때 */
   @media (min-aspect-ratio: 4/3) {
-    :global(a.start-game-busan) {
+    :global(.busan) {
       width : 13%;
       /* bottom: var(--busan-bottom, 33%); */
       /* top: calc(50% + 1vh); */
@@ -232,7 +232,7 @@
 
   /* 세로가 길 때 */
   @media (max-aspect-ratio: 4/3) {
-    :global(a.start-game-busan) {
+    :global(.busan) {
       height: 17%;
       /* bottom: 24%; */
       /* right: var(--busan-right, 37%); */
@@ -259,10 +259,6 @@
       opacity: 1;
       overflow: hidden;
       position: relative;
-    }
-
-    .seoul {
-      overflow: hidden;
     }
   }
 </style>

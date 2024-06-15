@@ -14,6 +14,10 @@ function socketConnect(socket) {
   socket.connect();
 }
 
+function socketClose(socket) {
+  socket.close();
+}
+
 function getPlayerId() {
   const id = loadFromBrowserStorage("id");
   return id;
@@ -142,6 +146,7 @@ function onPlayersTotal(socket, callback) {
 export const protocol = {
   createSocket,
   socketConnect,
+  socketClose,
   getPlayerId,
 
   getPlayers,

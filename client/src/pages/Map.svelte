@@ -1,7 +1,85 @@
 <script>
   import { Link } from 'svelte-routing';
   import { resetMap } from './storage';
+  import { protocol } from '../network/protocol';
+  import { onDestroy, onMount } from 'svelte';
   resetMap();
+
+  export let busanNum = 0;
+  export let seoulNum = 0;
+
+  let socket = null;;
+  let updateTotal = null;
+  onMount(() => {
+    if (socket) {
+      console.error('socket is already created in onMount', socket);
+      protocol.socketClose(socket);
+      socket = null;
+    }
+    console.log('onMount', 'createSocket');
+    socket = protocol.createSocket();
+    protocol.onDisconnect(socket, () => {
+      console.log('disconnected');
+    });
+    protocol.onConnectError(socket, () => {
+      console.log('connect error');
+    });
+    protocol.onConnect(socket, () => {
+      console.log('connected');
+    });
+
+    if (updateTotal != null) {
+      console.error('updateTotal is already created in onMount', updateTotal);
+      clearInterval(updateTotal);
+    }
+    updateTotal = setInterval(() => {
+      if (socket == null) {
+        console.error('socket is null in setInterval', socket);
+        return;
+      }
+      // console.log('getPlayersTotal');
+      protocol.getPlayersTotal(socket);
+    }, 1_000);
+    protocol.onPlayersTotal(socket, (total) => {
+      // console.log('onPlayersTotal', total);
+      if (total == null) {
+        console.error('total is null');
+        return;
+      }
+      if (typeof total !== 'object') {
+        console.error('total is not object', total);
+        return;
+      }
+
+      busanNum = 0;
+      seoulNum = 0;
+      for (let key in total) {
+        if (total[key] == null) {
+          console.error('total[key] is null', key);
+          continue;
+        }
+        if (typeof total[key] !== 'number') {
+          console.error('total[key] is not number', key, total[key]);
+          continue;
+        }
+        if (key.toLowerCase().includes('busan')) {
+          busanNum += total[key];
+        } else if (key.includes('seoul')) {
+          seoulNum += total[key];
+        }
+      }
+    });
+  });
+
+  onDestroy(() => {
+    if (socket == null) {
+      console.error('socket is already closed in onDestroy', socket);
+      return;
+    }
+    protocol.socketClose(socket);
+    clearInterval(updateTotal);
+    socket = null;
+  });
 
   let innerWidth = window.innerWidth;
   let innerHeight = window.innerHeight;

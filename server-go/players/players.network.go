@@ -68,7 +68,7 @@ func RegisterPlayersEvents(io *socket.Server, socket_ *socket.Socket) {
 		for _, player := range players {
 			totalOutput[player.Floor] += 1
 		}
-		socket_.Emit("playerTotal", totalOutput)
+		socket_.Emit("playersTotal", totalOutput)
 	})
 
 	socket_.On("addPlayer", func(datas ...any) {

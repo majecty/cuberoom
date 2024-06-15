@@ -138,11 +138,11 @@
   <Link to="/game?map=seoul" class="start-game-seoul seoul" style="{seoulTop};{seoulLeft}">
     <!-- <img src="/static/img/ui/map_gangnam.png" alt="클릭" /> -->
   </Link>
-  <p id="seoul-current-player-num" class='seoulxxx'>현재 접속자 수 {seoulNum}명</p>
+  <p id="seoul-current-player-num">현재 접속자 수 {seoulNum}명</p>
   <Link to="/game?map=busan" class="start-game-busan busan" style="{busanBottom};{busanRight}">
     <!-- <img src="/static/img/ui/map_gangnam.png" alt="클릭" /> -->
   </Link>
-  <p id="busan-current-player-num" class='busan'>현재 접속자 수 {busanNum}명</p>
+  <p id="busan-current-player-num">현재 접속자 수 {busanNum}명</p>
 </main>
 
 <style>
@@ -229,6 +229,18 @@
 
       top: 51%;
       left: 51%;
+  }
+
+  #busan-current-player-num {
+    z-index: 1;
+    position: absolute;
+    font-size: 1.5rem;
+    /* left: 60%; */
+    right: 50%;
+    top: 63%;
+    /* transform: translateY(-50%); */
+    margin: 0;
+    padding: 0;
   }
 
   :global(a.busan) {

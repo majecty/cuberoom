@@ -138,11 +138,11 @@
   <Link to="/game?map=seoul" class="start-game-seoul seoul" style="{seoulTop};{seoulLeft}">
     <!-- <img src="/static/img/ui/map_gangnam.png" alt="클릭" /> -->
   </Link>
-  <p id="seoul-current-player-num">현재 접속자 수 {seoulNum}명</p>
+  <p id="seoul-current-player-num" class='seoulxxx'>현재 접속자 수 {seoulNum}명</p>
   <Link to="/game?map=busan" class="start-game-busan busan" style="{busanBottom};{busanRight}">
     <!-- <img src="/static/img/ui/map_gangnam.png" alt="클릭" /> -->
   </Link>
-  <p id="busan-current-player-num">현재 접속자 수 {busanNum}명</p>
+  <p id="busan-current-player-num" class='busan'>현재 접속자 수 {busanNum}명</p>
 </main>
 
 <style>
@@ -173,7 +173,6 @@
   }
 
   :global(.seoul) {
-    opacity: 0;
     z-index : 2;
     position: absolute;
     bottom: 51%;
@@ -183,9 +182,26 @@
     transform: translateX(34%);
   }
 
+  #seoul-current-player-num {
+    z-index: 1;
+    position: absolute;
+    font-size: 1.5rem;
+    left: 51%;
+    /* right: unset; */
+    bottom: 50%;
+    transform: translateY(-50%);
+    margin: 0;
+    padding: 0;
+    /* bottom: unset; */
+  }
+
+  :global(a.seoul) {
+    opacity: 0;
+  }
+
   /* 가로가 길 때 */
   @media (min-aspect-ratio: 4/3) {
-    :global(.seoul) {
+    :global(a.seoul) {
       width : 13%;
       /* top: var(--seoul-top, 40%); */
       /* left: 48%; */
@@ -196,7 +212,7 @@
 
   /* 세로가 길 때 */
   @media (max-aspect-ratio: 4/3) {
-    :global(.seoul) {
+    :global(a.seoul) {
       height: 17%;
       /* top: 40%; */
       /* left: var(--seoul-left, 41%); */
@@ -207,19 +223,22 @@
   }
 
   :global(.busan) {
-      opacity: 0;
       z-index : 2;
       /* transform:translate(-50%, -50%); */
       position: absolute;
-      background-color: black;
 
       top: 51%;
       left: 51%;
   }
 
+  :global(a.busan) {
+    opacity: 0;
+    background-color: black;
+  }
+
   /* 가로가 길 때 */
   @media (min-aspect-ratio: 4/3) {
-    :global(.busan) {
+    :global(a.busan) {
       width : 13%;
       /* bottom: var(--busan-bottom, 33%); */
       /* top: calc(50% + 1vh); */
@@ -232,7 +251,7 @@
 
   /* 세로가 길 때 */
   @media (max-aspect-ratio: 4/3) {
-    :global(.busan) {
+    :global(a.busan) {
       height: 17%;
       /* bottom: 24%; */
       /* right: var(--busan-right, 37%); */

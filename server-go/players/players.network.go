@@ -58,6 +58,19 @@ func RegisterPlayersEvents(io *socket.Server, socket_ *socket.Socket) {
 		// socket_.Emit("debugMessage", playerOutputs)
 	})
 
+	socket_.On("getPlayersTotal", func(datas ...any) {
+		players, err := GetAllPlayer()
+		if err != nil {
+			fmt.Println("Error getting players:", err)
+			return
+		}
+		totalOutput := make(map[string]int)
+		for _, player := range players {
+			totalOutput[player.Floor] += 1
+		}
+		socket_.Emit("playerTotal", totalOutput)
+	})
+
 	socket_.On("addPlayer", func(datas ...any) {
 		fmt.Println("addPlayer:", datas)
 

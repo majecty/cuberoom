@@ -1,5 +1,6 @@
 import { createNanoEvents } from "nanoevents";
 import { loadFromBrowserStorage, loadIdAndPassword } from "../pages/storage";
+import { FLOOR_NAMES } from "../scenes/common";
 
 function callNextTick(callback) {
   setTimeout(callback, 0);
@@ -39,6 +40,17 @@ function getPlayers(socket) {
   // do nothing
   //callNextTick(() => socket.emit("playerList"));
 }
+
+function getPlayersTotal(socket) {
+  if (socket.disconnected) {
+    return null;
+  }
+  callNextTick(() => socket.emitter.emit("playersTotal", {
+    [FLOOR_NAMES.EntranceScene]: 0,
+    [FLOOR_NAMES.BusanExternalScene]: 0,
+  }))
+}
+
 
 /**
  * @param {string} floor
@@ -164,6 +176,10 @@ function onRemoveChat(socket, callback) {
   socket.emitter.on("removeChat", callback);
 }
 
+function onPlayersTotal(socket, callback) {
+  socket.emitter.on("playersTotal", callback);
+}
+
 /* eslint-disable import/prefer-default-export */
 export const protocol = {
   createSocket,
@@ -171,6 +187,7 @@ export const protocol = {
   getPlayerId,
 
   getPlayers,
+  getPlayersTotal,
   moveFloor,
   addPlayer,
   addChat,
@@ -187,4 +204,5 @@ export const protocol = {
   onDebugPlayerList,
   onAddChat,
   onRemoveChat,
+  onPlayersTotal,
 };

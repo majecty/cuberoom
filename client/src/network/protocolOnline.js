@@ -26,6 +26,13 @@ function getPlayers(socket) {
   socket.emit("getPlayers");
 }
 
+function getPlayersTotal(socket) {
+  if (socket.disconnected) {
+    return null;
+  }
+  socket.emit("getPlayersTotal");
+}
+
 /**
  * @param {string} floor
  */
@@ -127,6 +134,10 @@ function onRemoveChat(socket, callback) {
   socket.on("removeChat", callback);
 }
 
+function onPlayersTotal(socket, callback) {
+  socket.on("playersTotal", callback);
+}
+
 /* eslint-disable import/prefer-default-export */
 export const protocol = {
   createSocket,
@@ -134,6 +145,7 @@ export const protocol = {
   getPlayerId,
 
   getPlayers,
+  getPlayersTotal,
   moveFloor,
   addPlayer,
   addChat,
@@ -150,4 +162,5 @@ export const protocol = {
   onDebugPlayerList,
   onAddChat,
   onRemoveChat,
+  onPlayersTotal,
 };

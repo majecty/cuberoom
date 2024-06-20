@@ -142,7 +142,7 @@ const works = {
   },
   9: {
     id: "work-9",
-    imgUrl: "",
+    imgUrl: "/static/img/artist-profile/interior02MyHome.png",
     popupname: "나의살던고향은",
     title: "2020년 연재한 웹툰<나의살던고향은>의 1화",
     medium: "",
@@ -152,7 +152,7 @@ const works = {
   },
   10: {
     id: "work-10",
-    imgUrl: "",
+    imgUrl: "/static/img/artist-profile/interior01Find.png",
     popupname: "Flat is the new deep",
     title: "2018년 광주비엔날레 작품 <Flat is the new deep>(평면이 새로운 깊이다)",
     medium: "",
@@ -162,7 +162,7 @@ const works = {
   },
   11: {
     id: "work-11",
-    imgUrl: "",
+    imgUrl: "/static/img/artist-profile/interior03Red.png",
     popupname: "Red",
     title: "Red:전시에 대한 메모",
     medium: "",
@@ -172,7 +172,7 @@ const works = {
   },
   12: {
     id: "work-12",
-    imgUrl: "",
+    imgUrl: "/static/img/artist-profile/top02Green.png",
     popupname: "Green",
     title: "Green:픽셀에 대한 찬사",
     medium: "",
@@ -182,7 +182,7 @@ const works = {
   },
   13: {
     id: "work-13",
-    imgUrl: "",
+    imgUrl: "/static/img/artist-profile/top01Blue.png",
     popupname: "Blue",
     title: "Blue:이야기에 대한 이야기",
     medium: "",
@@ -192,7 +192,7 @@ const works = {
   },
   14: {
     id: "work-14",
-    imgUrl: "",
+    imgUrl: "/static/img/artist-profile/top03testing.png",
     popupname: "시험 시간",
     title: "시험 시간",
     medium: "2022부산시립미술관에서 전시한 <시험 시간> 은 18가지 문항에 답변을 하면 64가지 취미활동 중 내게 맞는 취미를 추천해주는 검사입니다.",
